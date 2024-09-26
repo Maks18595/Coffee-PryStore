@@ -1,0 +1,112 @@
+﻿@{
+    Layout = "~/Views/Shared/AdminSettings.cshtml";
+    ViewData["Title"] = "Registration";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link href="~/libraries/boost/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+        .background-image {
+            background-image: url('~/Attributes/Images/designdrinks.png');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 50px auto;
+        }
+
+        .navbar {
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50px; /* Висота шапки */
+            background-color: black; /* Чорний фон шапки */
+        }
+
+        .navbar-brand {
+            color: white; /* Білий текст для контрасту */
+            font-weight: bold; /* Жирний текст */
+            text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.7); /* Тінь для контрасту */
+        }
+
+            .navbar-brand:hover {
+                color: white; /* Залишити білим при наведенні */
+                text-decoration: none; /* Зняти підкреслення при наведенні */
+            }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Coffee_PryStore</a>
+        </div>
+    </nav>
+    <div class="background-image"></div>
+    <div class="content">
+        <div class="row">
+            <div class="col-md-6">
+                <img src="~/Attributes/Images/girlcoffee.png" class="img-fluid" />
+            </div>
+            <div class="col-md-6">
+                <p>Прізвище та ім'я: Приймак Максим</p>
+                <p>Номер групи та назва вузу: ІПЗ-22-1</p>
+                <p>Хмельницький Національний Університет</p>
+                <p>Тема курсового проекту: Інтернет-майстерня з продажу та виробництва кави</p>
+
+                <h1 class="text-danger">Sign Up</h1>
+
+                <form method="post">
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="exampleInputPassword1">
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="radio" class="form-check-input" id="User" name="role" value="User">
+                        <label class="form-check-label" for="User">User</label>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="radio" class="form-check-input" id="Admin" name="role" value="Admin">
+                        <label class="form-check-label" for="Admin">Admin</label>
+                    </div>
+
+                    <div class="mb-3 d-grid">
+                        <button type="submit" class="btn btn-danger btn-block">Sign Up</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
