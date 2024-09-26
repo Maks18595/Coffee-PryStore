@@ -16,13 +16,14 @@
             padding: 0;
             height: 100%;
             width: 100%;
+            overflow: hidden;
         }
 
         .background-image {
-            background-image: url('~/Attributes/Images/designdrinks.png');
+            background-image: url('@Url.Content("~/Attributes/Images/designdrinks.png")');
+            background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            background-size: cover;
             height: 100vh;
             position: fixed;
             top: 0;
@@ -34,11 +35,14 @@
         .content {
             position: relative;
             z-index: 1;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            max-width: 600px;
-            margin: 50px auto;
+            padding: 40px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            max-width: 800px;
+            margin: 100px auto;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            overflow: hidden; 
+            max-height: calc(100vh - 100px); 
         }
 
         .navbar {
@@ -47,21 +51,51 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 50px; /* Висота шапки */
-            background-color: black; /* Чорний фон шапки */
+            height: 60px;
+            background-color: black;
+            padding: 0 20px;
         }
 
         .navbar-brand {
-            color: white; /* Білий текст для контрасту */
-            font-weight: bold; /* Жирний текст */
-            text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.7); /* Тінь для контрасту */
+            color: white;
+            font-weight: bold;
+            text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.7);
         }
 
             .navbar-brand:hover {
-                color: white; /* Залишити білим при наведенні */
-                text-decoration: none; /* Зняти підкреслення при наведенні */
+                color: white;
+                text-decoration: none;
             }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .form-control {
+            padding: 15px;
+        }
+
+        .form-check-label {
+            margin-left: 8px;
+        }
+
+        .btn {
+            padding: 12px;
+            font-size: 18px;
+        }
+
+        .img-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .img-fluid {
+            max-width: 80%;
+            border-radius: 10px;
+        }
     </style>
+
 </head>
 <body>
     <nav class="navbar navbar-expand-sm">
@@ -72,33 +106,36 @@
     <div class="background-image"></div>
     <div class="content">
         <div class="row">
-            <div class="col-md-6">
-                <img src="~/Attributes/Images/girlcoffee.png" class="img-fluid" />
+            <div class="col-md-6 img-container">
+                <img src="@Url.Content("~/Attributes/Images/girlcoffee.png")" class="img-fluid" alt="Coffee Image"/>
             </div>
             <div class="col-md-6">
-                <p>Прізвище та ім'я: Приймак Максим</p>
-                <p>Номер групи та назва вузу: ІПЗ-22-1</p>
-                <p>Хмельницький Національний Університет</p>
-                <p>Тема курсового проекту: Інтернет-майстерня з продажу та виробництва кави</p>
+                <p><strong>Прізвище та ім'я:</strong> Приймак Максим</p>
+                <p><strong>Номер групи та назва вузу:</strong> ІПЗ-22-1, Хмельницький Національний Університет</p>
+                <p><strong>Тема курсового проекту:</strong> Інтернет-майстерня з продажу та виробництва кави</p>
 
                 <h1 class="text-danger">Sign Up</h1>
 
                 <form method="post">
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Email address</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter your email">
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1">
+                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Enter your password">
                     </div>
-                    <div class="mb-3 form-check">
-                        <input type="radio" class="form-check-input" id="User" name="role" value="User">
-                        <label class="form-check-label" for="User">User</label>
+                    <div class="mb-3">
+                        <label class="form-check-label" for="User">
+                            <input type="radio" class="form-check-input" id="User" name="role" value="User">
+                            User
+                        </label>
                     </div>
-                    <div class="mb-3 form-check">
-                        <input type="radio" class="form-check-input" id="Admin" name="role" value="Admin">
-                        <label class="form-check-label" for="Admin">Admin</label>
+                    <div class="mb-3">
+                        <label class="form-check-label" for="Admin">
+                            <input type="radio" class="form-check-input" id="Admin" name="role" value="Admin">
+                            Admin
+                        </label>
                     </div>
 
                     <div class="mb-3 d-grid">
