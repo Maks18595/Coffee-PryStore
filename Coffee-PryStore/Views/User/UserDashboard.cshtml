@@ -1,0 +1,43 @@
+﻿@model List<User>
+
+@{
+    ViewData["Title"] = "User Dashboard";
+}
+
+<h1>Welcome, User!</h1>
+
+<p>Це сторінка для звичайного користувача.</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Email</td>
+                    <td>@user.Role</td>
+                    <td>
+                        <form method="post" asp-action="Delete" asp-route-id="@user.Id">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3">No users found.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

@@ -1,0 +1,8 @@
+﻿
+
+CREATE TABLE HomeDataModels (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    Author NVARCHAR(MAX) NOT NULL,
+    ReleaseDate DATETIME2 NULL,
+    Title NVARCHAR(MAX) NOT NULL
+);

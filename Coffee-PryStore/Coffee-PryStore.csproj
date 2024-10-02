@@ -9,13 +9,32 @@
 
   <ItemGroup>
     <None Include="wwwroot\Attributes\Images\cloudfone.png" />
-    <None Include="wwwroot\Attributes\Images\cupwittclouds.png" />
     <None Include="wwwroot\Attributes\Images\cutecup.png" />
     <None Include="wwwroot\Attributes\Images\designdrinks.png" />
     <None Include="wwwroot\Attributes\Images\girlcoffee.png" />
     <None Include="wwwroot\Attributes\Images\lotsmallcoffee.png" />
     <None Include="wwwroot\Attributes\Images\menu.png" />
     <None Include="wwwroot\Attributes\Images\onlycoffee.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.12.0" />
+    <PackageReference Include="jose-jwt" Version="5.0.0" />
+    <PackageReference Include="JWT" Version="10.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
+    <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="2.22.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.65.0" />
+    <PackageReference Include="System.Formats.Asn1" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\NewFold\" />
   </ItemGroup>
 
 </Project>

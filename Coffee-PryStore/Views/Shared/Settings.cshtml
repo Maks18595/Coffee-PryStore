@@ -3,18 +3,19 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - AdminSettings</title>
+    <title>@ViewData["Title"] - Settings</title>
+    <link rel="icon" type="image/png" href="@Url.Content("~/Attributes/Images/cupwittclouds.png")">
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <!-- Твоя навігація або інші елементи -->
     </header>
 
     <div class="container">
         <main role="main" class="pb-3">
-            @RenderBody() <!-- Місце для відображення контенту підлеглих сторінок -->
+            @RenderBody()
         </main>
     </div>
 

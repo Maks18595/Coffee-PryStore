@@ -1,8 +1,59 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Головна сторінка";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="@Url.Action("PersonRegistration", "PersonRegistration")">Вхід/Реєстрація</a></li>
+                <li><a href="/Cart">Кошик</a></li>
+                <li><a href="/Products">Товари</a></li>
+                <li><a href="/Search">Пошук товарів</a></li>
+                    <form action="/Products/Search" method="get">
+                        <input type="text" name="searchTerm" placeholder="Пошук товарів" />
+                        <button type="submit">Пошук</button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Пропозиції товарів кави</h1>
+        <section class="product-offers">
+            <div class="product">
+                <h2>Кава Арабіка</h2>
+                <p>Опис: Смачна та ароматна кава Арабіка з кращих плантацій.</p>
+                <span>Ціна: 150 грн</span>
+                <button>Додати до кошика</button>
+            </div>
+            <div class="product">
+                <h2>Кава Робуста</h2>
+                <p>Опис: Сильна кава Робуста для любителів насичених смаків.</p>
+                <span>Ціна: 120 грн</span>
+                <button>Додати до кошика</button>
+            </div>
+            <div class="product">
+                <h2>Спеціальна кава</h2>
+                <p>Опис: Унікальна кава зі смаковими нотками шоколаду.</p>
+                <span>Ціна: 200 грн</span>
+                <button>Додати до кошика</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Інтернет-майстерня з продажу та виробництва кави</p>
+    </footer>
+</body>
+</html>
+

@@ -1,0 +1,20 @@
+﻿@model Coffee_PryStore.Models.User
+
+<h1>Create User</h1>
+
+<form asp-action="Create" method="post">
+    <div>
+        <label asp-for="Email"></label>
+        <input asp-for="Email" required />
+    </div>
+    <div>
+        <label asp-for="Password"></label>
+        <input asp-for="Password" required />
+    </div>
+    <div>
+        <label asp-for="Role"></label>
+        <input asp-for="Role" required />
+    </div>
+    <button type="submit">Create</button>
+</form>
+
