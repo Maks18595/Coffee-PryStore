@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Coffee_PryStore.Models;
 using System.Linq;
-using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 
 namespace Coffee_PryStore.Controllers
 {
@@ -14,82 +14,57 @@ namespace Coffee_PryStore.Controllers
             _context = context;
         }
 
+       
+
         public IActionResult UserProfile(int id)
         {
+            // Перевірка, чи користувач увійшов в систему
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            // Якщо користувач не увійшов, перенаправляємо на сторінку входу
+            if (userId == null)
+            {
+                return RedirectToAction("PersonRegistration", "PersonRegistration");
+            }
+
+            // Шукаємо користувача за параметром id
             var user = _context.Users.Find(id);
+
+            // Якщо користувача не знайдено, повертаємо 404
             if (user == null)
             {
                 return NotFound();
             }
+
+            // Відображаємо профіль користувача
             return View(user);
         }
 
 
 
-        // GET: User/UserDashboard
         public IActionResult UserDashboard()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Assuming you're using Identity
-            var user = _context.Users.FirstOrDefault(u => u.Id.ToString() == userId);
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            if (userId == null)
+            {
+                return RedirectToAction("PersonRegistration", "PersonRegistration");
+            }
+
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
 
             if (user == null)
             {
                 return NotFound();
             }
-            return View(user); // Pass the user to the view
-        }
 
-        // GET: User/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: User/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(User model)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Users.Add(model);
-                _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(model);
-        }
-
-        // GET: User/Edit/5
-        public IActionResult Edit(int id)
-        {
-            var user = _context.Users.Find(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
+            ViewData["CurrentUserId"] = user.Id; // Зберігаємо ID користувача у ViewData
             return View(user);
         }
 
-        // POST: User/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, User model)
-        {
-            if (id != model.Id)
-            {
-                return NotFound();
-            }
 
-            if (ModelState.IsValid)
-            {
-                _context.Users.Update(model);
-                _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(model);
-        }
-
-        // GET: User/Delete/5
+        // Видалення користувача
+        [HttpGet]
         public IActionResult Delete(int id)
         {
             var user = _context.Users.Find(id);
@@ -100,9 +75,7 @@ namespace Coffee_PryStore.Controllers
             return View(user);
         }
 
-        // POST: User/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
             var user = _context.Users.Find(id);
@@ -111,7 +84,66 @@ namespace Coffee_PryStore.Controllers
                 _context.Users.Remove(user);
                 _context.SaveChanges();
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(UserDashboard));
+        }
+
+        // Редагування користувача (GET)
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var user = _context.Users.Find(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+        }
+
+        // Редагування користувача (POST)
+        [HttpPost]
+        public IActionResult Edit(User user)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingUser = _context.Users.Find(user.Id);
+                if (existingUser == null)
+                {
+                    return NotFound();
+                }
+
+                existingUser.Email = user.Email;
+
+                // Змінюємо пароль тільки якщо він не пустий
+                if (!string.IsNullOrWhiteSpace(user.Password))
+                {
+                    existingUser.Password = user.Password;
+                }
+
+                existingUser.Role = user.Role;
+
+                try
+                {
+                    _context.SaveChanges();
+                    return RedirectToAction(nameof(UserDashboard));
+                }
+                catch (DbUpdateException ex)
+                {
+                    ModelState.AddModelError("", "Error saving changes: " + ex.Message);
+                }
+            }
+            return View(user);
+        }
+
+        // Деталі користувача
+        [HttpGet]
+        public IActionResult Details(int id)
+        {
+            var user = _context.Users.Find(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
         }
     }
 }

@@ -4,37 +4,119 @@
     ViewData["Title"] = "Admin Dashboard";
 }
 
-<h1>Admin Dashboard</h1>
-
-<table>
-    <thead>
-        <tr>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null && Model.Any())
-        {
-            foreach (var user in Model)
+<div class="container">
+    <h1 class="mt-4 text-center">Панель адміністратора</h1>
+    <div class="mb-3 text-end">
+        <a class="btn btn-primary" asp-action="Create">Створити користувача</a>
+    </div>
+    <table class="table table-striped mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th>Email</th>
+                <th>Роль</th>
+                <th>Дії</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.Email</td>
+                        <td>@user.Role</td>
+                        <td>
+                            <form method="post" asp-action="Delete" asp-route-id="@user.Id" class="d-inline">
+                                <button class="btn btn-danger btn-sm" type="submit">Видалити</button>
+                            </form>
+                            <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@user.Id">Редагувати</a>
+                            <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@user.Id">Деталі</a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
-                    <td>@user.Email</td>
-                    <td>@user.Role</td>
-                    <td>
-                        <form method="post" asp-action="Delete" asp-route-id="@user.Id">
-                            <button type="submit">Delete</button>
-                        </form>
-                    </td>
+                    <td colspan="3" class="text-center">Користувачів не знайдено.</td>
                 </tr>
             }
-        }
-        else
-        {
-            <tr>
-                <td colspan="3">No users found.</td>
-            </tr>
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mt-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Кавовий Магазин</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    @if (Context.Session.GetInt32("UserId") != null)
+                    {
+                        var userRole = Context.Session.GetString("UserRole");
+
+                        if (userRole == "Admin")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="@Url.Action("AdminDashboard", "Admin")">Панель адміністратора</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="@Url.Action("UserProfile", "Admin", new { id = Context.Session.GetInt32("UserId") })">Профіль</a>
+                            </li>
+                        }
+                        else if (userRole == "User")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="@Url.Action("UserProfile", "User", new { id = Context.Session.GetInt32("UserId") })">Профіль</a>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("PersonRegistration", "PersonRegistration")">Вхід/Реєстрація</a>
+                        </li>
+                    }
+                </ul>
+                <form class="d-flex" method="get" asp-action="Search" asp-controller="Admin">
+                    <input class="form-control me-2" type="search" placeholder="Пошук" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Пошук</button>
+                </form>
+                <form asp-action="EmptyPage" asp-controller="Admin" method="get" class="ms-3">
+                    <button type="submit" class="btn btn-primary">Керування товарами</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+</div>
+
+<style>
+    body {
+        background-color: #f8f9fa; /* Світлий фон для загального вигляду */
+    }
+
+    h1 {
+        color: #6f4c3e; /* Темний колір заголовка */
+    }
+
+    .table {
+        border-radius: 10px;
+        overflow: hidden; /* Заокруглення кутів таблиці */
+    }
+
+    .table-dark th {
+        background-color: #6f4c3e; /* Темний фон для заголовків таблиці */
+        color: #ffffff; /* Білий текст для заголовків */
+    }
+
+    .btn-primary {
+        background-color: #6f4c3e; /* Темний колір для кнопок */
+        border: none; /* Без рамки */
+    }
+
+    .btn-primary:hover {
+        background-color: #8c5a4c; /* Світліший колір при наведенні */
+    }
+</style>

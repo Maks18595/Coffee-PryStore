@@ -1,59 +1,108 @@
-﻿@{
-    ViewData["Title"] = "Головна сторінка";
+﻿@model IEnumerable<Coffee_PryStore.Models.Table>
+
+@{
+    ViewData["Title"] = "Товари";
 }
 
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/css/site.css" />
-</head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="@Url.Action("PersonRegistration", "PersonRegistration")">Вхід/Реєстрація</a></li>
-                <li><a href="/Cart">Кошик</a></li>
-                <li><a href="/Products">Товари</a></li>
-                <li><a href="/Search">Пошук товарів</a></li>
-                    <form action="/Products/Search" method="get">
-                        <input type="text" name="searchTerm" placeholder="Пошук товарів" />
-                        <button type="submit">Пошук</button>
+@if (ViewBag.UserEmail != null)
+{
+    <p>Ви увійшли як: @ViewBag.UserEmail (@ViewBag.UserRole)</p>
+}
+
+<style>
+    body {
+        display: flex;
+        flex-direction: column;
+        background-image: url('/Attributes/Images/cloudfone.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+
+    main {
+        flex: 1;
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    footer {
+        flex-shrink: 0;
+    }
+</style>
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Наші пропозиції кави</h1>
+
+    <div class="container">
+        <div class="row">
+            @foreach (var product in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="@(!string.IsNullOrEmpty(product.ImagePath) ? product.ImagePath : "/Attributes/Images/default.png")" class="card-img-top" alt="@product.CofName" />
+                        <div class="card-body">
+                            <h5 class="card-title">@product.CofName</h5>
+                            <p class="card-text">@product.CofCateg</p>
+                            <p class="card-text"><strong>Ціна: @product.CofPrice грн</strong></p>
+                            <form asp-action="AddToCart" method="post">
+                                <input type="hidden" name="productId" value="@product.CofId" /> <!-- Переконайтесь, що ID продукту правильний -->
+                                <button type="submit" class="btn btn-primary w-100">Додати до кошика</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Статичні продукти -->
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="/Attributes/Images/lotsmallcoffee.png" class="card-img-top" alt="Кава Арабіка">
+                <div class="card-body">
+                    <h5 class="card-title">Кава Арабіка</h5>
+                    <p class="card-text">Смачна та ароматна кава Арабіка з кращих плантацій.</p>
+                    <p class="card-text"><strong>Ціна: 150 грн</strong></p>
+                    <form asp-action="AddToCart" method="post">
+                        <input type="hidden" name="productId" value="1" />
+                        <button type="submit" class="btn btn-primary w-100">Додати до кошика</button>
                     </form>
-                </li>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        <h1>Пропозиції товарів кави</h1>
-        <section class="product-offers">
-            <div class="product">
-                <h2>Кава Арабіка</h2>
-                <p>Опис: Смачна та ароматна кава Арабіка з кращих плантацій.</p>
-                <span>Ціна: 150 грн</span>
-                <button>Додати до кошика</button>
+                </div>
             </div>
-            <div class="product">
-                <h2>Кава Робуста</h2>
-                <p>Опис: Сильна кава Робуста для любителів насичених смаків.</p>
-                <span>Ціна: 120 грн</span>
-                <button>Додати до кошика</button>
-            </div>
-            <div class="product">
-                <h2>Спеціальна кава</h2>
-                <p>Опис: Унікальна кава зі смаковими нотками шоколаду.</p>
-                <span>Ціна: 200 грн</span>
-                <button>Додати до кошика</button>
-            </div>
-        </section>
-    </main>
+        </div>
 
-    <footer>
-        <p>&copy; 2024 Інтернет-майстерня з продажу та виробництва кави</p>
-    </footer>
-</body>
-</html>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="/Attributes/Images/cutecup.png" class="card-img-top" alt="Кава Робуста">
+                <div class="card-body">
+                    <h5 class="card-title">Кава Робуста</h5>
+                    <p class="card-text">Сильна кава Робуста для любителів насичених смаків.</p>
+                    <p class="card-text"><strong>Ціна: 120 грн</strong></p>
+                    <form asp-action="AddToCart" method="post">
+                        <input type="hidden" name="productId" value="2" />
+                        <button type="submit" class="btn btn-primary w-100">Додати до кошика</button>
+                    </form>
+                </div>
+            </div>
+        </div>
 
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="/Attributes/Images/lotsmallcoffee.png" class="card-img-top" alt="Спеціальна кава">
+                <div class="card-body">
+                    <h5 class="card-title">Спеціальна кава</h5>
+                    <p class="card-text">Унікальна кава зі смаковими нотками шоколаду.</p>
+                    <p class="card-text"><strong>Ціна: 200 грн</strong></p>
+                    <form asp-action="AddToCart" method="post">
+                        <input type="hidden" name="productId" value="3" />
+                        <button type="submit" class="btn btn-primary w-100">Додати до кошика</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,33 @@
+﻿@model Coffee_PryStore.Models.Table
+
+
+<h2>Додати новий продукт</h2>
+
+<form asp-action="CreateProduct" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="CofName" class="form-label">Назва продукту</label>
+        <input type="text" class="form-control" asp-for="CofName" required />
+
+    </div>
+    <div class="mb-3">
+        <label for="CofCateg" class="form-label">Категорія</label>
+        <input type="text" class="form-control" asp-for="CofCateg" required />
+    </div>
+    <div class="mb-3">
+        <label for="CofPrice" class="form-label">Ціна</label>
+        <input type="number" class="form-control" asp-for="CofPrice" required />
+    </div>
+    <div class="mb-3">
+        <label for="CofAmount" class="form-label">Кількість</label>
+        <input type="number" class="form-control" asp-for="CofAmount" required />
+    </div>
+    <div class="mb-3">
+        <label for="CofDuration" class="form-label">Термін зберігання</label>
+        <input type="date" class="form-control" asp-for="CofDuration" required />
+    </div>
+    <div class="mb-3">
+        <label for="imageFile" class="form-label">Зображення продукту</label>
+        <input type="file" class="form-control" name="imageFile" />
+    </div>
+    <button type="submit" class="btn btn-primary">Зберегти</button>
+</form>

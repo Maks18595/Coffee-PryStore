@@ -1,14 +1,10 @@
-﻿@model List<User>
+﻿@model Coffee_PryStore.Models.User
 
-@{
-    ViewData["Title"] = "User Dashboard";
-}
+<h1>Ласкаво просимо, @Model.Email!</h1>
 
-<h1>Welcome, User!</h1>
+<p>Це ваша панель користувача.</p>
 
-<p>Це сторінка для звичайного користувача.</p>
-
-<table>
+<table class="table table-striped mt-3">
     <thead>
         <tr>
             <th>Email</th>
@@ -17,27 +13,16 @@
         </tr>
     </thead>
     <tbody>
-        @if (Model != null && Model.Any())
-        {
-            foreach (var user in Model)
-            {
-                <tr>
-                    <td>@user.Email</td>
-                    <td>@user.Role</td>
-                    <td>
-                        <form method="post" asp-action="Delete" asp-route-id="@user.Id">
-                            <button type="submit">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            }
-        }
-        else
-        {
-            <tr>
-                <td colspan="3">No users found.</td>
-            </tr>
-        }
+        <tr>
+            <td>@Model.Email</td>
+            <td>@Model.Role</td>
+            <td>
+                <form method="post" asp-action="Delete" asp-route-id="@Model.Id">
+                    <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                </form>
+                <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@Model.Id">Details</a>
+            </td>
+        </tr>
     </tbody>
 </table>
-

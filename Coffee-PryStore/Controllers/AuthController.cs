@@ -1,41 +1,74 @@
 ﻿using Coffee_PryStore.Models;
 using Coffee_PryStore.Models.Configurations;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Documents;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Coffee_PryStore.Controllers
 {
     public class AuthController : Controller
     {
         private readonly TokenService _tokenService;
-        private readonly DataBaseHome _context; // Ваш контекст бази даних
+        private readonly DataBaseHome _dataBaseHome; // Ваш контекст бази даних
 
-        public AuthController(TokenService tokenService, DataBaseHome context)
+        public AuthController(TokenService tokenService, DataBaseHome dataBaseHome)
         {
             _tokenService = tokenService;
-            _context = context;
+       
+            _dataBaseHome = dataBaseHome;
         }
+        
         public class UserLoginDto
         {
-            public string UserName { get; set; }
+            public string Email { get; set; }
             public string Password { get; set; }
         }
-       [HttpPost]
-        public IActionResult Login(UserLoginDto loginDto)
+        public void RegisterUser(Models.User user, string password)
         {
-            // Логіка перевірки користувача
-            var user = _context.Users.FirstOrDefault(u => u.UserName == loginDto.UserName && u.Password == loginDto.Password); // Змінити на правильну логіку
+            var passwordHasher = new PasswordHasher<Models.User>();
+            user.Password = passwordHasher.HashPassword(user, password);
+            _dataBaseHome.Users.Add(user);
+            _dataBaseHome.SaveChanges();
+        }
+
+        public async Task<IActionResult> Login(UserLoginDto loginDto)
+        {
+            var user = _dataBaseHome.Users.FirstOrDefault(u => u.Email == loginDto.Email);
 
             if (user == null)
             {
-                return Unauthorized(); // Повертаємо 401, якщо користувача не знайдено
+                return Unauthorized(); // Якщо користувача не знайдено
             }
 
-            var token = _tokenService.GenerateToken(user);
+            var passwordHasher = new PasswordHasher<Models.User>();
+            var passwordVerificationResult = passwordHasher.VerifyHashedPassword(user, user.Password, loginDto.Password);
 
+            if (passwordVerificationResult == PasswordVerificationResult.Failed)
+            {
+                return Unauthorized(); // Якщо пароль не співпадає
+            }
 
-            return Ok(new { Token = token });
+            // Створення claims для користувача
+            var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.Name, user.Email),
+        new Claim(ClaimTypes.Role, "Admin") // Додайте роль тут, якщо це адміністратор
+    };
+
+            var claimsIdentity = new ClaimsIdentity(claims, "CookieAuth");
+            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+            // Вхід користувача
+            await HttpContext.SignInAsync("CookieAuth", claimsPrincipal);
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

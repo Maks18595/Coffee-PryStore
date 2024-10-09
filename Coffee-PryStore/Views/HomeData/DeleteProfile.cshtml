@@ -1,0 +1,14 @@
+﻿@model User
+
+@{
+    ViewData["Title"] = "Delete Profile";
+}
+
+<h1>Видалення акаунту</h1>
+
+<p>Ви впевнені, що хочете видалити акаунт?</p>
+
+<form method="post" asp-action="DeleteProfileConfirmed">
+    <button type="submit" class="btn btn-danger">Так, видалити акаунт</button>
+    <a class="btn btn-secondary" asp-action="UserProfile">Скасувати</a>
+</form>

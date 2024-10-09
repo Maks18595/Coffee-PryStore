@@ -3,6 +3,7 @@
     ViewData["Title"] = "Registration";
 }
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -112,39 +113,45 @@
             <div class="col-md-6">
                
                 <h1 class="text-danger">Sign Up</h1>
-
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        @Html.ValidationSummary()
+                    </div>
+                }
                 <form method="post">
-                    <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Email address</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter your email" required>
-                        <div class="invalid-feedback">
-                            Будь ласка, введіть правильний email.
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Enter your password" required minlength="8">
-                        <div class="invalid-feedback">
-                            Пароль має містити щонайменше 8 символів.
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-check-label" for="User">
-                            <input type="radio" class="form-check-input" id="User" name="role" value="User" required>
-                            User
-                        </label>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-check-label" for="Admin">
-                            <input type="radio" class="form-check-input" id="Admin" name="role" value="Admin" required>
-                            Admin
-                        </label>
-                    </div>
+    <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" name="email" aria-describedby="emailHelp" placeholder="Enter your email" required>
+        <div class="invalid-feedback">
+            Будь ласка, введіть правильний email.
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Password</label>
+        <input type="password" class="form-control" id="exampleInputPassword1" name="password" placeholder="Enter your password" required minlength="8">
+        <div class="invalid-feedback">
+            Пароль має містити щонайменше 8 символів.
+        </div>
+    </div>
+    <div class="mb-3">
+        <label class="form-check-label" for="User">
+            <input type="radio" class="form-check-input" id="User" name="role" value="User" required>
+            User
+        </label>
+    </div>
+    <div class="mb-3">
+        <label class="form-check-label" for="Admin">
+            <input type="radio" class="form-check-input" id="Admin" name="role" value="Admin" required>
+            Admin
+        </label>
+    </div>
 
-                    <div class="mb-3 d-grid">
-                        <button type="submit" class="btn btn-danger btn-block">Sign Up</button>
-                    </div>
-                </form>
+    <div class="mb-3 d-grid">
+                        <button type="submit" class="btn btn-danger btn-block">Sign Up / Login</button>
+
+    </div>
+</form>
             </div>
         </div>
     </div>

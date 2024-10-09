@@ -1,20 +1,19 @@
-﻿@model Coffee_PryStore.Models.User
+﻿@model User
 
-<h1>Edit User</h1>
+@{
+    ViewData["Title"] = "Edit Profile";
+}
 
-<form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="Id" />
-    <div>
-        <label asp-for="Email"></label>
-        <input asp-for="Email" required />
+<h1>Редагування профілю</h1>
+
+<form method="post">
+    <div class="mb-3">
+        <label for="email" class="form-label">Електронна адреса</label>
+        <input type="email" class="form-control" id="email" name="email" value="@Model.Email" readonly />
     </div>
-    <div>
-        <label asp-for="Password"></label>
-        <input asp-for="Password" required />
+    <div class="mb-3">
+        <label for="password" class="form-label">Новий пароль</label>
+        <input type="password" class="form-control" id="password" name="password" value="@Model.Password" required />
     </div>
-    <div>
-        <label asp-for="Role"></label>
-        <input asp-for="Role" required />
-    </div>
-    <button type="submit">Save Changes</button>
+    <button type="submit" class="btn btn-success">Зберегти</button>
 </form>

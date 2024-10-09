@@ -1,0 +1,15 @@
+﻿@model Coffee_PryStore.Models.User
+
+<h1>Delete User</h1>
+
+<div>
+    <h4>Are you sure you want to delete this user?</h4>
+    <div>
+        <strong>Email:</strong> @Model.Email
+    </div>
+    <form asp-action="DeleteConfirmed" method="post">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit">Delete</button>
+    </form>
+    <a asp-action="UserDashboard">Cancel</a>
+</div>

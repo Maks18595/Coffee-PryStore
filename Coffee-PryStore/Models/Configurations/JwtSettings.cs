@@ -1,4 +1,4 @@
-﻿/*using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -7,6 +7,7 @@ using Coffee_PryStore.Models.Configurations; // Переконайтеся, що
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Coffee_PryStore.Models.Configurations
 {
@@ -15,37 +16,38 @@ namespace Coffee_PryStore.Models.Configurations
         public string Issuer { get; set; }
         public string Audience { get; set; }
         public string Key { get; set; }
+        public string Secret { get; set; }
+        public int ExpirationInMinutes { get; set; }
     }
 
-    public class TokenService // Можливо, вам потрібно створити окремий сервіс для генерації токенів
+    public class TokenService
     {
         private readonly JwtSettings _jwtSettings;
 
-        public TokenService(JwtSettings jwtSettings)
+        public TokenService(IOptions<JwtSettings> jwtSettings)
         {
-            _jwtSettings = jwtSettings;
+            _jwtSettings = jwtSettings.Value;
         }
 
         public string GenerateToken(User user)
         {
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Name, user.Email) // Додати інші claim за потреби
             };
-         
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 issuer: _jwtSettings.Issuer,
                 audience: _jwtSettings.Audience,
-              //  claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(_jwtSettings.ExpirationInMinutes),
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }
-*/
