@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Coffee_PryStore.Migrations
 {
     [DbContext(typeof(DataBaseHome))]
-    partial class DataBaseHomeModelSnapshot : ModelSnapshot
+    [Migration("20241009220718_CartItemWthout")]
+    partial class CartItemWthout
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,6 +41,24 @@ namespace Coffee_PryStore.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CartItems");
+                });
+
+            modelBuilder.Entity("Coffee_PryStore.Models.CategoryTable", b =>
+                {
+                    b.Property<string>("CategID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CategDescript")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CategName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CategID");
+
+                    b.ToTable("CategoryTable");
                 });
 
             modelBuilder.Entity("Coffee_PryStore.Models.HomeDataModel", b =>
@@ -72,12 +93,15 @@ namespace Coffee_PryStore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CofId"));
 
+                    b.Property<int?>("CartItemId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CofAmount")
                         .HasColumnType("int");
 
                     b.Property<string>("CofCateg")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CofDuration")
                         .HasColumnType("datetime2");
@@ -89,10 +113,15 @@ namespace Coffee_PryStore.Migrations
                     b.Property<decimal>("CofPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<byte[]>("ImageData")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CofId");
+
+                    b.HasIndex("CartItemId");
+
+                    b.HasIndex("CofCateg");
 
                     b.ToTable("Table");
                 });
@@ -120,6 +149,31 @@ namespace Coffee_PryStore.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Coffee_PryStore.Models.Table", b =>
+                {
+                    b.HasOne("Coffee_PryStore.Models.CartItem", null)
+                        .WithMany("Table")
+                        .HasForeignKey("CartItemId");
+
+                    b.HasOne("Coffee_PryStore.Models.CategoryTable", "Category")
+                        .WithMany("Table")
+                        .HasForeignKey("CofCateg")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Coffee_PryStore.Models.CartItem", b =>
+                {
+                    b.Navigation("Table");
+                });
+
+            modelBuilder.Entity("Coffee_PryStore.Models.CategoryTable", b =>
+                {
+                    b.Navigation("Table");
                 });
 #pragma warning restore 612, 618
         }

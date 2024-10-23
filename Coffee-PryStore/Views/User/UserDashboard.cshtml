@@ -1,28 +1,140 @@
 ﻿@model Coffee_PryStore.Models.User
 
-<h1>Ласкаво просимо, @Model.Email!</h1>
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link href="~/libraries/boost/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        html, body {
+            height: 100%;
+        }
 
-<p>Це ваша панель користувача.</p>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+            margin: 0;
+            background-color: #f8f9fa; 
+            font-family: 'Arial', sans-serif;
+        }
 
-<table class="table table-striped mt-3">
-    <thead>
-        <tr>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>@Model.Email</td>
-            <td>@Model.Role</td>
-            <td>
-                <form method="post" asp-action="Delete" asp-route-id="@Model.Id">
-                    <button class="btn btn-danger btn-sm" type="submit">Delete</button>
-                </form>
-                <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-                <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@Model.Id">Details</a>
-            </td>
-        </tr>
-    </tbody>
-</table>
+        .container {
+            margin-top: 50px;
+            max-width: 800px;
+            flex: 1; 
+        }
+
+        h1 {
+            color: #6f4c3e; 
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            margin-bottom: 20px; 
+            text-align: center; 
+            color: #6f4c3e; 
+            font-size: 1.5rem; 
+            font-weight: bold; 
+        }
+
+        table {
+            background-color: #fff; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            background-color: #6f4c3e; 
+            color: #4b2e20; 
+            padding: 15px;
+            text-align: left;
+        }
+
+        td {
+            padding: 15px;
+            vertical-align: middle;
+            color: #4b2e20; 
+        }
+
+        .btn {
+            margin-right: 10px;
+        }
+
+        .btn-danger {
+            background-color: #b85c38; 
+            border-color: #b85c38;
+        }
+
+        .btn-warning {
+            background-color: #ffc107; 
+        }
+
+        .btn-info {
+            background-color: #17a2b8; 
+        }
+
+        .btn-primary {
+            background-color: #6f4c3e; 
+            border: none; 
+        }
+
+            .btn-primary:hover {
+                background-color: #8c5a4c; 
+            }
+
+        .btn:hover {
+            opacity: 0.85;
+        }
+
+        footer {
+            flex-shrink: 0;
+            background-color: #343a40; 
+            color: white;
+            text-align: center;
+            padding: 0.5rem 0; 
+            width: 100%;
+            position: relative; 
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ласкаво просимо, @Model.Email!</h1>
+
+
+        <h2>Інформація про користувача</h2> 
+
+        <table class="table table-striped mt-3">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Роль</th>
+                    <th>Дії</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@Model.Email</td>
+                    <td>@Model.Role</td>
+                    <td>
+                        <form method="post" asp-action="Delete" asp-route-id="@Model.Id" class="d-inline-block">
+                            <button class="btn btn-danger btn-sm" type="submit">Видалити</button>
+                        </form>
+                        <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@Model.Id">Редагувати</a>
+                        <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@Model.Id">Деталі</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

@@ -5,6 +5,7 @@
 }
 
 <div class="container">
+
     <h1 class="mt-4 text-center">Панель адміністратора</h1>
     <div class="mb-3 text-end">
         <a class="btn btn-primary" asp-action="Create">Створити користувача</a>
@@ -18,6 +19,13 @@
             </tr>
         </thead>
         <tbody>
+
+
+
+
+
+
+            
             @if (Model != null && Model.Any())
             {
                 foreach (var user in Model)
@@ -46,7 +54,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light mt-4">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Кавовий Магазин</a>
+            <a class="navbar-brand" href="#">Coffe PryStore</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -59,7 +67,7 @@
                         if (userRole == "Admin")
                         {
                             <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("AdminDashboard", "Admin")">Панель адміністратора</a>
+                                <a class="nav-link" href="@Url.Action("AdminDashboard", "Admin", new { id = Context.Session.GetInt32("UserId") })">Панель адміністратора</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="@Url.Action("UserProfile", "Admin", new { id = Context.Session.GetInt32("UserId") })">Профіль</a>
@@ -69,6 +77,9 @@
                         {
                             <li class="nav-item">
                                 <a class="nav-link" href="@Url.Action("UserProfile", "User", new { id = Context.Session.GetInt32("UserId") })">Профіль</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="@Url.Action("AdminDashboard", "Admin", new { id = Context.Session.GetInt32("UserId") })">Панель адміністратора</a>
                             </li>
                         }
                     }
@@ -89,34 +100,54 @@
             </div>
         </div>
     </nav>
-
 </div>
+
 
 <style>
     body {
-        background-color: #f8f9fa; /* Світлий фон для загального вигляду */
+        background-color: #f8f9fa;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh; 
     }
 
     h1 {
-        color: #6f4c3e; /* Темний колір заголовка */
+        color: #6f4c3e; 
+    }
+
+    .container {
+        flex: 1; 
     }
 
     .table {
         border-radius: 10px;
-        overflow: hidden; /* Заокруглення кутів таблиці */
+        overflow: hidden; 
     }
 
     .table-dark th {
-        background-color: #6f4c3e; /* Темний фон для заголовків таблиці */
-        color: #ffffff; /* Білий текст для заголовків */
+        background-color: #6f4c3e; 
+        color: #ffffff; 
     }
 
     .btn-primary {
-        background-color: #6f4c3e; /* Темний колір для кнопок */
-        border: none; /* Без рамки */
+        background-color: #6f4c3e;
+        border: none; 
     }
 
-    .btn-primary:hover {
-        background-color: #8c5a4c; /* Світліший колір при наведенні */
+        .btn-primary:hover {
+            background-color: #8c5a4c; 
+        }
+
+    footer {
+        flex-shrink: 0;
+        background-color: #343a40;
+        color: white;
+        text-align: center;
+        padding: 0.5rem 0;
+        width: 100%;
+        position: relative;
+        bottom: 0;
     }
 </style>
+
+

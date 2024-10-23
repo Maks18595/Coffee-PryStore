@@ -8,13 +8,12 @@ namespace Coffee_PryStore.Models
 
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid email format")]
-        public string UserEmail { get; set; }
+        public string UserEmail { get; set; } = string.Empty; 
 
         [Required(ErrorMessage = "Password is required")]
-        public string UserPassword { get; set; }
+        public string UserPassword { get; set; } = string.Empty; 
 
-
-        public string UserPhone { get; set; }
-        public string UserName { get; set; }
+        public string UserPhone { get; set; } = string.Empty; 
+        public string UserName { get; set; } = string.Empty; 
     }
 }

@@ -15,7 +15,7 @@ namespace Coffee_PryStore.Controllers
             _context = context;
         }
 
-        // Метод для отримання користувача для редагування
+
         [HttpGet]
         public IActionResult Edit(int id)
         {
@@ -37,10 +37,10 @@ namespace Coffee_PryStore.Controllers
 
                 existingUser.Email = user.Email;
 
-                // Змінюйте пароль тільки якщо він не пустий
+            
                 if (!string.IsNullOrWhiteSpace(user.Password))
                 {
-                    existingUser.Password = user.Password; // Тут ви можете хешувати пароль
+                    existingUser.Password = user.Password; 
                 }
 
                 existingUser.Role = user.Role;
@@ -52,7 +52,7 @@ namespace Coffee_PryStore.Controllers
                 }
                 catch (DbUpdateException ex)
                 {
-                    // Логування помилки або обробка
+                 
                     ModelState.AddModelError("", "Error saving changes: " + ex.Message);
                 }
             }
@@ -62,10 +62,10 @@ namespace Coffee_PryStore.Controllers
 
         public IActionResult Users()
         {
-            var users = _context.Users.ToList(); // Отримання списку всіх користувачів
-            return View(users); // Вказуємо шлях до представлення
+            var users = _context.Users.ToList(); 
+            return View(users); 
         }
 
-        // Інші методи...
+    
     }
 }

@@ -1,0 +1,18 @@
+﻿@model Coffee_PryStore.Models.Table
+
+@{
+    ViewData["Title"] = "Видалити продукт";
+}
+
+<h2>Видалити продукт</h2>
+
+<div>
+    <h4>@Model.CofName</h4>
+    <p>Ви впевнені, що хочете видалити цей продукт?</p>
+</div>
+
+<form asp-action="DeleteConfirmed">
+    <input type="hidden" asp-for="CofId" />
+    <button type="submit" class="btn btn-danger">Видалити</button>
+    <a href="@Url.Action("ProductDetails", "Admin")" class="btn btn-secondary">Скасувати</a>
+</form>

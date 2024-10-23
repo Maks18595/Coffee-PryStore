@@ -3,6 +3,7 @@ using Coffee_PryStore.Models;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 
 namespace Coffee_PryStore.Controllers
 {
@@ -35,56 +36,143 @@ namespace Coffee_PryStore.Controllers
 
 
 
-        [HttpGet]
+
+        
         public IActionResult CreateProduct()
         {
-            return View(new Table()); // Передайте новий екземпляр Table
+            return View();
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateProduct(Table product, IFormFile imageFile)
+        public async Task<IActionResult> CreateProduct(Table product, IFormFile ImageFile)
         {
             if (ModelState.IsValid)
             {
-                if (imageFile != null && imageFile.Length > 0)
+                
+                if (ImageFile != null && ImageFile.Length > 0)
                 {
-                    var filePath = Path.Combine("wwwroot/Attributes/Images", imageFile.FileName);
-                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    using (var memoryStream = new MemoryStream())
                     {
-                        await imageFile.CopyToAsync(stream);
+                        await ImageFile.CopyToAsync(memoryStream);
+                        product.ImageData = memoryStream.ToArray();
                     }
-                    product.ImagePath = "/Attributes/Images/" + imageFile.FileName;
                 }
 
-                // Перевірте, чи продукт уже існує в базі даних перед додаванням
-                await _context.Table.AddAsync(product);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index)); // Замініть на правильне перенаправлення
+                await _context.AddAsync(product);
+                await _context.SaveChangesAsync(); 
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View(product);
+        }
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> EditProduct(int id)
+        {
+            var product = await _context.Table.FindAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return View(product);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProduct(Table product, IFormFile imageFile)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingProduct = await _context.Table.FindAsync(product.CofId);
+                if (existingProduct == null)
+                {
+                    return NotFound();
+                }
+
+                existingProduct.CofName = product.CofName;
+                existingProduct.CofCateg = product.CofCateg;
+                existingProduct.CofPrice = product.CofPrice;
+                existingProduct.CofAmount = product.CofAmount;
+                existingProduct.CofDuration = product.CofDuration;
+
+                if (imageFile != null && imageFile.Length > 0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await imageFile.CopyToAsync(memoryStream);
+                        existingProduct.ImageData = memoryStream.ToArray(); 
+                    }
+                }
+
+                await _context.SaveChangesAsync(); 
+                return RedirectToAction(nameof(Table));
             }
             return View(product);
         }
 
 
         [AllowAnonymous]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var products = _context.Table.ToList(); // Отримання списку продуктів з бази даних
+
+            var products = await _context.Table.ToListAsync();
 
             var userId = HttpContext.Session.GetInt32("UserId");
             if (userId != null)
             {
-                var user = _context.Users.FirstOrDefault(u => u.Id == userId.Value);
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId.Value);
                 if (user != null)
                 {
                     ViewBag.UserEmail = user.Email;
                     ViewBag.UserRole = user.Role;
                 }
             }
-            return View(products); // Переконайтеся, що модель передається правильно
+
+            return View(products);
         }
 
+
+        [HttpPost]
+        public IActionResult AddToCart(int productId)
+        {
+          
+            var product = _context.Table.Find(productId);
+
+            if (product != null)
+            {
+              
+                var cartItem = _context.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
+
+                if (cartItem != null)
+                {
+                  
+                    cartItem.Quantity++;
+                }
+                else
+                {
+                    
+                    cartItem = new CartItem
+                    {
+                        ProductId = product.CofId,
+                        Quantity = 1 
+                    };
+                    _context.CartItems.Add(cartItem);
+                }
+
+              
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        private Table? GetProductById(int productId)
+        {
+            return _context.Table.Find(productId);
+        }
 
 
 
@@ -92,7 +180,7 @@ namespace Coffee_PryStore.Controllers
     }
 
 
-
+    /*
     public class HomeDataController : Controller
     {
         private readonly DataBaseHome _context;
@@ -102,14 +190,14 @@ namespace Coffee_PryStore.Controllers
             _context = context;
         }
 
-        // GET: HomeData
+     
         public IActionResult HomeTestIndex()
         {
             var data = _context.HomeDataModels.ToList();
             return View(data);
         }
 
-        // GET: HomeData/Details/5
+       
         public IActionResult Details(int id)
         {
             var item = _context.HomeDataModels.Find(id);
@@ -120,13 +208,12 @@ namespace Coffee_PryStore.Controllers
             return View(item);
         }
 
-        // GET: HomeData/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: HomeData/Create
+      
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(HomeDataModel model)
@@ -140,7 +227,7 @@ namespace Coffee_PryStore.Controllers
             return View(model);
         }
 
-        // GET: HomeData/Edit/5
+  
         public IActionResult Edit(int id)
         {
             var item = _context.HomeDataModels.Find(id);
@@ -151,7 +238,7 @@ namespace Coffee_PryStore.Controllers
             return View(item);
         }
 
-        // POST: HomeData/Edit/5
+   
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, HomeDataModel model)
@@ -170,7 +257,7 @@ namespace Coffee_PryStore.Controllers
             return View(model);
         }
 
-        // GET: HomeData/Delete/5
+    
         public IActionResult Delete(int id)
         {
             var item = _context.HomeDataModels.Find(id);
@@ -181,7 +268,6 @@ namespace Coffee_PryStore.Controllers
             return View(item);
         }
 
-        // POST: HomeData/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
@@ -195,4 +281,5 @@ namespace Coffee_PryStore.Controllers
             return RedirectToAction(nameof(HomeTestIndex));
         }
     }
+    */
 }

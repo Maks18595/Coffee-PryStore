@@ -16,20 +16,21 @@ namespace Coffee_PryStore.Controllers
     public class AuthController : Controller
     {
         private readonly TokenService _tokenService;
-        private readonly DataBaseHome _dataBaseHome; // Ваш контекст бази даних
+        private readonly DataBaseHome _dataBaseHome;
 
         public AuthController(TokenService tokenService, DataBaseHome dataBaseHome)
         {
             _tokenService = tokenService;
-       
             _dataBaseHome = dataBaseHome;
         }
-        
+
         public class UserLoginDto
         {
-            public string Email { get; set; }
-            public string Password { get; set; }
+            public string Email { get; set; } = string.Empty; 
+            public string Password { get; set; } = string.Empty; 
         }
+
+
         public void RegisterUser(Models.User user, string password)
         {
             var passwordHasher = new PasswordHasher<Models.User>();
@@ -44,7 +45,7 @@ namespace Coffee_PryStore.Controllers
 
             if (user == null)
             {
-                return Unauthorized(); // Якщо користувача не знайдено
+                return Unauthorized();
             }
 
             var passwordHasher = new PasswordHasher<Models.User>();
@@ -52,20 +53,18 @@ namespace Coffee_PryStore.Controllers
 
             if (passwordVerificationResult == PasswordVerificationResult.Failed)
             {
-                return Unauthorized(); // Якщо пароль не співпадає
+                return Unauthorized();
             }
 
-            // Створення claims для користувача
             var claims = new List<Claim>
-    {
-        new Claim(ClaimTypes.Name, user.Email),
-        new Claim(ClaimTypes.Role, "Admin") // Додайте роль тут, якщо це адміністратор
-    };
+            {
+                new(ClaimTypes.Name, user.Email), 
+                new(ClaimTypes.Role, "Admin")
+            };
 
             var claimsIdentity = new ClaimsIdentity(claims, "CookieAuth");
             var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
-            // Вхід користувача
             await HttpContext.SignInAsync("CookieAuth", claimsPrincipal);
 
             return RedirectToAction("Index", "Home");

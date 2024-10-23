@@ -3,7 +3,6 @@
     ViewData["Title"] = "Registration";
 }
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +20,7 @@
         }
 
         .background-image {
-            background-image: url('@Url.Content("~/Attributes/Images/designdrinks.png")');
+            background-image: url('@Url.Content("~/Attributes/Images/themephotocoffee.png")');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -37,13 +36,13 @@
             position: relative;
             z-index: 1;
             padding: 40px;
-            background-color: rgba(255, 255, 255, 0.95);
+            background-color: rgba(250, 245, 235, 0.95); 
             border-radius: 15px;
             max-width: 800px;
             margin: 100px auto;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            overflow: hidden; 
-            max-height: calc(100vh - 100px); 
+            overflow: hidden;
+            max-height: calc(100vh - 100px);
         }
 
         .navbar {
@@ -53,36 +52,53 @@
             left: 0;
             width: 100%;
             height: 60px;
-            background-color: black;
+            background-color: rgba(75, 46, 32, 0.9); 
             padding: 0 20px;
         }
 
         .navbar-brand {
-            color: white;
+            color: #fff;
             font-weight: bold;
-            text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.7);
+            text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.9);
         }
 
             .navbar-brand:hover {
-                color: white;
+                color: #fff;
                 text-decoration: none;
             }
 
         .form-label {
             font-weight: bold;
+            color: #4b2e20; 
         }
 
         .form-control {
             padding: 15px;
+            background-color: #f5ebe0;
         }
 
         .form-check-label {
             margin-left: 8px;
+            color: #4b2e20; 
         }
 
         .btn {
             padding: 12px;
             font-size: 18px;
+        }
+
+        .btn-danger {
+            background-color: #b85c38; 
+            border-color: #b85c38;
+        }
+
+            .btn-danger:hover {
+                background-color: #a14927; 
+                border-color: #a14927;
+            }
+
+        h1.custom-title {
+            color: #4b2e20; 
         }
 
         .img-container {
@@ -94,6 +110,7 @@
         .img-fluid {
             max-width: 80%;
             border-radius: 10px;
+            border: 5px solid #b85c38; 
         }
     </style>
 
@@ -108,11 +125,10 @@
     <div class="content">
         <div class="row">
             <div class="col-md-6 img-container">
-                <img src="@Url.Content("~/Attributes/Images/girlcoffee.png")" class="img-fluid" alt="Coffee Image"/>
+                <img src="@Url.Content("~/Attributes/Images/girlcoffee.png")" class="img-fluid" alt="Coffee Image" />
             </div>
             <div class="col-md-6">
-               
-                <h1 class="text-danger">Sign Up</h1>
+                <h1 class="custom-title">Приєднатись</h1> 
                 @if (!ViewData.ModelState.IsValid)
                 {
                     <div class="alert alert-danger">
@@ -120,38 +136,36 @@
                     </div>
                 }
                 <form method="post">
-    <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" name="email" aria-describedby="emailHelp" placeholder="Enter your email" required>
-        <div class="invalid-feedback">
-            Будь ласка, введіть правильний email.
-        </div>
-    </div>
-    <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" name="password" placeholder="Enter your password" required minlength="8">
-        <div class="invalid-feedback">
-            Пароль має містити щонайменше 8 символів.
-        </div>
-    </div>
-    <div class="mb-3">
-        <label class="form-check-label" for="User">
-            <input type="radio" class="form-check-input" id="User" name="role" value="User" required>
-            User
-        </label>
-    </div>
-    <div class="mb-3">
-        <label class="form-check-label" for="Admin">
-            <input type="radio" class="form-check-input" id="Admin" name="role" value="Admin" required>
-            Admin
-        </label>
-    </div>
-
-    <div class="mb-3 d-grid">
-                        <button type="submit" class="btn btn-danger btn-block">Sign Up / Login</button>
-
-    </div>
-</form>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Електронна адреса</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" name="email" aria-describedby="emailHelp" placeholder="Enter your email" required>
+                        <div class="invalid-feedback">
+                            Будь ласка, введіть правильний email.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Пароль</label>
+                        <input type="password" class="form-control" id="exampleInputPassword1" name="password" placeholder="Enter your password" required minlength="8">
+                        <div class="invalid-feedback">
+                            Пароль має містити щонайменше 8 символів.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-check-label" for="User">
+                            <input type="radio" class="form-check-input" id="User" name="role" value="User" required>
+                            Користувач(рекомендовано)
+                        </label>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-check-label" for="Admin">
+                            <input type="radio" class="form-check-input" id="Admin" name="role" value="Admin" required>
+                            Адміністратор(доступ заборонено)
+                        </label>
+                    </div>
+                    <div class="mb-3 d-grid">
+                        <button type="submit" class="btn btn-danger btn-block">Зареєструватись / Увійти</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

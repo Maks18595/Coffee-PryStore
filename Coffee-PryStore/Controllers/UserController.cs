@@ -2,6 +2,10 @@
 using Coffee_PryStore.Models;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Azure.Documents;
+using System.Text;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Identity;
 
 namespace Coffee_PryStore.Controllers
 {
@@ -18,27 +22,27 @@ namespace Coffee_PryStore.Controllers
 
         public IActionResult UserProfile(int id)
         {
-            // Перевірка, чи користувач увійшов в систему
+      
             var userId = HttpContext.Session.GetInt32("UserId");
 
-            // Якщо користувач не увійшов, перенаправляємо на сторінку входу
+         
             if (userId == null)
             {
                 return RedirectToAction("PersonRegistration", "PersonRegistration");
             }
 
-            // Шукаємо користувача за параметром id
             var user = _context.Users.Find(id);
 
-            // Якщо користувача не знайдено, повертаємо 404
+           
             if (user == null)
             {
                 return NotFound();
             }
 
-            // Відображаємо профіль користувача
+  
             return View(user);
         }
+
 
 
 
@@ -58,12 +62,13 @@ namespace Coffee_PryStore.Controllers
                 return NotFound();
             }
 
-            ViewData["CurrentUserId"] = user.Id; // Зберігаємо ID користувача у ViewData
+            ViewData["CurrentUserId"] = user.Id;
+            ViewData["UserRole"] = user.Role;
             return View(user);
         }
 
 
-        // Видалення користувача
+     
         [HttpGet]
         public IActionResult Delete(int id)
         {
@@ -87,7 +92,7 @@ namespace Coffee_PryStore.Controllers
             return RedirectToAction(nameof(UserDashboard));
         }
 
-        // Редагування користувача (GET)
+
         [HttpGet]
         public IActionResult Edit(int id)
         {
@@ -99,13 +104,12 @@ namespace Coffee_PryStore.Controllers
             return View(user);
         }
 
-        // Редагування користувача (POST)
         [HttpPost]
-        public IActionResult Edit(User user)
+        public async Task<IActionResult> Edit(Models.User user)
         {
             if (ModelState.IsValid)
             {
-                var existingUser = _context.Users.Find(user.Id);
+                var existingUser = await _context.Users.FindAsync(user.Id);
                 if (existingUser == null)
                 {
                     return NotFound();
@@ -113,18 +117,17 @@ namespace Coffee_PryStore.Controllers
 
                 existingUser.Email = user.Email;
 
-                // Змінюємо пароль тільки якщо він не пустий
                 if (!string.IsNullOrWhiteSpace(user.Password))
                 {
-                    existingUser.Password = user.Password;
+                    existingUser.Password = HashPassword(user.Password); 
                 }
 
                 existingUser.Role = user.Role;
 
                 try
                 {
-                    _context.SaveChanges();
-                    return RedirectToAction(nameof(UserDashboard));
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(User));
                 }
                 catch (DbUpdateException ex)
                 {
@@ -134,7 +137,23 @@ namespace Coffee_PryStore.Controllers
             return View(user);
         }
 
-        // Деталі користувача
+        private static string HashPassword(string password)
+        {
+            using var sha256 = SHA256.Create();
+            var bytes = Encoding.UTF8.GetBytes(password);
+            var hash = sha256.ComputeHash(bytes);
+            return Convert.ToBase64String(hash);
+        }
+
+        private static bool VerifyPassword(string storedHash, string password)
+        {
+            var hashedInputPassword = HashPassword(password);
+            return hashedInputPassword == storedHash;
+        }
+
+
+
+
         [HttpGet]
         public IActionResult Details(int id)
         {

@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Coffee_PryStore.Models.Table>
+﻿
+@model List<Coffee_PryStore.Models.Table>
 
 @{
     ViewData["Title"] = "Товари";
@@ -33,76 +34,74 @@
     }
 </style>
 
-<div class="container mt-5">
-    <h1 class="text-center mb-4">Наші пропозиції кави</h1>
 
-    <div class="container">
-        <div class="row">
-            @foreach (var product in Model)
-            {
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100 shadow-sm">
-                        <img src="@(!string.IsNullOrEmpty(product.ImagePath) ? product.ImagePath : "/Attributes/Images/default.png")" class="card-img-top" alt="@product.CofName" />
-                        <div class="card-body">
-                            <h5 class="card-title">@product.CofName</h5>
-                            <p class="card-text">@product.CofCateg</p>
-                            <p class="card-text"><strong>Ціна: @product.CofPrice грн</strong></p>
-                            <form asp-action="AddToCart" method="post">
-                                <input type="hidden" name="productId" value="@product.CofId" /> <!-- Переконайтесь, що ID продукту правильний -->
-                                <button type="submit" class="btn btn-primary w-100">Додати до кошика</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
-
-    <!-- Статичні продукти -->
-    <div class="row">
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <img src="/Attributes/Images/lotsmallcoffee.png" class="card-img-top" alt="Кава Арабіка">
-                <div class="card-body">
-                    <h5 class="card-title">Кава Арабіка</h5>
-                    <p class="card-text">Смачна та ароматна кава Арабіка з кращих плантацій.</p>
-                    <p class="card-text"><strong>Ціна: 150 грн</strong></p>
-                    <form asp-action="AddToCart" method="post">
-                        <input type="hidden" name="productId" value="1" />
-                        <button type="submit" class="btn btn-primary w-100">Додати до кошика</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <img src="/Attributes/Images/cutecup.png" class="card-img-top" alt="Кава Робуста">
-                <div class="card-body">
-                    <h5 class="card-title">Кава Робуста</h5>
-                    <p class="card-text">Сильна кава Робуста для любителів насичених смаків.</p>
-                    <p class="card-text"><strong>Ціна: 120 грн</strong></p>
-                    <form asp-action="AddToCart" method="post">
-                        <input type="hidden" name="productId" value="2" />
-                        <button type="submit" class="btn btn-primary w-100">Додати до кошика</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <img src="/Attributes/Images/lotsmallcoffee.png" class="card-img-top" alt="Спеціальна кава">
-                <div class="card-body">
-                    <h5 class="card-title">Спеціальна кава</h5>
-                    <p class="card-text">Унікальна кава зі смаковими нотками шоколаду.</p>
-                    <p class="card-text"><strong>Ціна: 200 грн</strong></p>
-                    <form asp-action="AddToCart" method="post">
-                        <input type="hidden" name="productId" value="3" />
-                        <button type="submit" class="btn btn-primary w-100">Додати до кошика</button>
-                    </form>
-                </div>
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+            <img src="/Attributes/Images/capucandlatte.jpeg" class="card-img-top" alt="Кава Арабіка">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">Кава Арабіка</h5>
+                <p class="card-text">Смачна та ароматна кава Арабіка з кращих плантацій.</p>
+                <p class="card-text"><strong>Ціна: 150 грн</strong></p>
+                <form asp-action="AddToCart" method="post" class="mt-auto">
+                    <input type="hidden" name="productId" value="1" />
+                    <button type="submit" class="btn btn-primary w-100">Додати до кошика</button>
+                </form>
             </div>
         </div>
     </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+            <img src="/Attributes/Images/cappuccino.jpeg" class="card-img-top" alt="Кава Робуста">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">Кава Робуста</h5>
+                <p class="card-text">Сильна кава Робуста для любителів насичених смаків.</p>
+                <p class="card-text"><strong>Ціна: 120 грн</strong></p>
+                <form asp-action="AddToCart" method="post" class="mt-auto">
+                    <input type="hidden" name="productId" value="2" />
+                    <button type="submit" class="btn btn-primary w-100">Додати до кошика</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+            <img src="/Attributes/Images/capucino.jpeg" class="card-img-top" alt="Спеціальна кава">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">Спеціальна кава</h5>
+                <p class="card-text">Унікальна кава зі смаковими нотками шоколаду.</p>
+                <p class="card-text"><strong>Ціна: 200 грн</strong></p>
+                <form asp-action="AddToCart" method="post" class="mt-auto">
+                    <input type="hidden" name="productId" value="3" />
+                    <button type="submit" class="btn btn-primary w-100">Додати до кошика</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="@(item.ImageData != null ? $"data:image/jpeg;base64,{Convert.ToBase64String(item.ImageData)}" : "/Attributes/Images/placeholder.png")" class="card-img-top" alt="@item.CofName" />
+                <div class="card-body">
+                    <h5 class="card-title">@item.CofName</h5>
+                    <p class="card-text"><strong>Категорія:</strong> @item.CofCateg</p>
+                    <p class="card-text"><strong>Ціна:</strong> @item.CofPrice грн</p>
+                    <p class="card-text"><strong>Кількість:</strong> @item.CofAmount</p>
+                    <p class="card-text"><strong>Термін зберігання:</strong> @item.CofDuration.ToString("yyyy-MM-dd")</p>
+                    <form asp-action="AddToCart" method="post" class="mt-auto">
+                        <input type="hidden" name="productId" value="@item.CofId" />
+                        <button type="submit" class="btn btn-primary w-100">Додати до кошика</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
 </div>

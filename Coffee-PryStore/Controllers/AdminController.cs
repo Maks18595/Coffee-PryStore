@@ -4,6 +4,9 @@ using Coffee_PryStore.Models;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using System.Text;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Identity;
 
 
 
@@ -24,17 +27,72 @@ namespace Coffee_PryStore.Controllers
 
             if (users == null || !users.Any())
             {
-                return View("NoUsers"); // Якщо немає користувачів
+                return View("NoUsers");
             }
 
             var currentAdmin = users.FirstOrDefault(u => u.Role == "Admin");
             if (currentAdmin != null)
             {
                 ViewData["CurrentUserId"] = currentAdmin.Id;
+                ViewData["UserRole"] = currentAdmin.Role; 
             }
 
             return View(users);
         }
+
+
+     
+
+
+        [HttpPost]
+        public IActionResult UpdateUserPassword(int userId, string currentPassword, string newPassword)
+        {
+    
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Користувача не знайдено.");
+                return View();
+            }
+
+         
+            if (!VerifyPassword(user.Password, currentPassword))
+            {
+                ModelState.AddModelError("", "Поточний пароль невірний.");
+                return View();
+            }
+
+          
+            user.Password = HashPassword(newPassword);
+
+          
+            _context.Users.Update(user);
+            _context.SaveChanges();
+
+            TempData["Message"] = "Пароль успішно змінено.";
+            return RedirectToAction("AdminDashboard", "Admin");
+        }
+
+
+
+        private static string HashPassword(string password)
+        {
+            using var sha256 = SHA256.Create();
+            var bytes = Encoding.UTF8.GetBytes(password);
+            var hash = sha256.ComputeHash(bytes);
+            return Convert.ToBase64String(hash);
+        }
+
+        private static bool VerifyPassword(string storedHash, string password)
+        {
+            var hashedInputPassword = HashPassword(password);
+            return hashedInputPassword == storedHash;
+        }
+
+
+
+
 
         [HttpGet]
         public IActionResult Details(int id)
@@ -71,8 +129,8 @@ namespace Coffee_PryStore.Controllers
         [HttpGet]
         public async Task<IActionResult> Users()
         {
-            var users = await _context.Users.ToListAsync(); // Отримання списку всіх користувачів
-            return View(users); // Передача списку користувачів до представлення
+            var users = await _context.Users.ToListAsync(); 
+            return View(users); 
         }
 
         [HttpGet]
@@ -92,6 +150,7 @@ namespace Coffee_PryStore.Controllers
         {
             if (ModelState.IsValid)
             {
+                user.Password = HashPassword(user.Password); 
                 await _context.Users.AddAsync(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(AdminDashboard));
@@ -155,7 +214,7 @@ namespace Coffee_PryStore.Controllers
 
                 if (!string.IsNullOrWhiteSpace(user.Password))
                 {
-                    existingUser.Password = user.Password; // Тут ви можете хешувати пароль
+                    existingUser.Password = HashPassword(user.Password); 
                 }
 
                 existingUser.Role = user.Role;
@@ -191,42 +250,51 @@ namespace Coffee_PryStore.Controllers
             return View(user);
         }
 
-        [HttpGet]
+     
         public IActionResult CreateProduct()
         {
-            return View(new Table()); // Передайте новий екземпляр Table
+            return View();
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateProduct(Table product, IFormFile imageFile)
+        public async Task<IActionResult> CreateProduct(Table product, IFormFile ImageFile)
         {
             if (ModelState.IsValid)
             {
-                if (imageFile != null && imageFile.Length > 0)
+              
+                if (ImageFile != null && ImageFile.Length > 0)
                 {
-                    var filePath = Path.Combine("wwwroot/Attributes/Images", imageFile.FileName);
-                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    using (var memoryStream = new MemoryStream())
                     {
-                        await imageFile.CopyToAsync(stream);
+                        await ImageFile.CopyToAsync(memoryStream);
+                        product.ImageData = memoryStream.ToArray();
                     }
-                    product.ImagePath = "/Attributes/Images/" + imageFile.FileName;
                 }
 
-                // Перевірте, чи продукт уже існує в базі даних перед додаванням
-                await _context.Table.AddAsync(product);
+                await _context.AddAsync(product); 
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index)); // Замініть на правильне перенаправлення
+                return RedirectToAction("ProductDetails", "Admin", new { id = product.CofId });
             }
+
             return View(product);
         }
 
 
-        [HttpGet]
-        public async Task<IActionResult> EditProduct(int id)
+
+       
+        public IActionResult ProductDetails()
         {
-            var product = await _context.Table.FindAsync(id);
+            var products = _context.Table.ToList(); 
+            return View(products); 
+        }
+
+
+
+      
+        public IActionResult EditProduct(int id)
+        {
+            var product = _context.Table.FirstOrDefault(p => p.CofId == id);
             if (product == null)
             {
                 return NotFound();
@@ -234,54 +302,36 @@ namespace Coffee_PryStore.Controllers
             return View(product);
         }
 
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditProduct(Table product, IFormFile imageFile)
+        public async Task<IActionResult> EditProduct(Table product)
         {
             if (ModelState.IsValid)
             {
-                var existingProduct = await _context.Table.FindAsync(product.CofId);
-                if (existingProduct == null)
-                {
-                    return NotFound();
-                }
-
-                existingProduct.CofName = product.CofName;
-                existingProduct.CofCateg = product.CofCateg;
-                existingProduct.CofPrice = product.CofPrice;
-                existingProduct.CofAmount = product.CofAmount;
-                existingProduct.CofDuration = product.CofDuration;
-
-                if (imageFile != null && imageFile.Length > 0)
-                {
-                    var filePath = Path.Combine("wwwroot/Attributes/Images", imageFile.FileName);
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await imageFile.CopyToAsync(stream);
-                    }
-                    existingProduct.ImagePath = "/Attributes/Images/" + imageFile.FileName;
-                }
-
+                _context.Update(product);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Table));
+                return RedirectToAction(nameof(Index));
             }
             return View(product);
         }
 
-        [HttpGet]
+
+        
+        public IActionResult DeleteProducts(int id)
+        {
+            var product = _context.Table.FirstOrDefault(p => p.CofId == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return View(product);
+        }
+
+      
+        [HttpPost, ActionName("DeleteProducts")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteProduct(int id)
-        {
-            var product = await _context.Table.FindAsync(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-            return View(product);
-        }
-
-        [HttpPost, ActionName("DeleteProduct")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteProductConfirmed(int id)
         {
             var product = await _context.Table.FindAsync(id);
             if (product != null)
@@ -289,7 +339,8 @@ namespace Coffee_PryStore.Controllers
                 _context.Table.Remove(product);
                 await _context.SaveChangesAsync();
             }
-            return RedirectToAction(nameof(Table));
+            return RedirectToAction("ProductDetails");
         }
+
     }
 }

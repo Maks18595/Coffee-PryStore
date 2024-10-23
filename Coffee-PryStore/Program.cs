@@ -8,17 +8,17 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 var jwtKey = builder.Configuration["JwtSettings:Key"] ?? throw new InvalidOperationException("JwtSettings:Key is not configured.");
 
-// Конфігурація бази даних
+
 builder.Services.AddDbContext<DataBaseHome>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Додайте конфігурацію JwtSettings з appsettings.json
+
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
-// Реєстрація TokenService
+
 builder.Services.AddScoped<TokenService>();
 
-// Реєстрація JWT-аутентифікації
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -37,16 +37,16 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Додати сесії
-builder.Services.AddDistributedMemoryCache(); // Необхідно для використання сесій
+
+builder.Services.AddDistributedMemoryCache(); 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // Час життя сесії
+    options.IdleTimeout = TimeSpan.FromMinutes(30); 
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
 
-// Додайте інші служби
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -62,10 +62,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthentication(); // Аутентифікація через JWT
+app.UseAuthentication(); 
 app.UseAuthorization();
 
-app.UseSession(); // Використання сесій
+app.UseSession(); 
 
 app.MapControllerRoute(
     name: "default",

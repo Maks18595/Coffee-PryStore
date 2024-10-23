@@ -1,0 +1,33 @@
+﻿@model Coffee_PryStore.Models.Table
+
+@{
+    ViewData["Title"] = "Редагувати продукт";
+}
+
+<h2>Редагувати продукт</h2>
+
+<form asp-action="Edit">
+    <div class="mb-3">
+        <label asp-for="CofName" class="form-label">Назва продукту</label>
+        <input asp-for="CofName" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label asp-for="CofCateg" class="form-label">Категорія</label>
+        <input asp-for="CofCateg" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label asp-for="CofPrice" class="form-label">Ціна</label>
+        <input asp-for="CofPrice" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label asp-for="CofAmount" class="form-label">Кількість</label>
+        <input asp-for="CofAmount" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label asp-for="CofDuration" class="form-label">Термін зберігання</label>
+        <input asp-for="CofDuration" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Зберегти</button>
+</form>
+
+<a href="@Url.Action("ProductDetails", "Admin")" class="btn btn-secondary mt-3">Назад</a>

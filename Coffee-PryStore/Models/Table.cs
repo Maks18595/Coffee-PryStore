@@ -3,37 +3,30 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-
-
-    namespace Coffee_PryStore.Models
+namespace Coffee_PryStore.Models
+{
+    public class Table
     {
-        public class Table
-        {
-        public int CofId { get; set; } // Не забувайте про ID, якщо він є у вашій базі даних
+        [Key]
+        public int CofId { get; set; }
 
-        [Required]
-        public string CofName { get; set; }
+        public string CofName { get; set; } = string.Empty;
 
-        [Required]
-        public string CofCateg { get; set; }
+        [ForeignKey("Category")]
+        public string CofCateg { get; set; } = string.Empty;
 
-        [Required]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Ціна повинна бути більшою за 0")]
         public decimal CofPrice { get; set; }
 
-        [Required]
-        [Range(0, int.MaxValue, ErrorMessage = "Кількість не може бути меншою за 0")]
         public int CofAmount { get; set; }
 
-        [Required]
         public DateTime CofDuration { get; set; }
 
-        public string ImagePath { get; set; }
+        public byte[]? ImageData { get; set; } 
 
-        // Навігаційна властивість
-        public virtual CategoryTable Category { get; set; }
-        }
+      //  public virtual CategoryTable Category { get; set; } = new CategoryTable();
+
     }
+}
 
 
 

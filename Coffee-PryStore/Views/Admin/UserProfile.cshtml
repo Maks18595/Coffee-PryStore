@@ -16,14 +16,26 @@
 <hr />
 
 <li class="nav-item">
+
+
+
+
     @if (Context.Session.GetInt32("UserId") != null)
     {
+
+
         var userRole = Context.Session.GetString("UserRole");
+
+
 
         if (userRole == "Admin")
         {
-            <a class="nav-link" href="@Url.Action("AdminDashboard", "Admin")">Панель адміністратора</a>
-            <a class="nav-link" href="@Url.Action("UserProfile", "Admin", new { id = Context.Session.GetInt32("UserId") })">Профіль</a>
+       
+                <a class="nav-link" href="@Url.Action("AdminDashboard", "Admin", new { id = Context.Session.GetInt32("UserId") })">Панель адміністратора</a>
+          
+         
+                <a class="nav-link" href="@Url.Action("UserProfile", "Admin", new { id = Context.Session.GetInt32("UserId") })">Профіль</a>
+       
         }
         else if (userRole == "User")
         {
@@ -34,11 +46,15 @@
     {
         <a class="nav-link" href="@Url.Action("PersonRegistration", "PersonRegistration")">Вхід/Реєстрація</a>
     }
+
+
+
+
+   
+    
 </li>
 
 
-
-<!-- Додаткові дії -->
 <div class="mt-4">
     <h3>Ваші замовлення</h3>
     <table class="table">

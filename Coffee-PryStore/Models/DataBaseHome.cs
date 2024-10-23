@@ -9,10 +9,10 @@ public class DataBaseHome : DbContext
     {
     }
 
-    // DbSet для моделі HomeDataModel
+
     public DbSet<HomeDataModel> HomeDataModels { get; set; }
 
-    // DbSet для моделі User
+ 
     public DbSet<User> Users { get; set; }
 
     public DbSet<Table> Table { get; set; }
@@ -20,8 +20,8 @@ public class DataBaseHome : DbContext
     {
         modelBuilder.Entity<Table>()
             .Property(t => t.CofPrice)
-            .HasColumnType("decimal(18,2)"); // Вказуємо, що це десятковий тип з 18 знаками, 2 з яких після коми
+            .HasColumnType("decimal(18,2)"); 
     }
-
+    public DbSet<CartItem> CartItems { get; set; }
 }
 

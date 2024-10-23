@@ -1,23 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
-    using Coffee_PryStore.Models;
-   
+using System.Collections.Generic;
 
-
-    namespace Coffee_PryStore.Models
+namespace Coffee_PryStore.Models
+{
+    public class CategoryTable
     {
-        public class CategoryTable
-        {
-            [Key]
-            public string CategID { get; set; }  // Це буде первинний ключ у таблиці категорій
+        [Key]
+        [Required] 
+        public string CategID { get; set; } = string.Empty;
+        [Required]
+        public string CategName { get; set; } = string.Empty;
 
-            public  string CategName { get; set; }
+        public string CategDescript { get; set; } = string.Empty;
 
-            public  string CategDescript { get; set; }
+        public virtual ICollection<Table> Table { get; set; } = new List<Table>();
 
-            // Навігаційна властивість для зв'язку з продуктами
-            public virtual  ICollection<Table> Table { get; set; }
-        }
     }
-
-
+}
 

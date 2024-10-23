@@ -4,15 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] Coffee_PryStore_MainPage</title>
-    <link rel="icon" type="image/png" href="@Url.Content("~/Attributes/Images/cupwittclouds.png")">
+    <link rel="icon" type="image/png" href="@Url.Content("~/Attributes/Images/signview.png")">
 
-
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Coffee_PryStore.styles.css" asp-append-version="true" />
+
     <style>
-        /* CSS для закріплення футера на низу */
         html, body {
             height: 100%;
         }
@@ -20,6 +18,8 @@
         body {
             display: flex;
             flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
         }
 
         main {
@@ -28,6 +28,11 @@
 
         footer {
             flex-shrink: 0;
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            width: 100%;
         }
     </style>
 </head>
@@ -42,27 +47,37 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" href="/Cart">Кошик</a>
+                            <a class="nav-link" href="@Url.Action("Basket", "Basket")">Кошик</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/Products">Товари</a>
                         </li>
-                      
 
                         @if (Context.Session.GetInt32("UserId") != null)
                         {
+
                             var userRole = Context.Session.GetString("UserRole");
 
-                            if (userRole == "Admin")
+
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="@Url.Action("PersonRegistration", "PersonRegistration")">Вихід</a>
+                            </li>
+                           
+
+
+
+                            @if (ViewData["UserRole"] != null && ViewData["UserRole"].ToString() == "Admin")
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link" href="@Url.Action("AdminDashboard", "Admin")">Панель адміністратора</a>
+                                    <a class="nav-link" href="@Url.Action(("AdminDashboard"), "Admin")">Панель адміністратора</a>
                                 </li>
+                               
                                 <li class="nav-item">
                                     <a class="nav-link" href="@Url.Action("UserProfile", "Admin", new { id = Context.Session.GetInt32("UserId") })">Профіль</a>
                                 </li>
                             }
-                            else if (userRole == "User")
+                            else
                             {
                                 <li class="nav-item">
                                     <a class="nav-link" href="@Url.Action("UserProfile", "User", new { id = Context.Session.GetInt32("UserId") })">Профіль</a>
@@ -86,14 +101,13 @@
         </nav>
     </header>
 
-
     <div class="container mt-4">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="bg-dark text-light text-center py-3">
+    <footer>
         <div class="container">
             &copy; 2024 - Coffee PryStore
         </div>
