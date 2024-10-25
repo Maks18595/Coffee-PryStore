@@ -4,39 +4,14 @@
     ViewData["Title"] = "Профіль користувача";
 }
 
-<h1>Профіль користувача</h1>
-
+<h1>Профіль</h1>
 <p>Електронна адреса: @Model.Email</p>
 <p>Роль: @Model.Role</p>
 
-<a class="btn btn-warning" asp-action="EditProfile" asp-route-id="@Model.Id">Редагувати профіль</a>
-<a class="btn btn-danger" asp-action="DeleteProfile" asp-route-id="@Model.Id">Видалити акаунт</a>
 
 
-<hr />
-
-<li class="nav-item">
-    @if (Context.Session.GetInt32("UserId") != null)
-    {
-        var userRole = Context.Session.GetString("UserRole");
-
-        if (userRole == "Admin")
-        {
-            <a class="nav-link" href="@Url.Action("AdminDashboard", "Admin")">Панель адміністратора</a>
-            <a class="nav-link" href="@Url.Action("UserProfile", "Admin", new { id = Context.Session.GetInt32("UserId") })">Профіль</a>
-        }
-        else if (userRole == "User")
-        {
-            <a class="nav-link" href="@Url.Action("UserProfile", "User", new { id = Context.Session.GetInt32("UserId") })">Профіль</a>
-        }
-    }
-    else
-    {
-        <a class="nav-link" href="@Url.Action("PersonRegistration", "PersonRegistration")">Вхід/Реєстрація</a>
-    }
-</li>
-
-
+<a class="btn btn-warning" asp-action="EditProfile" asp-route-id="@Model.Id" aria-label="Редагувати профіль">Редагувати профіль</a>
+<a class="btn btn-danger" asp-action="DeleteProfile" asp-route-id="@Model.Id" aria-label="Видалити акаунт">Видалити акаунт</a>
 
 <div class="mt-4">
     <h3>Ваші замовлення</h3>
@@ -49,7 +24,8 @@
                 <th>Статус</th>
             </tr>
         </thead>
-       
+        <tbody>
+            @* Логіка для відображення замовлень користувача *@
+        </tbody>
     </table>
 </div>
-

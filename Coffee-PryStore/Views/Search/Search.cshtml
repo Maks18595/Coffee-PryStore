@@ -1,0 +1,26 @@
+﻿@model List<Coffee_PryStore.Models.Table>
+
+@{
+    ViewData["Title"] = "Результати пошуку";
+}
+
+<h1>Результати пошуку</h1>
+
+@if (Model != null && Model.Any())
+{
+    <ul class="list-group">
+        @foreach (var product in Model)
+        {
+            <li class="list-group-item">
+                <h5>@product.CofName</h5>
+                <p>Ціна: @product.CofPrice грн</p>
+                <a class="btn btn-primary" asp-controller="Home" asp-action="Index" asp-route-id="@product.CofId">Деталі</a>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>На жаль, жодного продукту не знайдено за запитом "@ViewData["searchTerm"]".</p>
+}
+

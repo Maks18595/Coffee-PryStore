@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Coffee_PryStore.Migrations
 {
     [DbContext(typeof(DataBaseHome))]
-    [Migration("20241009114351_UpdateTableAndCategoryModel")]
-    partial class UpdateTableAndCategoryModel
+    [Migration("20241025091546_MigBasket2")]
+    partial class MigBasket2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,22 +24,28 @@ namespace Coffee_PryStore.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Coffee_PryStore.Models.CategoryTable", b =>
+            modelBuilder.Entity("Coffee_PryStore.Models.Basket", b =>
                 {
-                    b.Property<string>("CategID")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("CartItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<string>("CategDescript")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartItemId"));
 
-                    b.Property<string>("CategName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CofId")
+                        .HasColumnType("int");
 
-                    b.HasKey("CategID");
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
 
-                    b.ToTable("CategoryTable");
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("CartItemId");
+
+                    b.HasIndex("CofId");
+
+                    b.ToTable("Basket");
                 });
 
             modelBuilder.Entity("Coffee_PryStore.Models.HomeDataModel", b =>
@@ -79,7 +85,7 @@ namespace Coffee_PryStore.Migrations
 
                     b.Property<string>("CofCateg")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CofDuration")
                         .HasColumnType("datetime2");
@@ -91,13 +97,10 @@ namespace Coffee_PryStore.Migrations
                     b.Property<decimal>("CofPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("ImagePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("ImageData")
+                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("CofId");
-
-                    b.HasIndex("CofCateg");
 
                     b.ToTable("Table");
                 });
@@ -127,20 +130,15 @@ namespace Coffee_PryStore.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Coffee_PryStore.Models.Table", b =>
+            modelBuilder.Entity("Coffee_PryStore.Models.Basket", b =>
                 {
-                    b.HasOne("Coffee_PryStore.Models.CategoryTable", "Category")
-                        .WithMany("Table")
-                        .HasForeignKey("CofCateg")
+                    b.HasOne("Coffee_PryStore.Models.Table", "Cof")
+                        .WithMany()
+                        .HasForeignKey("CofId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("Coffee_PryStore.Models.CategoryTable", b =>
-                {
-                    b.Navigation("Table");
+                    b.Navigation("Cof");
                 });
 #pragma warning restore 612, 618
         }

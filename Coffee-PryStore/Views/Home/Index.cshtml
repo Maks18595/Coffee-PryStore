@@ -1,5 +1,4 @@
-﻿
-@model List<Coffee_PryStore.Models.Table>
+﻿@model List<Coffee_PryStore.Models.Table>
 
 @{
     ViewData["Title"] = "Товари";
@@ -9,6 +8,10 @@
 {
     <p>Ви увійшли як: @ViewBag.UserEmail (@ViewBag.UserRole)</p>
 }
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
 
 <style>
     body {
@@ -34,55 +37,39 @@
     }
 </style>
 
-
-<div class="row">
-    <div class="col-md-4 mb-4">
-        <div class="card h-100 shadow-sm">
-            <img src="/Attributes/Images/capucandlatte.jpeg" class="card-img-top" alt="Кава Арабіка">
-            <div class="card-body d-flex flex-column">
-                <h5 class="card-title">Кава Арабіка</h5>
-                <p class="card-text">Смачна та ароматна кава Арабіка з кращих плантацій.</p>
-                <p class="card-text"><strong>Ціна: 150 грн</strong></p>
-                <form asp-action="AddToCart" method="post" class="mt-auto">
-                    <input type="hidden" name="productId" value="1" />
-                    <button type="submit" class="btn btn-primary w-100">Додати до кошика</button>
-                </form>
-            </div>
+<form method="get">
+    <div class="row align-items-center">
+        <div class="col-md-3">
+            <label for="searchName">Назва:</label>
+            <input type="text" name="searchName" class="form-control" value="@ViewData["searchName"]" />
+        </div>
+        <div class="col-md-3">
+            <label for="searchCategory">Категорія:</label>
+            <select name="searchCategory" class="form-control">
+                <option value="">Всі категорії</option>
+                <option value="Арабіка">Арабіка</option>
+                <option value="Робуста">Робуста</option>
+                <option value="Мелена кава">Мелена кава</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="sortOrder">Сортувати за:</label>
+            <select name="sortOrder" class="form-control">
+                <option value="price_asc">Зростання ціни</option>
+                <option value="price_desc">Спадання ціни</option>
+                <option value="name_asc">За алфавітом (A-Z)</option>
+                <option value="name_desc">За алфавітом (Z-A)</option>
+            </select>
+        </div>
+        <div class="col-md-3 text-end">
+            <button type="submit" class="btn btn-outline-primary" style="width: 40px; height: 40px;" title="Фільтр">
+                <i class="fas fa-filter"></i> 
+            </button>
         </div>
     </div>
+</form>
 
-    <div class="col-md-4 mb-4">
-        <div class="card h-100 shadow-sm">
-            <img src="/Attributes/Images/cappuccino.jpeg" class="card-img-top" alt="Кава Робуста">
-            <div class="card-body d-flex flex-column">
-                <h5 class="card-title">Кава Робуста</h5>
-                <p class="card-text">Сильна кава Робуста для любителів насичених смаків.</p>
-                <p class="card-text"><strong>Ціна: 120 грн</strong></p>
-                <form asp-action="AddToCart" method="post" class="mt-auto">
-                    <input type="hidden" name="productId" value="2" />
-                    <button type="submit" class="btn btn-primary w-100">Додати до кошика</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4 mb-4">
-        <div class="card h-100 shadow-sm">
-            <img src="/Attributes/Images/capucino.jpeg" class="card-img-top" alt="Спеціальна кава">
-            <div class="card-body d-flex flex-column">
-                <h5 class="card-title">Спеціальна кава</h5>
-                <p class="card-text">Унікальна кава зі смаковими нотками шоколаду.</p>
-                <p class="card-text"><strong>Ціна: 200 грн</strong></p>
-                <form asp-action="AddToCart" method="post" class="mt-auto">
-                    <input type="hidden" name="productId" value="3" />
-                    <button type="submit" class="btn btn-primary w-100">Додати до кошика</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-
+<hr />
 
 <div class="row">
     @foreach (var item in Model)
@@ -97,7 +84,7 @@
                     <p class="card-text"><strong>Кількість:</strong> @item.CofAmount</p>
                     <p class="card-text"><strong>Термін зберігання:</strong> @item.CofDuration.ToString("yyyy-MM-dd")</p>
                     <form asp-action="AddToCart" method="post" class="mt-auto">
-                        <input type="hidden" name="productId" value="@item.CofId" />
+                        <input type="hidden" name="cofId" value="@item.CofId" />
                         <button type="submit" class="btn btn-primary w-100">Додати до кошика</button>
                     </form>
                 </div>

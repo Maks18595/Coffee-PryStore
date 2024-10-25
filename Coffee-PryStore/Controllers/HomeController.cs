@@ -4,9 +4,14 @@ using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace Coffee_PryStore.Controllers
 {
+    
+
+
+
     public class HomeController : Controller
     {
         private readonly DataBaseHome _context;
@@ -14,6 +19,12 @@ namespace Coffee_PryStore.Controllers
         public HomeController(DataBaseHome context)
         {
             _context = context;
+        }
+
+
+        public IActionResult Search()
+        {
+            return View();
         }
 
         [HttpGet]
@@ -33,10 +44,6 @@ namespace Coffee_PryStore.Controllers
 
             return View(user);
         }
-
-
-
-
         
         public IActionResult CreateProduct()
         {
@@ -115,11 +122,43 @@ namespace Coffee_PryStore.Controllers
 
 
         [AllowAnonymous]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchName, string searchCategory, string sortOrder)
         {
+            var products = from p in _context.Table select p;
 
-            var products = await _context.Table.ToListAsync();
+            if (!String.IsNullOrEmpty(searchName))
+            {
+                products = products.Where(p => p.CofName.Contains(searchName));
+            }
 
+            if (!String.IsNullOrEmpty(searchCategory))
+            {
+                products = products.Where(p => p.CofCateg == searchCategory);
+            }
+
+            
+            switch (sortOrder)
+            {
+                case "price_asc":
+                    products = products.OrderBy(p => p.CofPrice);
+                    break;
+                case "price_desc":
+                    products = products.OrderByDescending(p => p.CofPrice);
+                    break;
+                case "name_asc":
+                    products = products.OrderBy(p => p.CofName);
+                    break;
+                case "name_desc":
+                    products = products.OrderByDescending(p => p.CofName);
+                    break;
+                default:
+                    products = products.OrderBy(p => p.CofName);
+                    break;
+            }
+
+            var productList = await products.ToListAsync();
+
+            
             var userId = HttpContext.Session.GetInt32("UserId");
             if (userId != null)
             {
@@ -131,20 +170,20 @@ namespace Coffee_PryStore.Controllers
                 }
             }
 
-            return View(products);
+            return View(productList);
         }
 
 
         [HttpPost]
-        public IActionResult AddToCart(int productId)
+        public IActionResult AddToCart(int cofId)
         {
           
-            var product = _context.Table.Find(productId);
+            var product = _context.Table.Find(cofId);
 
             if (product != null)
             {
               
-                var cartItem = _context.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
+                var cartItem = _context.Basket.FirstOrDefault(ci => ci.CofId == cofId);
 
                 if (cartItem != null)
                 {
@@ -154,12 +193,12 @@ namespace Coffee_PryStore.Controllers
                 else
                 {
                     
-                    cartItem = new CartItem
+                    cartItem = new Basket
                     {
-                        ProductId = product.CofId,
+                        CofId = product.CofId,
                         Quantity = 1 
                     };
-                    _context.CartItems.Add(cartItem);
+                    _context.Basket.Add(cartItem);
                 }
 
               
@@ -169,9 +208,9 @@ namespace Coffee_PryStore.Controllers
             return RedirectToAction("Index");
         }
 
-        private Table? GetProductById(int productId)
+        private Table? GetProductById(int cofId)
         {
-            return _context.Table.Find(productId);
+            return _context.Table.Find(cofId);
         }
 
 

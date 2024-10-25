@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Coffee_PryStore.Migrations
 {
     [DbContext(typeof(DataBaseHome))]
-    [Migration("20241002224616_CorrectData")]
-    partial class CorrectData
+    [Migration("20241025091642_MigBaskettest")]
+    partial class MigBaskettest
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,30 @@ namespace Coffee_PryStore.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Coffee_PryStore.Models.Basket", b =>
+                {
+                    b.Property<int>("CartItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartItemId"));
+
+                    b.Property<int>("CofId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("CartItemId");
+
+                    b.HasIndex("CofId");
+
+                    b.ToTable("Basket");
+                });
 
             modelBuilder.Entity("Coffee_PryStore.Models.HomeDataModel", b =>
                 {
@@ -48,6 +72,39 @@ namespace Coffee_PryStore.Migrations
                     b.ToTable("HomeDataModels");
                 });
 
+            modelBuilder.Entity("Coffee_PryStore.Models.Table", b =>
+                {
+                    b.Property<int>("CofId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CofId"));
+
+                    b.Property<int>("CofAmount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CofCateg")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CofDuration")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CofName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("CofPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<byte[]>("ImageData")
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("CofId");
+
+                    b.ToTable("Table");
+                });
+
             modelBuilder.Entity("Coffee_PryStore.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -71,6 +128,17 @@ namespace Coffee_PryStore.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Coffee_PryStore.Models.Basket", b =>
+                {
+                    b.HasOne("Coffee_PryStore.Models.Table", "Cof")
+                        .WithMany()
+                        .HasForeignKey("CofId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cof");
                 });
 #pragma warning restore 612, 618
         }

@@ -21,13 +21,16 @@ namespace Coffee_PryStore.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Coffee_PryStore.Models.CartItem", b =>
+            modelBuilder.Entity("Coffee_PryStore.Models.Basket", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CartItemId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartItemId"));
+
+                    b.Property<int>("CofId")
+                        .HasColumnType("int");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -35,9 +38,11 @@ namespace Coffee_PryStore.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("CartItemId");
 
-                    b.ToTable("CartItems");
+                    b.HasIndex("CofId");
+
+                    b.ToTable("Basket");
                 });
 
             modelBuilder.Entity("Coffee_PryStore.Models.HomeDataModel", b =>
@@ -120,6 +125,17 @@ namespace Coffee_PryStore.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Coffee_PryStore.Models.Basket", b =>
+                {
+                    b.HasOne("Coffee_PryStore.Models.Table", "Cof")
+                        .WithMany()
+                        .HasForeignKey("CofId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cof");
                 });
 #pragma warning restore 612, 618
         }

@@ -3,9 +3,10 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] Coffee_PryStore_MainPage</title>
+    <meta name="description" content="Coffee PryStore - Your online coffee shop" />
+    <meta name="keywords" content="coffee, shop, online, e-commerce" />
+    <title>@ViewData["Title"] - Coffee PryStore</title>
     <link rel="icon" type="image/png" href="@Url.Content("~/Attributes/Images/signview.png")">
-
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Coffee_PryStore.styles.css" asp-append-version="true" />
@@ -13,13 +14,13 @@
     <style>
         html, body {
             height: 100%;
+            margin: 0;
         }
 
         body {
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            margin: 0;
         }
 
         main {
@@ -27,7 +28,6 @@
         }
 
         footer {
-            flex-shrink: 0;
             background-color: #343a40;
             color: white;
             text-align: center;
@@ -47,52 +47,50 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Basket", "Basket")">Кошик</a>
+                            <a class="nav-link" asp-controller="Basket" asp-action="Basket">Кошик</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/Products">Товари</a>
+                            <a class="nav-link" asp-controller="Products" asp-action="Index">Товари</a>
                         </li>
 
                         @if (Context.Session.GetInt32("UserId") != null)
                         {
-
                             var userRole = Context.Session.GetString("UserRole");
+                            var userEmail = Context.Session.GetString("UserEmail");
 
-
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("PersonRegistration", "PersonRegistration")">Вихід</a>
-                            </li>
+                        
+                            if (userRole == "Admin" || userEmail == "pryimak@gmail.com")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Admin" asp-action="AdminDashboard">Панель адміністратора</a>
+                                </li>
+                            }
                            
-
-
-
-                            @if (ViewData["UserRole"] != null && ViewData["UserRole"].ToString() == "Admin")
+                            else if (userRole == "User")
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link" href="@Url.Action(("AdminDashboard"), "Admin")">Панель адміністратора</a>
+                                    <a class="nav-link" asp-controller="User" asp-action="UserDashboard">Панель</a>
                                 </li>
-                               
                                 <li class="nav-item">
-                                    <a class="nav-link" href="@Url.Action("UserProfile", "Admin", new { id = Context.Session.GetInt32("UserId") })">Профіль</a>
+                                    <a class="nav-link" asp-controller="User" asp-action="UserProfile" asp-route-id="@Context.Session.GetInt32("UserId")">Профіль</a>
                                 </li>
                             }
-                            else
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link" href="@Url.Action("UserProfile", "User", new { id = Context.Session.GetInt32("UserId") })">Профіль</a>
-                                </li>
-                            }
+
+                   
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="PersonRegistration" asp-action="Logout">Вихід</a>
+                            </li>
                         }
                         else
                         {
+
                             <li class="nav-item">
                                 <a class="nav-link" href="@Url.Action("PersonRegistration", "PersonRegistration")">Вхід/Реєстрація</a>
                             </li>
                         }
                     </ul>
 
-                    <form class="d-flex" action="/Products/Search" method="get">
+                    <form class="d-flex" asp-controller="Search" asp-action="Index" method="get">
                         <input class="form-control me-2" type="search" name="searchTerm" placeholder="Пошук товарів" aria-label="Пошук" />
                         <button class="btn btn-outline-light" type="submit">Пошук</button>
                     </form>

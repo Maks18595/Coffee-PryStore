@@ -1,59 +1,34 @@
 ﻿@model User
 
 @{
-    ViewData["Title"] = "Профіль користувача";
+    ViewData["Title"] = "Профіль адміністратора";
 }
 
-<h1>Профіль користувача</h1>
-
+<h1>Профіль адміністратора</h1>
 <p>Електронна адреса: @Model.Email</p>
 <p>Роль: @Model.Role</p>
-
-<a class="btn btn-warning" asp-action="EditProfile" asp-route-id="@Model.Id">Редагувати профіль</a>
-<a class="btn btn-danger" asp-action="DeleteProfile" asp-route-id="@Model.Id">Видалити акаунт</a>
-
-
-<hr />
-
-<li class="nav-item">
-
-
-
-
-    @if (Context.Session.GetInt32("UserId") != null)
-    {
-
-
-        var userRole = Context.Session.GetString("UserRole");
-
-
-
-        if (userRole == "Admin")
-        {
-       
-                <a class="nav-link" href="@Url.Action("AdminDashboard", "Admin", new { id = Context.Session.GetInt32("UserId") })">Панель адміністратора</a>
-          
-         
-                <a class="nav-link" href="@Url.Action("UserProfile", "Admin", new { id = Context.Session.GetInt32("UserId") })">Профіль</a>
-       
-        }
-        else if (userRole == "User")
-        {
-            <a class="nav-link" href="@Url.Action("UserProfile", "User", new { id = Context.Session.GetInt32("UserId") })">Профіль</a>
-        }
-    }
-    else
-    {
-        <a class="nav-link" href="@Url.Action("PersonRegistration", "PersonRegistration")">Вхід/Реєстрація</a>
-    }
-
-
-
-
-   
-    
-</li>
-
+<table class="table">
+    <thead>
+        <tr>
+            <th>Електронна адреса</th>
+            <th>Роль</th>
+            <th>Дії</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.Email</td>
+            <td>@Model.Role</td>
+            <td>
+                <form method="post" asp-action="Delete" asp-route-id="@Model.Id" class="d-inline-block">
+                    <button class="btn btn-danger btn-sm" type="submit" aria-label="Видалити">Видалити</button>
+                </form>
+                <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@Model.Id" aria-label="Редагувати">Редагувати</a>
+                <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@Model.Id" aria-label="Деталі">Деталі</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 <div class="mt-4">
     <h3>Ваші замовлення</h3>
@@ -67,6 +42,4 @@
             </tr>
         </thead>
 
-    </table>
-</div>
 

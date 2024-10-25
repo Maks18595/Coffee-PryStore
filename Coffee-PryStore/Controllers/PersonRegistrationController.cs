@@ -35,31 +35,51 @@ namespace Coffee_PryStore.Controllers
             return View(user);
         }
 
-        [HttpPost]
-        public IActionResult PersonRegistration(string email, string password, string role)
+        public IActionResult Logout()
         {
-            
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
-            {
-                ModelState.AddModelError("", "Будь ласка, введіть електронну адресу та пароль.");
-                return View();
-            }
+        
+            HttpContext.Session.Clear();
 
        
+            return RedirectToAction("PersonRegistration", "PersonRegistration");
+        }
+
+
+        [HttpPost]
+        public IActionResult PersonRegistration(string email, string password)
+        {
+            // Хардкодовані дані адміністратора
+            string adminEmail = "pryimak@gmail.com";
+            string adminPassword = HashPassword("12345678");
+            string adminRole = "Admin";
+
+            // Якщо введені дані відповідають хардкодованим даним адміністратора
+            if (email == adminEmail && VerifyPassword(adminPassword, password))
+            {
+                // Призначаємо роль і ID адміністратора в сесії
+                HttpContext.Session.SetString("UserRole", adminRole);
+                HttpContext.Session.SetInt32("UserId", 0); // ID адміністратора може бути 0 або інше значення
+                return RedirectToAction("AdminDashboard", "Admin");
+            }
+
+            // Перевірка користувачів у базі даних
             var existingUser = _context.Users.FirstOrDefault(u => u.Email == email);
 
             if (existingUser != null)
             {
-              
                 if (VerifyPassword(existingUser.Password, password))
                 {
-                   
                     HttpContext.Session.SetInt32("UserId", existingUser.Id);
+                    HttpContext.Session.SetString("UserRole", existingUser.Role);
 
-                    
-                    return existingUser.Role == "Admin"
-                        ? RedirectToAction("AdminDashboard", "Admin")
-                        : RedirectToAction("UserDashboard", "User", new { id = existingUser.Id });
+                    if (existingUser.Role == "Admin")
+                    {
+                        return RedirectToAction("AdminDashboard", "Admin");
+                    }
+                    else
+                    {
+                        return RedirectToAction("UserDashboard", "User", new { id = existingUser.Id });
+                    }
                 }
                 else
                 {
@@ -68,28 +88,28 @@ namespace Coffee_PryStore.Controllers
                 }
             }
 
-            
+            // Якщо користувача з такою електронною адресою не існує, створюємо нового користувача
             var newUser = new User
             {
                 Email = email,
                 Password = HashPassword(password),
-                Role = role
+                Role = "User"
             };
 
             _context.Users.Add(newUser);
             _context.SaveChanges();
 
-            HttpContext.Session.SetInt32("UserId", newUser.Id); 
+            HttpContext.Session.SetInt32("UserId", newUser.Id);
+            HttpContext.Session.SetString("UserRole", newUser.Role);
 
-            return newUser.Role == "Admin"
-                ? RedirectToAction("AdminDashboard", "Admin")
-                : RedirectToAction("UserDashboard", "User", new { id = newUser.Id });
+            return RedirectToAction("UserDashboard", "User", new { id = newUser.Id });
         }
 
 
-       
 
-       
+
+
+
         private string HashPassword(string password)
         {
             using (var sha256 = SHA256.Create())

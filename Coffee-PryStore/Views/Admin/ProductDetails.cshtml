@@ -31,8 +31,10 @@
                     <img src="@(item.ImageData != null ? $"data:image/jpeg;base64,{Convert.ToBase64String(item.ImageData)}" : "/Attributes/Images/placeholder.png")" class="img-thumbnail" alt="@item.CofName" />
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.CofId">Редагувати</a> |
-                    <a asp-action="Delete" asp-route-id="@item.CofId">Видалити</a>
+                    <a asp-action="EditProduct" asp-route-id="@item.CofId">Редагувати</a>
+                    <a asp-action="DeleteProduct" asp-route-id="@item.CofId">Видалити</a>
+
+                
                 </td>
             </tr>
         }

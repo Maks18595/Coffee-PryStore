@@ -22,6 +22,6 @@ public class DataBaseHome : DbContext
             .Property(t => t.CofPrice)
             .HasColumnType("decimal(18,2)"); 
     }
-    public DbSet<CartItem> CartItems { get; set; }
+    public DbSet<Basket> Basket { get; set; }
 }
 

@@ -8,10 +8,36 @@
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; 
+        }
+
+        .container {
+            flex: 1; 
+        }
+
+
+        footer {
+            background-color: #343a40; 
+            color: white; 
+            text-align: center;
+            padding: 1rem 0;
+            width: 100%;
+            position: relative; 
+        }
+    </style>
 </head>
 <body>
-    <header>
-    </header>
+   
 
     <div class="container">
         <main role="main" class="pb-3">

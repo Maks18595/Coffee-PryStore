@@ -250,7 +250,8 @@ namespace Coffee_PryStore.Controllers
             return View(user);
         }
 
-     
+
+
         public IActionResult CreateProduct()
         {
             return View();
@@ -302,23 +303,48 @@ namespace Coffee_PryStore.Controllers
             return View(product);
         }
 
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditProduct(Table product)
+        public async Task<IActionResult> EditProduct(Table product, IFormFile ImageFile)
         {
             if (ModelState.IsValid)
             {
-                _context.Update(product);
+                var existingProduct = await _context.Table.FindAsync(product.CofId);
+                if (existingProduct == null)
+                {
+                    return NotFound();
+                }
+
+                existingProduct.CofName = product.CofName;
+                existingProduct.CofCateg = product.CofCateg;
+                existingProduct.CofPrice = product.CofPrice;
+                existingProduct.CofAmount = product.CofAmount;
+                existingProduct.CofDuration = product.CofDuration;
+
+               
+                if (ImageFile != null && ImageFile.Length > 0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await ImageFile.CopyToAsync(memoryStream);
+                        existingProduct.ImageData = memoryStream.ToArray();
+                    }
+                }
+
+                _context.Update(existingProduct);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                return RedirectToAction("ProductDetails", new { id = product.CofId });
             }
+
             return View(product);
         }
 
 
-        
-        public IActionResult DeleteProducts(int id)
+
+
+        public IActionResult DeleteProduct(int id)
         {
             var product = _context.Table.FirstOrDefault(p => p.CofId == id);
             if (product == null)
@@ -328,10 +354,9 @@ namespace Coffee_PryStore.Controllers
             return View(product);
         }
 
-      
-        [HttpPost, ActionName("DeleteProducts")]
+        [HttpPost, ActionName("DeleteProduct")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteProduct(int id)
+        public async Task<IActionResult> DeleteProductConfirmed(int id)
         {
             var product = await _context.Table.FindAsync(id);
             if (product != null)
@@ -339,8 +364,16 @@ namespace Coffee_PryStore.Controllers
                 _context.Table.Remove(product);
                 await _context.SaveChangesAsync();
             }
+            else
+            {
+                return NotFound();
+            }
+
             return RedirectToAction("ProductDetails");
         }
+
+
+
 
     }
 }

@@ -1,4 +1,41 @@
-﻿@{
+﻿@model List<Coffee_PryStore.Models.Basket> // Змінюємо тип моделі на список Basket
+@{
     ViewData["Title"] = "Кошик";
 }
-<h1>Кошик</h1>
+
+<h1>Ваш кошик</h1>
+
+@if (Model == null || Model.Count == 0) // Перевірка, чи список порожній
+{
+    <p>Ваш кошик порожній.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Назва</th>
+                <th>Ціна за одиницю</th>
+                <th>Кількість</th>
+                <th>Сума</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Cof.CofName</td>
+                    <td>@item.Cof.CofPrice грн</td>
+                    <td>@item.Quantity</td>
+                    <td>@(item.Cof.CofPrice * item.Quantity) грн</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h4>Загальна сума: @Model.Sum(i => i.Cof.CofPrice * i.Quantity) грн</h4>
+
+    <form asp-action="Checkout" method="post">
+        <button type="submit" class="btn btn-primary">Оформити замовлення</button>
+    </form>
+}

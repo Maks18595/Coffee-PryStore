@@ -11,8 +11,11 @@
     <p>Ви впевнені, що хочете видалити цей продукт?</p>
 </div>
 
-<form asp-action="DeleteConfirmed">
+<form asp-action="DeleteProduct" method="post">
     <input type="hidden" asp-for="CofId" />
     <button type="submit" class="btn btn-danger">Видалити</button>
     <a href="@Url.Action("ProductDetails", "Admin")" class="btn btn-secondary">Скасувати</a>
 </form>
+
+
+
