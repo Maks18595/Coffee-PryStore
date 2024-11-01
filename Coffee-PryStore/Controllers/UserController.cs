@@ -9,16 +9,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Coffee_PryStore.Controllers
 {
-    public class UserController : Controller
+    public class UserController(DataBaseHome context) : Controller
     {
-        private readonly DataBaseHome _context;
-
-        public UserController(DataBaseHome context)
-        {
-            _context = context;
-        }
-
-       
+        private readonly DataBaseHome _context = context;
 
         public IActionResult UserProfile(int id)
         {
@@ -139,9 +132,8 @@ namespace Coffee_PryStore.Controllers
 
         private static string HashPassword(string password)
         {
-            using var sha256 = SHA256.Create();
             var bytes = Encoding.UTF8.GetBytes(password);
-            var hash = sha256.ComputeHash(bytes);
+            var hash = SHA256.HashData(bytes);
             return Convert.ToBase64String(hash);
         }
 

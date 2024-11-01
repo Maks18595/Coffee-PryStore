@@ -13,16 +13,10 @@ using System.Text;
 
 namespace Coffee_PryStore.Controllers
 {
-    public class AuthController : Controller
+    public class AuthController(TokenService tokenService, DataBaseHome dataBaseHome) : Controller
     {
-        private readonly TokenService _tokenService;
-        private readonly DataBaseHome _dataBaseHome;
-
-        public AuthController(TokenService tokenService, DataBaseHome dataBaseHome)
-        {
-            _tokenService = tokenService;
-            _dataBaseHome = dataBaseHome;
-        }
+        private readonly TokenService _tokenService = tokenService;
+        private readonly DataBaseHome _dataBaseHome = dataBaseHome;
 
         public class UserLoginDto
         {
@@ -58,6 +52,7 @@ namespace Coffee_PryStore.Controllers
 
             var claims = new List<Claim>
             {
+                new Claim(ClaimTypes.Email, user.Email),
                 new(ClaimTypes.Name, user.Email), 
                 new(ClaimTypes.Role, "Admin")
             };

@@ -6,22 +6,17 @@ using System.Linq;
 
 namespace Coffee_PryStore.Controllers
 {
-    public class UsersPageController : Controller
+    public class UsersPageController(DataBaseHome context) : Controller
     {
-        private readonly DataBaseHome _context;
+        private readonly DataBaseHome _context = context;
 
-        public UsersPageController(DataBaseHome context)
-        {
-            _context = context;
-        }
-
-
+        /*
         [HttpGet]
         public IActionResult Edit(int id)
         {
             return View(new User());
         }
-
+        */
 
 
         [HttpPost]

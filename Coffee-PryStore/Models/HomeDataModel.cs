@@ -2,7 +2,7 @@
 
 namespace Coffee_PryStore.Models
 {
-    public class HomeDataModel
+   public class HomeDataModel
     {
         
         public int Id { get; set; }

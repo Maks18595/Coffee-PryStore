@@ -83,10 +83,12 @@
                     <p class="card-text"><strong>Ціна:</strong> @item.CofPrice грн</p>
                     <p class="card-text"><strong>Кількість:</strong> @item.CofAmount</p>
                     <p class="card-text"><strong>Термін зберігання:</strong> @item.CofDuration.ToString("yyyy-MM-dd")</p>
-                    <form asp-action="AddToCart" method="post" class="mt-auto">
-                        <input type="hidden" name="cofId" value="@item.CofId" />
+                    <form asp-controller="Basket" asp-action="AddToCart" method="post" class="mt-auto">
+                        <input type="hidden" name="productId" value="@item.CofId" />
+                        <input type="hidden" name="quantity" value="1" />
                         <button type="submit" class="btn btn-primary w-100">Додати до кошика</button>
                     </form>
+
                 </div>
             </div>
         </div>

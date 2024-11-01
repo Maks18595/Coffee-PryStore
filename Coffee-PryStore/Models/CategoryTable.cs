@@ -13,7 +13,7 @@ namespace Coffee_PryStore.Models
 
         public string CategDescript { get; set; } = string.Empty;
 
-        public virtual ICollection<Table> Table { get; set; } = new List<Table>();
+        public virtual ICollection<Table> Table { get; set; } = [];
 
     }
 }

@@ -5,22 +5,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using System.Security.Claims;
 
 namespace Coffee_PryStore.Controllers
 {
-    
 
-
-
-    public class HomeController : Controller
+    public class HomeController(DataBaseHome context) : Controller
     {
-        private readonly DataBaseHome _context;
-
-        public HomeController(DataBaseHome context)
-        {
-            _context = context;
-        }
-
+        private readonly DataBaseHome _context = context;
 
         public IActionResult Search()
         {
@@ -59,11 +51,9 @@ namespace Coffee_PryStore.Controllers
                 
                 if (ImageFile != null && ImageFile.Length > 0)
                 {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        await ImageFile.CopyToAsync(memoryStream);
-                        product.ImageData = memoryStream.ToArray();
-                    }
+                    using var memoryStream = new MemoryStream();
+                    await ImageFile.CopyToAsync(memoryStream);
+                    product.ImageData = memoryStream.ToArray();
                 }
 
                 await _context.AddAsync(product);
@@ -107,11 +97,9 @@ namespace Coffee_PryStore.Controllers
 
                 if (imageFile != null && imageFile.Length > 0)
                 {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        await imageFile.CopyToAsync(memoryStream);
-                        existingProduct.ImageData = memoryStream.ToArray(); 
-                    }
+                    using var memoryStream = new MemoryStream();
+                    await imageFile.CopyToAsync(memoryStream);
+                    existingProduct.ImageData = memoryStream.ToArray();
                 }
 
                 await _context.SaveChangesAsync(); 
@@ -136,26 +124,15 @@ namespace Coffee_PryStore.Controllers
                 products = products.Where(p => p.CofCateg == searchCategory);
             }
 
-            
-            switch (sortOrder)
-            {
-                case "price_asc":
-                    products = products.OrderBy(p => p.CofPrice);
-                    break;
-                case "price_desc":
-                    products = products.OrderByDescending(p => p.CofPrice);
-                    break;
-                case "name_asc":
-                    products = products.OrderBy(p => p.CofName);
-                    break;
-                case "name_desc":
-                    products = products.OrderByDescending(p => p.CofName);
-                    break;
-                default:
-                    products = products.OrderBy(p => p.CofName);
-                    break;
-            }
 
+            products = sortOrder switch
+            {
+                "price_asc" => products.OrderBy(p => p.CofPrice),
+                "price_desc" => products.OrderByDescending(p => p.CofPrice),
+                "name_asc" => products.OrderBy(p => p.CofName),
+                "name_desc" => products.OrderByDescending(p => p.CofName),
+                _ => products.OrderBy(p => p.CofName),
+            };
             var productList = await products.ToListAsync();
 
             
@@ -172,41 +149,163 @@ namespace Coffee_PryStore.Controllers
 
             return View(productList);
         }
-
+        
 
         [HttpPost]
-        public IActionResult AddToCart(int cofId)
+        public async Task<IActionResult> AddToCart(int productId, int quantity)
         {
-          
-            var product = _context.Table.Find(cofId);
-
-            if (product != null)
+            // Retrieve the product
+            var product = await _context.Table.FirstOrDefaultAsync(p => p.CofId == productId);
+            if (product == null)
             {
-              
-                var cartItem = _context.Basket.FirstOrDefault(ci => ci.CofId == cofId);
-
-                if (cartItem != null)
-                {
-                  
-                    cartItem.Quantity++;
-                }
-                else
-                {
-                    
-                    cartItem = new Basket
-                    {
-                        CofId = product.CofId,
-                        Quantity = 1 
-                    };
-                    _context.Basket.Add(cartItem);
-                }
-
-              
-                _context.SaveChanges();
+                return NotFound();
             }
 
-            return RedirectToAction("Index");
+            // Retrieve cart from session or create a new cart object
+            var cart = HttpContext.Session.GetObjectFromJson<Baskets>("Cart") ?? new Baskets();
+
+            // Get the user ID, ensuring it is not null
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            // Retrieve an existing cart item for this product if it exists in the database
+            Basket existingCartItem = null;
+            if (userId.HasValue)
+            {
+                existingCartItem = await _context.Basket.FirstOrDefaultAsync(b => b.CofId == productId && b.Id == userId.Value);
+            }
+
+            if (existingCartItem != null)
+            {
+                // If the item exists in both session and database, update quantity
+                existingCartItem.Quantity += quantity;
+                var sessionCartItem = cart.Items.FirstOrDefault(b => b.CofId == productId);
+                if (sessionCartItem != null)
+                {
+                    sessionCartItem.Quantity += quantity;
+                }
+            }
+            else
+            {
+                // Add the new item to both the session cart and database
+                var newCartItem = new Basket
+                {
+                    CofId = productId,
+                    Quantity = quantity,
+                    Id = userId ?? 0 // Assign a default value if userId is null
+                };
+
+                cart.Items.Add(newCartItem);
+                await _context.Basket.AddAsync(newCartItem); // Save new item to the database
+            }
+
+            // Save updated cart to the session and database
+            HttpContext.Session.SetObjectAsJson("Cart", cart);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Basket");
         }
+
+
+        public async Task<IActionResult> Basket()
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account"); // Перенаправлення на логін, якщо користувач не авторизований
+            }
+
+            // Завантаження корзини для поточного користувача з бази даних
+            var cartItems = await _context.Basket
+                .Include(b => b.Cof)
+                .Where(b => b.Id == userId.Value)
+                .ToListAsync();
+
+            // Створення моделі для представлення
+            var cart = new Baskets
+            {
+                Items = cartItems
+            };
+
+            // Оновлення сесії корзини
+            HttpContext.Session.SetObjectAsJson("Cart", cart);
+
+            return View(cart); // Передача корзини в представлення
+        }
+
+
+        private Baskets GetCartFromSession()
+        {
+            var cart = HttpContext.Session.GetObjectFromJson<Baskets>("Cart");
+            return cart ?? new Baskets();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromCart(int productId)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            // Find the item in the database
+            var cartItem = userId != null
+                ? await _context.Basket.FirstOrDefaultAsync(b => b.CofId == productId && b.Id == userId.Value)
+                : null;
+
+            if (cartItem != null)
+            {
+                _context.Basket.Remove(cartItem);
+                await _context.SaveChangesAsync();
+
+                // Update session cart
+                var cart = HttpContext.Session.GetObjectFromJson<Baskets>("Cart") ?? new Baskets();
+                cart.Items.RemoveAll(i => i.CofId == productId);
+                HttpContext.Session.SetObjectAsJson("Cart", cart);
+            }
+
+            return RedirectToAction("Basket");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PlaceOrder()
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var cart = HttpContext.Session.GetObjectFromJson<Baskets>("Cart");
+
+            if (cart != null && cart.Items.Any())
+            {
+                var order = new Order
+                {
+                    UserId = userId.Value,
+                    OrderItems = cart.Items.Select(item => new OrderItem
+                    {
+                        CofId = item.CofId,
+                        Quantity = item.Quantity,
+                        UnitPrice = item.Cof.CofPrice
+                    }).ToList(),
+                    OrderDate = DateTime.Now,
+                    TotalAmount = cart.Items.Sum(item => item.Quantity * item.Cof.CofPrice),
+                    Status = "Pending"
+                };
+
+                await _context.Orders.AddAsync(order);
+                _context.Basket.RemoveRange(cart.Items); // Видалення елементів корзини з бази даних
+                HttpContext.Session.Remove("Cart"); // Очищення сесії корзини
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("OrderConfirmation");
+        }
+
+
+
+
+
+
 
         private Table? GetProductById(int cofId)
         {

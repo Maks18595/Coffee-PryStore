@@ -4,6 +4,7 @@ using Coffee_PryStore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Coffee_PryStore.Migrations
 {
     [DbContext(typeof(DataBaseHome))]
-    partial class DataBaseHomeModelSnapshot : ModelSnapshot
+    [Migration("20241026163542_MigrationDataBasetestagin2")]
+    partial class MigrationDataBasetestagin2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,9 +96,34 @@ namespace Coffee_PryStore.Migrations
 
                     b.HasKey("OrderId");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Coffee_PryStore.Models.OrderItem", b =>
+                {
+                    b.Property<int>("OrderItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderItemId"));
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.HasKey("OrderItemId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("Coffee_PryStore.Models.Table", b =>
@@ -156,35 +184,6 @@ namespace Coffee_PryStore.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("OrderItem", b =>
-                {
-                    b.Property<int>("OrderItemId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderItemId"));
-
-                    b.Property<int>("CofId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("UnitPrice")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.HasKey("OrderItemId");
-
-                    b.HasIndex("CofId");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("OrderItems");
-                });
-
             modelBuilder.Entity("Coffee_PryStore.Models.Basket", b =>
                 {
                     b.HasOne("Coffee_PryStore.Models.Table", "Cof")
@@ -196,34 +195,13 @@ namespace Coffee_PryStore.Migrations
                     b.Navigation("Cof");
                 });
 
-            modelBuilder.Entity("Coffee_PryStore.Models.Order", b =>
+            modelBuilder.Entity("Coffee_PryStore.Models.OrderItem", b =>
                 {
-                    b.HasOne("Coffee_PryStore.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("OrderItem", b =>
-                {
-                    b.HasOne("Coffee_PryStore.Models.Table", "Table")
-                        .WithMany()
-                        .HasForeignKey("CofId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Coffee_PryStore.Models.Order", "Order")
+                    b.HasOne("Coffee_PryStore.Models.Order", null)
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Table");
                 });
 
             modelBuilder.Entity("Coffee_PryStore.Models.Order", b =>

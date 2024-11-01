@@ -3,12 +3,23 @@ using Coffee_PryStore.Models;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Coffee_PryStore.Models.Configurations;
 
 namespace Coffee_PryStore.Controllers
 {
-    public class PersonRegistrationController(DataBaseHome context) : Controller
+    public class PersonRegistrationController : Controller
     {
-        private readonly DataBaseHome _context = context;
+        private readonly DataBaseHome _context;
+        private readonly TokenService _tokenService;
+
+        public PersonRegistrationController(DataBaseHome context, TokenService tokenService)
+        {
+            _context = context;
+            _tokenService = tokenService;
+        }
 
         [HttpGet]
         public IActionResult PersonRegistration()
@@ -44,7 +55,7 @@ namespace Coffee_PryStore.Controllers
             return RedirectToAction("PersonRegistration", "PersonRegistration");
         }
 
-
+        
         [HttpPost]
         public IActionResult PersonRegistration(string email, string password)
         {
@@ -104,24 +115,19 @@ namespace Coffee_PryStore.Controllers
 
             return RedirectToAction("UserDashboard", "User", new { id = newUser.Id });
         }
+        
+       
 
 
-
-
-
-
-        private string HashPassword(string password)
+        private static string HashPassword(string password)
         {
-            using (var sha256 = SHA256.Create())
-            {
-                var bytes = Encoding.UTF8.GetBytes(password);
-                var hash = sha256.ComputeHash(bytes);
-                return Convert.ToBase64String(hash);
-            }
+            var bytes = Encoding.UTF8.GetBytes(password);
+            var hash = SHA256.HashData(bytes);
+            return Convert.ToBase64String(hash);
         }
 
-     
-        private bool VerifyPassword(string storedHash, string password)
+
+        private static bool VerifyPassword(string storedHash, string password)
         {
             var hashedInputPassword = HashPassword(password);
             return hashedInputPassword == storedHash;

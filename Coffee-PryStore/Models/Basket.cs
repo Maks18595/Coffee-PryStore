@@ -6,17 +6,17 @@ namespace Coffee_PryStore.Models
     public class Basket
     {
         [Key]
-        public int CartItemId { get; set; } 
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int CartItemId { get; set; }
 
-        public int ProductId { get; set; } 
+      
+        public int Id { get; set; } 
 
-        public int CofId { get; set; } 
+        public int CofId { get; set; }
 
         public int Quantity { get; set; }
-
-
+        
         [ForeignKey("CofId")]
-        public virtual Table Cof { get; set; }
-
+        public virtual  Table Cof { get; set; } 
     }
 }

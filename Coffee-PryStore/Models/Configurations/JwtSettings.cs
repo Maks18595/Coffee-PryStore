@@ -13,21 +13,16 @@ namespace Coffee_PryStore.Models.Configurations
 {
     public class JwtSettings
     {
-        public string Issuer { get; set; }
-        public string Audience { get; set; }
-        public string Key { get; set; }
-        public string Secret { get; set; }
+        public required string Issuer { get; set; }
+        public required string Audience { get; set; }
+        public required string Key { get; set; }
+        public required string Secret { get; set; }
         public int ExpirationInMinutes { get; set; }
     }
 
-    public class TokenService
+    public class TokenService(IOptions<JwtSettings> jwtSettings)
     {
-        private readonly JwtSettings _jwtSettings;
-
-        public TokenService(IOptions<JwtSettings> jwtSettings)
-        {
-            _jwtSettings = jwtSettings.Value;
-        }
+        private readonly JwtSettings _jwtSettings = jwtSettings.Value;
 
         public string GenerateToken(User user)
         {

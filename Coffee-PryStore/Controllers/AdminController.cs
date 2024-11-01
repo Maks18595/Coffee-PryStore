@@ -12,20 +12,15 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Coffee_PryStore.Controllers
 {
-    public class AdminController : Controller
+    public class AdminController(DataBaseHome context) : Controller
     {
-        private readonly DataBaseHome _context;
-
-        public AdminController(DataBaseHome context)
-        {
-            _context = context;
-        }
+        private readonly DataBaseHome _context = context;
 
         public async Task<IActionResult> AdminDashboard()
         {
             var users = await _context.Users.ToListAsync();
 
-            if (users == null || !users.Any())
+            if (users == null || users.Count == 0)
             {
                 return View("NoUsers");
             }
@@ -78,9 +73,8 @@ namespace Coffee_PryStore.Controllers
 
         private static string HashPassword(string password)
         {
-            using var sha256 = SHA256.Create();
             var bytes = Encoding.UTF8.GetBytes(password);
-            var hash = sha256.ComputeHash(bytes);
+            var hash = SHA256.HashData(bytes);
             return Convert.ToBase64String(hash);
         }
 
@@ -180,7 +174,7 @@ namespace Coffee_PryStore.Controllers
             }
 
             var users = await _context.Users.ToListAsync();
-            if (users == null || !users.Any())
+            if (users == null || users.Count == 0)
             {
                 return View("NoUsers");
             }
@@ -266,11 +260,9 @@ namespace Coffee_PryStore.Controllers
               
                 if (ImageFile != null && ImageFile.Length > 0)
                 {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        await ImageFile.CopyToAsync(memoryStream);
-                        product.ImageData = memoryStream.ToArray();
-                    }
+                    using var memoryStream = new MemoryStream();
+                    await ImageFile.CopyToAsync(memoryStream);
+                    product.ImageData = memoryStream.ToArray();
                 }
 
                 await _context.AddAsync(product); 
@@ -325,11 +317,9 @@ namespace Coffee_PryStore.Controllers
                
                 if (ImageFile != null && ImageFile.Length > 0)
                 {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        await ImageFile.CopyToAsync(memoryStream);
-                        existingProduct.ImageData = memoryStream.ToArray();
-                    }
+                    using var memoryStream = new MemoryStream();
+                    await ImageFile.CopyToAsync(memoryStream);
+                    existingProduct.ImageData = memoryStream.ToArray();
                 }
 
                 _context.Update(existingProduct);
