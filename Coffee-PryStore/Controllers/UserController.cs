@@ -15,24 +15,23 @@ namespace Coffee_PryStore.Controllers
 
         public IActionResult UserProfile(int id)
         {
-      
             var userId = HttpContext.Session.GetInt32("UserId");
 
-         
             if (userId == null)
             {
                 return RedirectToAction("PersonRegistration", "PersonRegistration");
             }
 
-            var user = _context.Users.Find(id);
+            var user = _context.Users
+                .Include(u => u.Orders) // Include orders for the user
+                .ThenInclude(o => o.OrderItems) // Include order items if needed
+                .FirstOrDefault(u => u.Id == id);
 
-           
             if (user == null)
             {
                 return NotFound();
             }
 
-  
             return View(user);
         }
 

@@ -36,7 +36,68 @@ namespace Coffee_PryStore.Controllers
         }
 
 
-     
+
+        [HttpGet]
+        public async Task<IActionResult> Orders()
+        {
+            var orders = await _context.Orders
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Table) // Assuming you have a Product navigation property
+                .ToListAsync();
+            return View(orders);
+        }
+        [HttpGet]
+        public async Task<IActionResult> OrderDetails(int id)
+        {
+            var order = await _context.Orders
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Table) // Assuming you have a Product navigation property
+                .FirstOrDefaultAsync(o => o.OrderId == id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return View(order);
+        }
+       
+
+        // Action to change order status
+        [HttpPost]
+        public async Task<IActionResult> ChangeStatus(int id, string newStatus)
+        {
+            var order = await _context.Orders.FindAsync(id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            order.Status = newStatus;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("OrderDetails", new { id });
+        }
+
+        // Action to delete an order
+        [HttpPost]
+        public async Task<IActionResult> DeleteOrder(int id)
+        {
+            var order = await _context.Orders.FindAsync(id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            _context.Orders.Remove(order);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index"); // Assuming you have an index page listing orders
+        }
+
+
 
 
         [HttpPost]
@@ -257,7 +318,6 @@ namespace Coffee_PryStore.Controllers
         {
             if (ModelState.IsValid)
             {
-              
                 if (ImageFile != null && ImageFile.Length > 0)
                 {
                     using var memoryStream = new MemoryStream();
@@ -265,7 +325,7 @@ namespace Coffee_PryStore.Controllers
                     product.ImageData = memoryStream.ToArray();
                 }
 
-                await _context.AddAsync(product); 
+                await _context.AddAsync(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("ProductDetails", "Admin", new { id = product.CofId });
             }
@@ -275,7 +335,8 @@ namespace Coffee_PryStore.Controllers
 
 
 
-       
+
+
         public IActionResult ProductDetails()
         {
             var products = _context.Table.ToList(); 
@@ -284,7 +345,7 @@ namespace Coffee_PryStore.Controllers
 
 
 
-      
+
         public IActionResult EditProduct(int id)
         {
             var product = _context.Table.FirstOrDefault(p => p.CofId == id);
@@ -292,43 +353,48 @@ namespace Coffee_PryStore.Controllers
             {
                 return NotFound();
             }
+
+            // Якщо існує зображення, конвертуємо його в Base64
+            if (product.ImageData != null && product.ImageData.Length > 0)
+            {
+                ViewBag.ExistingImage = Convert.ToBase64String(product.ImageData);
+            }
+
             return View(product);
         }
 
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditProduct(Table product, IFormFile ImageFile)
+        public async Task<IActionResult> EditProduct(Table model, string ImageChoice, IFormFile ImageFile)
         {
-            if (ModelState.IsValid)
+            var product = await _context.Table.FindAsync(model.CofId);
+
+            if (product == null)
             {
-                var existingProduct = await _context.Table.FindAsync(product.CofId);
-                if (existingProduct == null)
-                {
-                    return NotFound();
-                }
-
-                existingProduct.CofName = product.CofName;
-                existingProduct.CofCateg = product.CofCateg;
-                existingProduct.CofPrice = product.CofPrice;
-                existingProduct.CofAmount = product.CofAmount;
-                existingProduct.CofDuration = product.CofDuration;
-
-               
-                if (ImageFile != null && ImageFile.Length > 0)
-                {
-                    using var memoryStream = new MemoryStream();
-                    await ImageFile.CopyToAsync(memoryStream);
-                    existingProduct.ImageData = memoryStream.ToArray();
-                }
-
-                _context.Update(existingProduct);
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction("ProductDetails", new { id = product.CofId });
+                return NotFound();
             }
 
-            return View(product);
+            // Оновлюємо властивості продукту
+            product.CofName = model.CofName;
+            product.CofCateg = model.CofCateg;
+            product.CofPrice = model.CofPrice;
+            product.CofAmount = model.CofAmount;
+            product.CofDuration = model.CofDuration;
+            product.Description = model.Description; // Оновлення опису
+
+            if (ImageChoice == "new" && ImageFile != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await ImageFile.CopyToAsync(memoryStream);
+                    product.ImageData = memoryStream.ToArray(); // Зберігаємо нове зображення
+                }
+            }
+
+            _context.Update(product);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ProductDetails", new { id = product.CofId });
         }
 
 

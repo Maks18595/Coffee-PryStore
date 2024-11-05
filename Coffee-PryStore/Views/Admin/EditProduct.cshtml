@@ -8,36 +8,71 @@
 
 <form asp-action="EditProduct" enctype="multipart/form-data">
     <input type="hidden" asp-for="CofId" />
+
     <div class="mb-3">
         <label for="CofName" class="form-label">Назва продукту</label>
         <input type="text" class="form-control" asp-for="CofName" required />
     </div>
+
     <div class="mb-3">
         <label for="CofCateg" class="form-label">Категорія</label>
         <input type="text" class="form-control" asp-for="CofCateg" required />
     </div>
+
     <div class="mb-3">
         <label for="CofPrice" class="form-label">Ціна</label>
         <input type="number" class="form-control" asp-for="CofPrice" required />
     </div>
+
     <div class="mb-3">
         <label for="CofAmount" class="form-label">Кількість</label>
         <input type="number" class="form-control" asp-for="CofAmount" required />
     </div>
+
     <div class="mb-3">
         <label for="CofDuration" class="form-label">Термін зберігання</label>
         <input type="date" class="form-control" asp-for="CofDuration" required />
     </div>
     <div class="mb-3">
-        <label for="imageFile" class="form-label">Зображення продукту</label>
-        <input type="file" class="form-control" name="imageFile" />
+        <label for="Description" class="form-label">Опис продукту</label>
+        <textarea class="form-control" asp-for="Description" rows="3" required></textarea>
     </div>
+    <div class="mb-3">
+        <label class="form-label">Обрати зображення:</label><br />
+
+        <input type="radio" id="currentImage" name="ImageChoice" value="current" checked />
+        <label for="currentImage">Використати поточне зображення</label><br />
+
+        <input type="radio" id="newImage" name="ImageChoice" value="new" />
+        <label for="newImage">Завантажити нове зображення</label><br />
+
+        <input type="file" class="form-control mt-2" name="ImageFile" accept="image/*" style="display: none;" id="fileInput" />
+
+        <small class="form-text text-muted">
+            Якщо нове зображення не вибрано, поточне зображення залишиться незмінним.
+        </small>
+    </div>
+
     <button type="submit" class="btn btn-primary">Зберегти</button>
 </form>
 
-<td>
-    <a href="@Url.Action("Index", "Home")" class="btn btn-secondary mt-3">На головну сторінку</a>
-    <a asp-action="ProductDetails" asp-controller="Admin" class="btn btn-secondary mt-3">Показати всі товари</a>
-    <a href="@Url.Action("AdminDashboard", "Admin")" class="btn btn-secondary mt-3">На сторінку адміністратора</a>
-</td>
+<div class="mt-3">
+    <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">На головну сторінку</a>
+    <a asp-action="ProductDetails" asp-controller="Admin" class="btn btn-secondary">Показати всі товари</a>
+    <a href="@Url.Action("AdminDashboard", "Admin")" class="btn btn-secondary">На сторінку адміністратора</a>
+</div>
 
+<script>
+    document.querySelectorAll('input[name="ImageChoice"]').forEach((elem) => {
+        elem.addEventListener("change", function (event) {
+            const fileInput = document.getElementById("fileInput");
+            // Показати або сховати поле для завантаження файлу
+            if (event.target.value === "new") {
+                fileInput.style.display = "block";
+            } else {
+                fileInput.style.display = "none";
+                fileInput.value = ""; // очищаємо поле вибору файлу, якщо вибрано поточне зображення
+            }
+        });
+    });
+</script>

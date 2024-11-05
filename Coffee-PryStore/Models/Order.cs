@@ -12,16 +12,35 @@ namespace Coffee_PryStore.Models
 
         [ForeignKey("User")]
         public int UserId { get; set; }
+       
+        [Required]
         public DateTime OrderDate { get; set; }
 
         [Column(TypeName = "decimal(18, 2)")]
         public decimal TotalAmount { get; set; }
 
         [Required]
-        public string Status { get; set; } = string.Empty;
+        public string Status { get; set; } = "New";
 
-        // Navigation property
+        // Додані поля для інформації про доставку
+        [Required]
+        [StringLength(100)]
+        public string FullName { get; set; } = string.Empty;
+
+        [Required]
+        [StringLength(100)]
+        public string City { get; set; } = string.Empty;
+
+        [Required]
+        [StringLength(200)]
+        public string Address { get; set; } = string.Empty;
+
+        [Required]
+        [Phone]
+        public string PhoneNumber { get; set; } = string.Empty;
+
+        // Навігаційні властивості
         public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
-        public User User { get; set; } = null!;  // Reference to the User who made the order
+        public User User { get; set; } = null!;
     }
 }

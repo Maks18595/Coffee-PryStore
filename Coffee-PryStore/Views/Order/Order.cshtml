@@ -1,5 +1,73 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model Coffee_PryStore.Models.OrderViewModel
+
+<div class="container my-5">
+    <h2 class="text-center mb-4">Створити Замовлення</h2>
+
+    <form asp-action="Order" method="post" class="p-4 border rounded shadow-sm bg-light">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label class="form-label">ПІБ</label>
+            <input asp-for="FullName" class="form-control" placeholder="Введіть ваше ім'я" />
+            <span asp-validation-for="FullName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Місто</label>
+            <input asp-for="City" class="form-control" placeholder="Введіть місто" />
+            <span asp-validation-for="City" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Адреса</label>
+            <input asp-for="Address" class="form-control" placeholder="Введіть адресу доставки" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Номер телефону</label>
+            <input asp-for="PhoneNumber" class="form-control" placeholder="+380123456789" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+
+        <div id="order-items" class="mt-4">
+            <h4 class="text-center mb-3">Товари у кошику</h4>
+            <table class="table table-striped table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Назва</th>
+                        <th>Ціна</th>
+                        <th>Кількість</th>
+                        <th>Загальна сума</th>
+                        <th>Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in ViewBag.Products)
+                    {
+                        <tr>
+                            <td>@product.CofName</td>
+                            <td>₴@product.CofPrice.ToString("0.00")</td>
+                            <td>@product.CofQuantity</td>
+                            <td>₴@(product.CofPrice * product.CofQuantity)</td>
+                            <td>
+                                <form asp-action="RemoveFromCart" method="post" class="d-inline">
+                                    <input type="hidden" name="productId" value="@product.CofId" />
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Видалити</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary btn-lg px-5">Оформити Замовлення</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

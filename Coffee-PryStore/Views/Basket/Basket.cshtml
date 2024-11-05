@@ -1,11 +1,5 @@
 ﻿@model Coffee_PryStore.Models.Baskets
 
-@{
-    ViewData["Title"] = "Ваш кошик";
-}
-
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
-
 <div class="container mt-5">
     <h2 class="text-center mb-4">Ваш кошик</h2>
 
@@ -26,7 +20,13 @@
                 {
                     <tr>
                         <td>@item.Cof?.CofName</td>
-                        <td>@item.Quantity</td>
+                        <td>
+                            <form asp-action="UpdateCartQuantity" method="post" class="d-inline">
+                                <input type="hidden" name="productId" value="@item.CofId" />
+                                <input type="number" name="quantity" value="@item.Quantity" min="1" max="@item.Cof?.CofAmount" class="form-control d-inline" style="width: 80px;" />
+                                <button type="submit" class="btn btn-sm btn-primary">Оновити</button>
+                            </form>
+                        </td>
                         <td>₴@item.Cof?.CofPrice</td>
                         <td>₴@(item.Cof?.CofPrice * item.Quantity ?? 0)</td>
                         <td>
@@ -47,6 +47,11 @@
         </tbody>
     </table>
 
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
     <div class="d-flex justify-content-between align-items-center mt-4">
         <h4>Загальна сума: <span class="text-success">₴@(Model?.Items?.Sum(item => item.Cof?.CofPrice * item.Quantity) ?? 0)</span></h4>
 
@@ -55,6 +60,3 @@
         </form>
     </div>
 </div>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>

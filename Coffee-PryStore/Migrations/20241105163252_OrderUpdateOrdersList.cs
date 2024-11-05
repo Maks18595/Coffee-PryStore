@@ -5,7 +5,7 @@
 namespace Coffee_PryStore.Migrations
 {
     /// <inheritdoc />
-    public partial class MigrationOrdertest : Migration
+    public partial class OrderUpdateOrdersList : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

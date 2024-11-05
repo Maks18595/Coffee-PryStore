@@ -76,9 +76,14 @@
     {
         <div class="col-md-4 mb-4">
             <div class="card h-100 shadow-sm">
-                <img src="@(item.ImageData != null ? $"data:image/jpeg;base64,{Convert.ToBase64String(item.ImageData)}" : "/Attributes/Images/placeholder.png")" class="card-img-top" alt="@item.CofName" />
+                <a asp-controller="Home" asp-action="DetailsProduct" asp-route-id="@item.CofId">
+                    <img src="@(item.ImageData != null ? $"data:image/jpeg;base64,{Convert.ToBase64String(item.ImageData)}" : "/Attributes/Images/placeholder.png")" class="card-img-top" alt="@item.CofName" />
+                </a>
+
                 <div class="card-body">
-                    <h5 class="card-title">@item.CofName</h5>
+                    <h5 class="card-title">
+                        <a asp-controller="Home" asp-action="DetailsProduct" asp-route-id="@item.CofId">@item.CofName</a>
+                    </h5>
                     <p class="card-text"><strong>Категорія:</strong> @item.CofCateg</p>
                     <p class="card-text"><strong>Ціна:</strong> @item.CofPrice грн</p>
                     <p class="card-text"><strong>Кількість:</strong> @item.CofAmount</p>
@@ -88,7 +93,6 @@
                         <input type="hidden" name="quantity" value="1" />
                         <button type="submit" class="btn btn-primary w-100">Додати до кошика</button>
                     </form>
-
                 </div>
             </div>
         </div>

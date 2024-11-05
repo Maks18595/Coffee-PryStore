@@ -28,14 +28,12 @@
         <input type="date" class="form-control" asp-for="CofDuration" required />
     </div>
     <div class="mb-3">
+        <label for="Description" class="form-label">Опис продукту</label>
+        <textarea class="form-control" asp-for="Description" rows="3" required></textarea>
+    </div>
+    <div class="mb-3">
         <label for="imageFile" class="form-label">Зображення продукту</label>
         <input type="file" class="form-control" name="imageFile" />
     </div>
     <button type="submit" class="btn btn-primary">Зберегти</button>
 </form>
-
-<td>
-    <a href="@Url.Action("Index", "Home")" class="btn btn-secondary mt-3">На головну сторінку</a>
-    <a asp-action="ProductDetails" asp-controller="Admin" class="btn btn-secondary mt-3">Показати всі товари</a>
-    <a href="@Url.Action("AdminDashboard", "Admin")" class="btn btn-secondary mt-3">На сторінку адміністратора</a>
-</td>

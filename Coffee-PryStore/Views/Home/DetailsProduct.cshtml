@@ -1,0 +1,32 @@
+﻿@model Coffee_PryStore.Models.Table
+
+@{
+    ViewData["Title"] = "Деталі товару";
+}
+
+<style>
+    .custom-img-size {
+        max-width: 300px; /* Встановіть максимальну ширину зображення */
+        width: 100%;      /* Зображення буде займати всю доступну ширину до максимального розміру */
+        height: auto;     /* Зберігає пропорції зображення */
+        display: block;   /* Встановлює зображення як блочний елемент для кращого контролю */
+        margin: 0 auto;   /* Вирівнює зображення по центру */
+    }
+</style>
+
+<div class="container mt-5">
+    <h2>@Model.CofName</h2>
+    <img src="@(Model.ImageData != null ? $"data:image/jpeg;base64,{Convert.ToBase64String(Model.ImageData)}" : "/Attributes/Images/placeholder.png")" class="img-thumbnail mb-4 custom-img-size" alt="@Model.CofName" />
+    <p><strong>Опис:</strong> @Model.Description</p>
+    <p><strong>Категорія:</strong> @Model.CofCateg</p>
+    <p><strong>Ціна:</strong> @Model.CofPrice грн</p>
+    <p><strong>Кількість:</strong> @Model.CofAmount</p>
+    <p><strong>Термін зберігання:</strong> @Model.CofDuration.ToString("yyyy-MM-dd")</p>
+
+    <form asp-controller="Basket" asp-action="AddToCart" method="post" class="mt-3">
+        <input type="hidden" name="productId" value="@Model.CofId" />
+        <input type="hidden" name="quantity" value="1" />
+        <button type="submit" class="btn btn-primary">Додати до кошика</button>
+    </form>
+</div>
+

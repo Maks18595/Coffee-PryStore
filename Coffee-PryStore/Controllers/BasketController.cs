@@ -35,6 +35,52 @@ namespace Coffee_PryStore.Controllers
             _context = context;
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateCartQuantity(int productId, int quantity)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            if (userId == null)
+            {
+                return RedirectToAction("PersonRegistration", "PersonRegistration");
+            }
+
+            // Знаходимо товар у базі даних
+            var product = await _context.Table.FirstOrDefaultAsync(p => p.CofId == productId);
+            if (product == null || quantity > product.CofAmount)
+            {
+                TempData["ErrorMessage"] = "Неможливо оновити кількість. Бажана кількість перевищує доступну.";
+                return RedirectToAction("Basket");
+            }
+
+            // Знаходимо відповідний товар у кошику користувача
+            var cartItem = await _context.Basket.FirstOrDefaultAsync(b => b.CofId == productId && b.Id == userId.Value);
+            if (cartItem != null)
+            {
+                cartItem.Quantity = quantity;
+                await _context.SaveChangesAsync();
+
+                // Оновлюємо кількість в сесії
+                var cart = HttpContext.Session.GetObjectFromJson<Baskets>("Cart");
+                if (cart != null)
+                {
+                    var sessionItem = cart.Items.FirstOrDefault(i => i.CofId == productId);
+                    if (sessionItem != null)
+                    {
+                        sessionItem.Quantity = quantity;
+                        HttpContext.Session.SetObjectAsJson("Cart", cart);
+                    }
+                }
+            }
+
+            return RedirectToAction("Basket");
+        }
+
+
+
+
+
         [HttpPost]
         public async Task<IActionResult> AddToCart(int productId, int quantity)
         {
@@ -89,7 +135,7 @@ namespace Coffee_PryStore.Controllers
             return RedirectToAction("Basket");
         }
 
-
+        
      
             public async Task<IActionResult> Basket()
             {
@@ -97,7 +143,7 @@ namespace Coffee_PryStore.Controllers
 
                 if (userId == null)
                 {
-                    return RedirectToAction("Login", "Account"); // Перенаправлення на логін, якщо користувач не авторизований
+                    return RedirectToAction("PersonRegistration", "PersonRegistration"); // Перенаправлення на логін, якщо користувач не авторизований
                 }
 
                 // Завантаження корзини для поточного користувача з бази даних
@@ -155,39 +201,10 @@ namespace Coffee_PryStore.Controllers
         [HttpPost]
         public async Task<IActionResult> PlaceOrder()
         {
-            var userId = HttpContext.Session.GetInt32("UserId");
-
-            if (userId == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var cart = HttpContext.Session.GetObjectFromJson<Baskets>("Cart");
-
-            if (cart != null && cart.Items.Any())
-            {
-                var order = new Order
-                {
-                    UserId = userId.Value,
-                    OrderItems = cart.Items.Select(item => new OrderItem
-                    {
-                        CofId = item.CofId,
-                        Quantity = item.Quantity,
-                        UnitPrice = item.Cof.CofPrice
-                    }).ToList(),
-                    OrderDate = DateTime.Now,
-                    TotalAmount = cart.Items.Sum(item => item.Quantity * item.Cof.CofPrice),
-                    Status = "Pending"
-                };
-
-                await _context.Orders.AddAsync(order);
-                _context.Basket.RemoveRange(cart.Items); 
-                HttpContext.Session.Remove("Cart"); 
-                await _context.SaveChangesAsync();
-            }
-
-            return RedirectToAction("OrderConfirmation");
+           
+            return RedirectToAction("Order", "Order");
         }
+
 
 
     }

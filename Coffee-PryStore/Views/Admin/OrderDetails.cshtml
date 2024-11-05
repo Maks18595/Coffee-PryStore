@@ -1,0 +1,91 @@
+﻿@model Coffee_PryStore.Models.Order
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<h2>Order Details - @Model.OrderId</h2>
+
+<p><strong>User ID:</strong> @Model.UserId</p>
+<p><strong>Order Date:</strong> @Model.OrderDate.ToString("yyyy-MM-dd")</p>
+<p><strong>Total Amount:</strong> @Model.TotalAmount</p>
+<p><strong>Status:</strong> @Model.Status</p>
+
+    <h3>Admin Actions</h3>
+    <!-- Form to change order status -->
+    <form asp-action="ChangeStatus" method="post">
+        <input type="hidden" name="id" value="@Model.OrderId" />
+        <label for="newStatus">Change Status:</label>
+        <select id="newStatus" name="newStatus">
+            @if (Model.Status == "New")
+            {
+                <option value="New" selected>New</option>
+            }
+            else
+            {
+                <option value="New">New</option>
+            }
+            @if (Model.Status == "Accepted")
+            {
+                <option value="Accepted" selected>Accepted</option>
+            }
+            else
+            {
+                <option value="Accepted">Accepted</option>
+            }
+            @if (Model.Status == "Shipped")
+            {
+                <option value="Shipped" selected>Shipped</option>
+            }
+            else
+            {
+                <option value="Shipped">Shipped</option>
+            }
+            @if (Model.Status == "Completed")
+            {
+                <option value="Completed" selected>Completed</option>
+            }
+            else
+            {
+                <option value="Completed">Completed</option>
+            }
+        </select>
+        <button type="submit" class="btn btn-primary">Update Status</button>
+    </form>
+
+    <!-- Button to delete order -->
+    <form asp-action="DeleteOrder" method="post" style="margin-top: 10px;">
+        <input type="hidden" name="id" value="@Model.OrderId" />
+        <button type="submit" class="btn btn-danger">Delete Order</button>
+    </form>
+
+
+
+<h3>Delivery Information</h3>
+<p><strong>Full Name:</strong> @Model.FullName</p>
+<p><strong>City:</strong> @Model.City</p>
+<p><strong>Address:</strong> @Model.Address</p>
+<p><strong>Phone Number:</strong> @Model.PhoneNumber</p>
+
+<h3>Order Items</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Product ID</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderItems)
+        {
+            <tr>
+                <td>@item.CofId</td>
+                <td>@item.Quantity</td>
+                <td>@item.UnitPrice</td>
+                <td>@(item.Quantity * item.UnitPrice)</td>
+            </tr>
+        }
+    </tbody>
+</table>

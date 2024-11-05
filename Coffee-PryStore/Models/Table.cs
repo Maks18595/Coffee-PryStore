@@ -21,9 +21,11 @@ namespace Coffee_PryStore.Models
 
         public DateTime CofDuration { get; set; }
 
-        public byte[]? ImageData { get; set; } 
+        public byte[]? ImageData { get; set; }
 
-      //  public virtual CategoryTable Category { get; set; } = new CategoryTable();
+        public string? Description { get; set; }
+
+        //  public virtual CategoryTable Category { get; set; } = new CategoryTable();
 
     }
 }

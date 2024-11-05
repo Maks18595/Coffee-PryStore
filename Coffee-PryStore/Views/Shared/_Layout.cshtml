@@ -49,9 +49,24 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Basket" asp-action="Basket">Кошик</a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="History" asp-action="History">Інформація про каву</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="@Url.Action("ChangeLanguage", "Home", new { culture = "uk" })">Українська</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("ChangeLanguage", "Home", new { culture = "en" })">English</a>
+                        </li>
+
+
+                        <!--  
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Products" asp-action="Index">Товари</a>
                         </li>
+                        -->
 
                         @if (Context.Session.GetInt32("UserId") != null)
                         {

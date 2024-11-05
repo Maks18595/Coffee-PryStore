@@ -6,9 +6,26 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System.Security.Claims;
+using Microsoft.Extensions.Localization;
+using static Coffee_PryStore.Models.Configurations.Startup;
 
 namespace Coffee_PryStore.Controllers
 {
+
+    /*
+     public class HomeController : Controller
+    {
+        private readonly DataBaseHome _context;
+        private readonly IStringLocalizer<SharedResource> _localizer;
+
+        // Конструктор, який приймає контекст бази даних і локалізатор
+        public HomeController(DataBaseHome context, IStringLocalizer<SharedResource> localizer)
+        {
+            _context = context;
+            _localizer = localizer;
+        }
+    */
+
 
     public class HomeController(DataBaseHome context) : Controller
     {
@@ -18,6 +35,20 @@ namespace Coffee_PryStore.Controllers
         {
             return View();
         }
+
+       
+
+        public IActionResult DetailsProduct(int id)
+        {
+            var product = _context.Table.FirstOrDefault(p => p.CofId == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return View(product);
+        }
+
+
 
         [HttpGet]
         public IActionResult UserProfile(int id)

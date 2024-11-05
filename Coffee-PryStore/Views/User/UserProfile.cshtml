@@ -8,8 +8,6 @@
 <p>Електронна адреса: @Model.Email</p>
 <p>Роль: @Model.Role</p>
 
-
-
 <a class="btn btn-warning" asp-action="EditProfile" asp-route-id="@Model.Id" aria-label="Редагувати профіль">Редагувати профіль</a>
 <a class="btn btn-danger" asp-action="DeleteProfile" asp-route-id="@Model.Id" aria-label="Видалити акаунт">Видалити акаунт</a>
 
@@ -25,7 +23,24 @@
             </tr>
         </thead>
         <tbody>
-            @* Логіка для відображення замовлень користувача *@
+            @if (Model.Orders.Any())
+            {
+                foreach (var order in Model.Orders)
+                {
+                    <tr>
+                        <td>@order.OrderId</td>
+                        <td>@order.OrderDate.ToString("dd/MM/yyyy")</td>
+                        <td>@order.TotalAmount.ToString("C2")</td>
+                        <td>@order.Status</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4" class="text-center">Немає замовлень.</td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>

@@ -14,6 +14,8 @@ namespace Coffee_PryStore.Models
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; } = string.Empty; 
 
-        public string Role { get; set; } = string.Empty; 
+        public string Role { get; set; } = string.Empty;
+
+        public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
     }
 }

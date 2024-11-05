@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Coffee_PryStore.Migrations
 {
     [DbContext(typeof(DataBaseHome))]
-    [Migration("20241026163542_MigrationDataBasetestagin2")]
-    partial class MigrationDataBasetestagin2
+    [Migration("20241105205605_Description")]
+    partial class Description
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,30 +49,6 @@ namespace Coffee_PryStore.Migrations
                     b.ToTable("Basket");
                 });
 
-            modelBuilder.Entity("Coffee_PryStore.Models.HomeDataModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Author")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ReleaseDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("HomeDataModels");
-                });
-
             modelBuilder.Entity("Coffee_PryStore.Models.Order", b =>
                 {
                     b.Property<int>("OrderId")
@@ -81,8 +57,27 @@ namespace Coffee_PryStore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -96,6 +91,8 @@ namespace Coffee_PryStore.Migrations
 
                     b.HasKey("OrderId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Orders");
                 });
 
@@ -107,10 +104,10 @@ namespace Coffee_PryStore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderItemId"));
 
-                    b.Property<int>("OrderId")
+                    b.Property<int>("CofId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -120,6 +117,8 @@ namespace Coffee_PryStore.Migrations
                         .HasColumnType("decimal(18, 2)");
 
                     b.HasKey("OrderItemId");
+
+                    b.HasIndex("CofId");
 
                     b.HasIndex("OrderId");
 
@@ -150,6 +149,9 @@ namespace Coffee_PryStore.Migrations
 
                     b.Property<decimal>("CofPrice")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("ImageData")
                         .HasColumnType("varbinary(max)");
@@ -195,18 +197,44 @@ namespace Coffee_PryStore.Migrations
                     b.Navigation("Cof");
                 });
 
+            modelBuilder.Entity("Coffee_PryStore.Models.Order", b =>
+                {
+                    b.HasOne("Coffee_PryStore.Models.User", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Coffee_PryStore.Models.OrderItem", b =>
                 {
-                    b.HasOne("Coffee_PryStore.Models.Order", null)
+                    b.HasOne("Coffee_PryStore.Models.Table", "Table")
+                        .WithMany()
+                        .HasForeignKey("CofId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Coffee_PryStore.Models.Order", "Order")
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Table");
                 });
 
             modelBuilder.Entity("Coffee_PryStore.Models.Order", b =>
                 {
                     b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("Coffee_PryStore.Models.User", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

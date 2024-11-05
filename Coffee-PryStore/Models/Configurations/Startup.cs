@@ -1,50 +1,43 @@
-﻿/*namespace Coffee_PryStore.Models.Configurations
-{
+﻿
+ 
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Microsoft.IdentityModel.Tokens;
-    using System.Text;
-
+using System.Globalization;
+using System.Text;
+namespace Coffee_PryStore.Models.Configurations { 
     public class Startup
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            // Налаштування аутентифікації через JWT
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    // Додайте свої параметри, такі як Issuer, Audience, SecretKey
-                    ValidIssuer = "YourIssuer",
-                    ValidAudience = "YourAudience",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("YourSecretKey"))
-                };
-            });
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
 
-            // Додайте авторизацію
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
-            });
+            services.AddControllersWithViews()
+                .AddViewLocalization()
+                .AddDataAnnotationsLocalization();
 
-            // Інші служби
-            services.AddControllersWithViews(); // Додайте підтримку контролерів та представлень
+            // Інші служби...
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var supportedCultures = new[]
+            {
+                new CultureInfo("uk"),
+                new CultureInfo("en")
+            };
+
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("uk"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -60,8 +53,8 @@
 
             app.UseRouting();
 
-            app.UseAuthentication(); // Додайте аутентифікацію
-            app.UseAuthorization();  // Додайте авторизацію
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -70,5 +63,10 @@
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
+    
+
+public class SharedResource
+        {
+        }
     }
-}*/
+}
