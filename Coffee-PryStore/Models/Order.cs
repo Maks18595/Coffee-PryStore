@@ -22,7 +22,7 @@ namespace Coffee_PryStore.Models
         [Required]
         public string Status { get; set; } = "New";
 
-        // Додані поля для інформації про доставку
+ 
         [Required]
         [StringLength(100)]
         public string FullName { get; set; } = string.Empty;
@@ -39,7 +39,7 @@ namespace Coffee_PryStore.Models
         [Phone]
         public string PhoneNumber { get; set; } = string.Empty;
 
-        // Навігаційні властивості
+     
         public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
         public User User { get; set; } = null!;
     }

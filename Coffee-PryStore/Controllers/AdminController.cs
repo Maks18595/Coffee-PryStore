@@ -42,7 +42,7 @@ namespace Coffee_PryStore.Controllers
         {
             var orders = await _context.Orders
                 .Include(o => o.OrderItems)
-                .ThenInclude(oi => oi.Table) // Assuming you have a Product navigation property
+                .ThenInclude(oi => oi.Table) 
                 .ToListAsync();
             return View(orders);
         }
@@ -51,7 +51,7 @@ namespace Coffee_PryStore.Controllers
         {
             var order = await _context.Orders
                 .Include(o => o.OrderItems)
-                .ThenInclude(oi => oi.Table) // Assuming you have a Product navigation property
+                .ThenInclude(oi => oi.Table)
                 .FirstOrDefaultAsync(o => o.OrderId == id);
 
             if (order == null)
@@ -63,7 +63,6 @@ namespace Coffee_PryStore.Controllers
         }
        
 
-        // Action to change order status
         [HttpPost]
         public async Task<IActionResult> ChangeStatus(int id, string newStatus)
         {
@@ -80,7 +79,7 @@ namespace Coffee_PryStore.Controllers
             return RedirectToAction("OrderDetails", new { id });
         }
 
-        // Action to delete an order
+     
         [HttpPost]
         public async Task<IActionResult> DeleteOrder(int id)
         {
@@ -94,7 +93,7 @@ namespace Coffee_PryStore.Controllers
             _context.Orders.Remove(order);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index"); // Assuming you have an index page listing orders
+            return RedirectToAction("Index"); 
         }
 
 
@@ -354,7 +353,7 @@ namespace Coffee_PryStore.Controllers
                 return NotFound();
             }
 
-            // Якщо існує зображення, конвертуємо його в Base64
+       
             if (product.ImageData != null && product.ImageData.Length > 0)
             {
                 ViewBag.ExistingImage = Convert.ToBase64String(product.ImageData);
@@ -374,20 +373,19 @@ namespace Coffee_PryStore.Controllers
                 return NotFound();
             }
 
-            // Оновлюємо властивості продукту
             product.CofName = model.CofName;
             product.CofCateg = model.CofCateg;
             product.CofPrice = model.CofPrice;
             product.CofAmount = model.CofAmount;
             product.CofDuration = model.CofDuration;
-            product.Description = model.Description; // Оновлення опису
+            product.Description = model.Description; 
 
             if (ImageChoice == "new" && ImageFile != null)
             {
                 using (var memoryStream = new MemoryStream())
                 {
                     await ImageFile.CopyToAsync(memoryStream);
-                    product.ImageData = memoryStream.ToArray(); // Зберігаємо нове зображення
+                    product.ImageData = memoryStream.ToArray(); 
                 }
             }
 

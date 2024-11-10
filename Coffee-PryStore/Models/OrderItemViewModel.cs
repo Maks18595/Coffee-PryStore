@@ -4,8 +4,8 @@ namespace Coffee_PryStore.Models
 {
     public class OrderItemViewModel
     {
-        public int CofId { get; set; }  // Ідентифікатор товару
-        public int Quantity { get; set; }  // Кількість товару
-        public decimal UnitPrice { get; set; }  // Ціна за одиницю
+        public int CofId { get; set; }  
+        public int Quantity { get; set; }  
+        public decimal UnitPrice { get; set; }  
     }
 }

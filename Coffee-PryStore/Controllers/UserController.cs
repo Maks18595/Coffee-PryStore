@@ -23,8 +23,8 @@ namespace Coffee_PryStore.Controllers
             }
 
             var user = _context.Users
-                .Include(u => u.Orders) // Include orders for the user
-                .ThenInclude(o => o.OrderItems) // Include order items if needed
+                .Include(u => u.Orders) 
+                .ThenInclude(o => o.OrderItems) 
                 .FirstOrDefault(u => u.Id == id);
 
             if (user == null)

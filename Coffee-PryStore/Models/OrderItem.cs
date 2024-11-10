@@ -19,7 +19,7 @@ namespace Coffee_PryStore.Models
         [Column(TypeName = "decimal(18, 2)")]
         public decimal UnitPrice { get; set; }
 
-        // Navigation properties
+    
         public Order Order { get; set; } = null!;
         public Table Table { get; set; } = null!;
     }

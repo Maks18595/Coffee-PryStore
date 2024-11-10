@@ -14,7 +14,7 @@
             <li class="list-group-item">
                 <h5>@product.CofName</h5>
                 <p>Ціна: @product.CofPrice грн</p>
-                <a class="btn btn-primary" asp-controller="Home" asp-action="Index" asp-route-id="@product.CofId">Деталі</a>
+                <a asp-controller="Home" asp-action="DetailsProduct" asp-route-id="@product.CofId">Деталі</a>
             </li>
         }
     </ul>

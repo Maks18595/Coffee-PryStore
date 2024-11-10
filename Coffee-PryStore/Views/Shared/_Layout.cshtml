@@ -54,12 +54,6 @@
                             <a class="nav-link" asp-controller="History" asp-action="History">Інформація про каву</a>
                         </li>
 
-                        <li class="nav-item">
-                            <a href="@Url.Action("ChangeLanguage", "Home", new { culture = "uk" })">Українська</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("ChangeLanguage", "Home", new { culture = "en" })">English</a>
-                        </li>
 
 
                         <!--  
@@ -105,10 +99,27 @@
                         }
                     </ul>
 
+                    <form class="d-flex">
+
+                        <li class="nav-item">
+                            <a href="@Url.Action("ChangeLanguage", "Home", new { culture = "uk" })"> Українська </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("ChangeLanguage", "Home", new { culture = "en" })"> English </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("", "", new { culture = "" })"></a>
+                        </li>
+                    </form>
+
+
                     <form class="d-flex" asp-controller="Search" asp-action="Index" method="get">
                         <input class="form-control me-2" type="search" name="searchTerm" placeholder="Пошук товарів" aria-label="Пошук" />
                         <button class="btn btn-outline-light" type="submit">Пошук</button>
                     </form>
+
+               
+
                 </div>
             </div>
         </nav>

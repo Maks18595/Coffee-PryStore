@@ -59,21 +59,19 @@ namespace Coffee_PryStore.Controllers
         [HttpPost]
         public IActionResult PersonRegistration(string email, string password)
         {
-            // Хардкодовані дані адміністратора
+
             string adminEmail = "pryimak@gmail.com";
             string adminPassword = HashPassword("12345678");
             string adminRole = "Admin";
 
-            // Якщо введені дані відповідають хардкодованим даним адміністратора
             if (email == adminEmail && VerifyPassword(adminPassword, password))
             {
-                // Призначаємо роль і ID адміністратора в сесії
+
                 HttpContext.Session.SetString("UserRole", adminRole);
-                HttpContext.Session.SetInt32("UserId", 0); // ID адміністратора може бути 0 або інше значення
+                HttpContext.Session.SetInt32("UserId", 0); 
                 return RedirectToAction("AdminDashboard", "Admin");
             }
 
-            // Перевірка користувачів у базі даних
             var existingUser = _context.Users.FirstOrDefault(u => u.Email == email);
 
             if (existingUser != null)
@@ -99,7 +97,6 @@ namespace Coffee_PryStore.Controllers
                 }
             }
 
-            // Якщо користувача з такою електронною адресою не існує, створюємо нового користувача
             var newUser = new User
             {
                 Email = email,

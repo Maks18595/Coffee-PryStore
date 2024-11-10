@@ -46,7 +46,7 @@ namespace Coffee_PryStore.Controllers
                 return RedirectToAction("PersonRegistration", "PersonRegistration");
             }
 
-            // Знаходимо товар у базі даних
+         
             var product = await _context.Table.FirstOrDefaultAsync(p => p.CofId == productId);
             if (product == null || quantity > product.CofAmount)
             {
@@ -54,14 +54,12 @@ namespace Coffee_PryStore.Controllers
                 return RedirectToAction("Basket");
             }
 
-            // Знаходимо відповідний товар у кошику користувача
             var cartItem = await _context.Basket.FirstOrDefaultAsync(b => b.CofId == productId && b.Id == userId.Value);
             if (cartItem != null)
             {
                 cartItem.Quantity = quantity;
                 await _context.SaveChangesAsync();
 
-                // Оновлюємо кількість в сесії
                 var cart = HttpContext.Session.GetObjectFromJson<Baskets>("Cart");
                 if (cart != null)
                 {
@@ -84,20 +82,17 @@ namespace Coffee_PryStore.Controllers
         [HttpPost]
         public async Task<IActionResult> AddToCart(int productId, int quantity)
         {
-            // Retrieve the product
+    
             var product = await _context.Table.FirstOrDefaultAsync(p => p.CofId == productId);
             if (product == null)
             {
                 return NotFound();
             }
 
-            // Retrieve cart from session or create a new cart object
             var cart = HttpContext.Session.GetObjectFromJson<Baskets>("Cart") ?? new Baskets();
 
-            // Get the user ID, ensuring it is not null
             var userId = HttpContext.Session.GetInt32("UserId");
 
-            // Retrieve an existing cart item for this product if it exists in the database
             Basket existingCartItem = null;
             if (userId.HasValue)
             {
@@ -106,7 +101,7 @@ namespace Coffee_PryStore.Controllers
 
             if (existingCartItem != null)
             {
-                // If the item exists in both session and database, update quantity
+
                 existingCartItem.Quantity += quantity;
                 var sessionCartItem = cart.Items.FirstOrDefault(b => b.CofId == productId);
                 if (sessionCartItem != null)
@@ -116,19 +111,19 @@ namespace Coffee_PryStore.Controllers
             }
             else
             {
-                // Add the new item to both the session cart and database
+
                 var newCartItem = new Basket
                 {
                     CofId = productId,
                     Quantity = quantity,
-                    Id = userId ?? 0 // Assign a default value if userId is null
+                    Id = userId ?? 0 
                 };
 
                 cart.Items.Add(newCartItem);
-                await _context.Basket.AddAsync(newCartItem); // Save new item to the database
+                await _context.Basket.AddAsync(newCartItem); 
             }
 
-            // Save updated cart to the session and database
+          
             HttpContext.Session.SetObjectAsJson("Cart", cart);
             await _context.SaveChangesAsync();
 
@@ -143,25 +138,25 @@ namespace Coffee_PryStore.Controllers
 
                 if (userId == null)
                 {
-                    return RedirectToAction("PersonRegistration", "PersonRegistration"); // Перенаправлення на логін, якщо користувач не авторизований
+                    return RedirectToAction("PersonRegistration", "PersonRegistration"); 
                 }
 
-                // Завантаження корзини для поточного користувача з бази даних
+               
                 var cartItems = await _context.Basket
                     .Include(b => b.Cof)
                     .Where(b => b.Id == userId.Value)
                     .ToListAsync();
 
-                // Створення моделі для представлення
+        
                 var cart = new Baskets
                 {
                     Items = cartItems
                 };
 
-                // Оновлення сесії корзини
+         
                 HttpContext.Session.SetObjectAsJson("Cart", cart);
 
-                return View(cart); // Передача корзини в представлення
+                return View(cart); 
             }
 
         
@@ -179,7 +174,7 @@ namespace Coffee_PryStore.Controllers
         {
             var userId = HttpContext.Session.GetInt32("UserId");
 
-            // Find the item in the database
+        
             var cartItem = userId != null
                 ? await _context.Basket.FirstOrDefaultAsync(b => b.CofId == productId && b.Id == userId.Value)
                 : null;
@@ -189,7 +184,6 @@ namespace Coffee_PryStore.Controllers
                 _context.Basket.Remove(cartItem);
                 await _context.SaveChangesAsync();
 
-                // Update session cart
                 var cart = HttpContext.Session.GetObjectFromJson<Baskets>("Cart") ?? new Baskets();
                 cart.Items.RemoveAll(i => i.CofId == productId);
                 HttpContext.Session.SetObjectAsJson("Cart", cart);

@@ -24,16 +24,16 @@ namespace Coffee_PryStore.Controllers
 
         public IActionResult Order()
         {
-            // Отримуємо ID користувача з сесії
+          
             var userId = HttpContext.Session.GetInt32("UserId");
 
             if (userId == null)
             {
-                // Перенаправляємо на сторінку реєстрації, якщо ID користувача відсутній у сесії
+             
                 return RedirectToAction("PersonRegistration", "PersonRegistration");
             }
 
-            // Отримуємо товари з кошика, що відповідають користувачу
+     
             var basketItems = (from b in _context.Basket
                                join p in _context.Table on b.CofId equals p.CofId
                                where b.Id == userId.Value
@@ -62,7 +62,7 @@ namespace Coffee_PryStore.Controllers
 
             if (!ModelState.IsValid)
             {
-                // Передаємо елементи корзини у випадку помилки
+            
                 var basketItemsView = (from b in _context.Basket
                                        join p in _context.Table on b.CofId equals p.CofId
                                        where b.Id == userId.Value
@@ -78,7 +78,7 @@ namespace Coffee_PryStore.Controllers
                 return View(model);
             }
 
-            // Отримуємо товари з кошика
+        
             var cartItems = await _context.Basket
                 .Include(b => b.Cof)
                 .Where(b => b.Id == userId.Value)
@@ -90,7 +90,6 @@ namespace Coffee_PryStore.Controllers
                 return RedirectToAction("Basket");
             }
 
-            // Перевіряємо, чи достатньо товару на складі для кожного елемента
             foreach (var item in cartItems)
             {
                 var product = await _context.Table.FirstOrDefaultAsync(p => p.CofId == item.CofId);
@@ -101,10 +100,8 @@ namespace Coffee_PryStore.Controllers
                 }
             }
 
-            // Обчислюємо загальну суму
             var totalAmount = cartItems.Sum(item => item.Quantity * item.Cof.CofPrice);
 
-            // Створюємо об'єкт замовлення
             var order = new Order
             {
                 UserId = userId.Value,
@@ -123,10 +120,8 @@ namespace Coffee_PryStore.Controllers
                 }).ToList()
             };
 
-            // Додаємо замовлення до бази даних
             _context.Orders.Add(order);
 
-            // Зменшуємо кількість товару в базі даних
             foreach (var item in cartItems)
             {
                 var product = await _context.Table.FirstOrDefaultAsync(p => p.CofId == item.CofId);
@@ -137,10 +132,8 @@ namespace Coffee_PryStore.Controllers
                 }
             }
 
-            // Видаляємо товари з кошика після оформлення замовлення
             _context.Basket.RemoveRange(cartItems);
 
-            // Очищуємо сесію кошика, якщо потрібно
             HttpContext.Session.Remove("Cart");
 
             await _context.SaveChangesAsync();
