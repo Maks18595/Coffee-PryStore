@@ -3,44 +3,155 @@
 @{
     ViewData["Title"] = "Профіль користувача";
 }
+@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
+<html lang="@currentLanguage">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профіль користувача</title>
+    <link href="~/libraries/boost/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        html, body {
+            height: 100%;
+        }
 
-<h1>Профіль</h1>
-<p>Електронна адреса: @Model.Email</p>
-<p>Роль: @Model.Role</p>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+            margin: 0;
+            background-color: #f5ebe0;
+            font-family: 'Arial', sans-serif;
+            color: #4b2e20;
+        }
 
-<a class="btn btn-warning" asp-action="EditProfile" asp-route-id="@Model.Id" aria-label="Редагувати профіль">Редагувати профіль</a>
-<a class="btn btn-danger" asp-action="DeleteProfile" asp-route-id="@Model.Id" aria-label="Видалити акаунт">Видалити акаунт</a>
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #6f4c3e;
+            margin-bottom: 40px;
+        }
 
-<div class="mt-4">
-    <h3>Ваші замовлення</h3>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Номер замовлення</th>
-                <th>Дата</th>
-                <th>Сума</th>
-                <th>Статус</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model.Orders.Any())
-            {
-                foreach (var order in Model.Orders)
-                {
+        p {
+            font-size: 1.2rem;
+            color: #4b2e20;
+            margin: 10px 0;
+        }
+
+        .btn {
+            font-size: 14px;
+            padding: 8px 16px;
+            margin-right: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-warning {
+            background-color: #ffc107; 
+            border: none;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+
+        .btn-danger {
+            background-color: #b85c38; 
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background-color: #8c3e22;
+        }
+
+        table {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+
+        th {
+            background-color: #6f4c3e;
+            color: #fff;
+            padding: 12px;
+        }
+
+        td {
+            padding: 12px;
+            vertical-align: middle;
+            color: #4b2e20;
+        }
+
+        .table th, .table td {
+            text-align: center;
+        }
+
+        footer {
+            flex-shrink: 0;
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 0.5rem 0;
+            width: 100%;
+            position: relative;
+            bottom: 0;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Профіль користувача</h1>
+
+        <p>Електронна адреса: @Model.Email</p>
+        <p>Роль: @Model.Role</p>
+
+        <div class="btn-group">
+            <a class="btn btn-warning" asp-action="EditProfile" asp-route-id="@Model.Id" aria-label="Редагувати профіль">Редагувати профіль</a>
+            <a class="btn btn-danger" asp-action="DeleteProfile" asp-route-id="@Model.Id" aria-label="Видалити акаунт">Видалити акаунт</a>
+        </div>
+
+        <div class="mt-4">
+            <h3 class="text-center">Ваші замовлення</h3>
+            <table class="table table-striped mt-3">
+                <thead>
                     <tr>
-                        <td>@order.OrderId</td>
-                        <td>@order.OrderDate.ToString("dd/MM/yyyy")</td>
-                        <td>@order.TotalAmount.ToString("C2")</td>
-                        <td>@order.Status</td>
+                        <th>Номер замовлення</th>
+                        <th>Дата</th>
+                        <th>Сума</th>
+                        <th>Статус</th>
+                        <th>Дії</th>
                     </tr>
-                }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="4" class="text-center">Немає замовлень.</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+                </thead>
+                <tbody>
+                    @if (Model.Orders.Any())
+                    {
+                        foreach (var order in Model.Orders)
+                        {
+                            <tr>
+                                <td>@order.OrderId</td>
+                                <td>@order.OrderDate.ToString("dd/MM/yyyy")</td>
+                                <td>@order.TotalAmount.ToString("C2")</td>
+                                <td>@order.Status</td>
+                                <td>
+                                    <a asp-action="OrderDetails" asp-route-id="@order.OrderId" class="btn btn-info">Деталі</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center">Немає замовлень.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

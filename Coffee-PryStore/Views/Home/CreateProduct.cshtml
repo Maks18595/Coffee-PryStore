@@ -1,5 +1,8 @@
 ﻿@model Coffee_PryStore.Models.Table
-
+@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
+<html lang="@currentLanguage">
 <h2>Додати новий продукт</h2>
 
 <form asp-action="CreateProduct" enctype="multipart/form-data">

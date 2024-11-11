@@ -1,13 +1,43 @@
 ﻿@model List<Coffee_PryStore.Models.Table>
 
+
 @{
     ViewData["Title"] = "Товари";
 }
+@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
+<html lang="@currentLanguage">
 
 @if (ViewBag.UserEmail != null)
 {
-    <p>Ви увійшли як: @ViewBag.UserEmail (@ViewBag.UserRole)</p>
+    <p>@ViewBag.UserEmail (@ViewBag.UserRole)</p>
 }
+
+
+<h1>
+    @if (currentLanguage == "en-US")
+    {
+        <text>Welcome to our Coffee Shop!</text>
+    }
+    else if (currentLanguage == "uk-UA")
+    {
+        <text>Ласкаво просимо до нашої кав'ярні!</text>
+    }
+</h1>
+
+
+<p>
+    @if (currentLanguage == "en-US")
+    {
+        <text>We offer the finest coffee from around the world.</text>
+    }
+    else if (currentLanguage == "uk-UA")
+    {
+        <text>Ми пропонуємо найкращу каву з усього світу.</text>
+    }
+</p>
+
 
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -37,28 +67,219 @@
     }
 </style>
 
+@inject LanguageService language
+
 <form method="get">
     <div class="row align-items-center">
         <div class="col-md-3">
-            <label for="searchName">Назва:</label>
+            <label for="searchName">
+                @if (currentLanguage == "en-US")
+                {
+                    <text>Name:</text>
+                }
+                else if (currentLanguage == "uk-UA")
+                {
+                    <text>Назва:</text>
+                }
+            </label>
             <input type="text" name="searchName" class="form-control" value="@ViewData["searchName"]" />
         </div>
         <div class="col-md-3">
-            <label for="searchCategory">Категорія:</label>
-            <select name="searchCategory" class="form-control">
-                <option value="">Всі категорії</option>
-                <option value="Арабіка">Арабіка</option>
-                <option value="Робуста">Робуста</option>
-                <option value="Мелена кава">Мелена кава</option>
-            </select>
+            <label for="searchCategory">
+                @if (currentLanguage == "en-US")
+                {
+                    <text>Category:</text>
+                }
+                else if (currentLanguage == "uk-UA")
+                {
+                    <text>Категорія:</text>
+                }
+               </label>
+                <select name="searchCategory" class="form-control">
+                    <option value="">
+                        @if (currentLanguage == "en-US")
+                        {
+                            <text>All categories:</text>
+                        }
+                        else if (currentLanguage == "uk-UA")
+                        {
+                            <text>Всі категорії:</text>
+                        }
+                    </option>
+                    <option value="Арабіка">
+                        @if (currentLanguage == "en-US")
+                        {
+                            <text>Arabica</text>
+                        }
+                        else if (currentLanguage == "uk-UA")
+                        {
+                            <text>Арабіка</text>
+                        }
+                    </option>
+                    <option value="Робуста">
+                        @if (currentLanguage == "en-US")
+                        {
+                            <text>Robusta</text>
+                        }
+                        else if (currentLanguage == "uk-UA")
+                        {
+                            <text>Робуста</text>
+                        }
+                    </option>
+                    <option value="Мелена кава">
+                        @if (currentLanguage == "en-US")
+                        {
+                            <text>Ground coffee</text>
+                        }
+                        else if (currentLanguage == "uk-UA")
+                        {
+                            <text>Мелена кава</text>
+                        }
+                    </option>
+                    <option value="Еспресо">
+                        @if (currentLanguage == "en-US")
+                        {
+                            <text>Espresso</text>
+                        }
+                        else if (currentLanguage == "uk-UA")
+                        {
+                            <text>Еспресо</text>
+                        }
+                    </option>
+                    <option value="Капучіно">
+                        @if (currentLanguage == "en-US")
+                        {
+                            <text>Cappuccino</text>
+                        }
+                        else if (currentLanguage == "uk-UA")
+                        {
+                            <text>Капучіно</text>
+                        }
+                    </option>
+                    <option value="Латте">
+                        @if (currentLanguage == "en-US")
+                        {
+                            <text>Latte</text>
+                        }
+                        else if (currentLanguage == "uk-UA")
+                        {
+                            <text>Латте</text>
+                        }
+                    </option>
+                    <option value="Кава по-турецьки">
+                        @if (currentLanguage == "en-US")
+                        {
+                            <text>Turkish coffee</text>
+                        }
+                        else if (currentLanguage == "uk-UA")
+                        {
+                            <text>Кава по-турецьки</text>
+                        }
+                    </option>
+                    <option value="Кава з молоком">
+                        @if (currentLanguage == "en-US")
+                        {
+                            <text>Coffee with milk</text>
+                        }
+                        else if (currentLanguage == "uk-UA")
+                        {
+                            <text>Кава з молоком</text>
+                        }
+                    </option>
+                    <option value="Без кофеїну">
+                        @if (currentLanguage == "en-US")
+                        {
+                            <text>Caffeine-free</text>
+                        }
+                        else if (currentLanguage == "uk-UA")
+                        {
+                            <text>Без кофеїну</text>
+                        }
+                    </option>
+                    <option value="Спеціальні сорти">
+                        @if (currentLanguage == "en-US")
+                        {
+                            <text>Specialty blends</text>
+                        }
+                        else if (currentLanguage == "uk-UA")
+                        {
+                            <text>Спеціальні сорти</text>
+                        }
+                    </option>
+                <option value="Міцна кава">
+                    @if (currentLanguage == "en-US")
+                    {
+                        <text>Strong coffee</text>
+                    }
+                    else if (currentLanguage == "uk-UA")
+                    {
+                        <text>Міцна кава</text>
+                    }
+                </option>
+                <option value="Шоколад">
+                    @if (currentLanguage == "en-US")
+                    {
+                        <text>Chocolate</text>
+                    }
+                    else if (currentLanguage == "uk-UA")
+                    {
+                        <text>Шоколад</text>
+                    }
+                </option>
+                </select>
         </div>
         <div class="col-md-3">
-            <label for="sortOrder">Сортувати за:</label>
+            <label for="sortOrder">
+                @if (currentLanguage == "en-US")
+                {
+                    <text>Sort by:</text>
+                }
+                else if (currentLanguage == "uk-UA")
+                {
+                    <text>Сортувати за:</text>
+                }
+            </label>
             <select name="sortOrder" class="form-control">
-                <option value="price_asc">Зростання ціни</option>
-                <option value="price_desc">Спадання ціни</option>
-                <option value="name_asc">За алфавітом (A-Z)</option>
-                <option value="name_desc">За алфавітом (Z-A)</option>
+                <option value="price_asc">
+                    @if (currentLanguage == "en-US")
+                    {
+                        <text>Price Increase</text>
+                    }
+                    else if (currentLanguage == "uk-UA")
+                    {
+                        <text>Зростання ціни</text>
+                    }
+                </option>
+                <option value="price_desc">
+                    @if (currentLanguage == "en-US")
+                    {
+                        <text>Falling price</text>
+                    }
+                    else if (currentLanguage == "uk-UA")
+                    {
+                        <text>Спадання ціни</text>
+                    }
+                </option>
+                <option value="name_asc">
+                    @if (currentLanguage == "en-US")
+                    {
+                        <text>Alpabetically (A-Z)</text>
+                    }
+                    else if (currentLanguage == "uk-UA")
+                    {
+                        <text>За алфавітом (A-Z)</text>
+                    }
+                </option>
+                <option value="name_desc">
+                    @if (currentLanguage == "en-US")
+                    {
+                        <text>Alpabetically (Z-A)</text>
+                    }
+                    else if (currentLanguage == "uk-UA")
+                    {
+                        <text>За алфавітом (Z-A)</text>
+                    }
+                </option>
             </select>
         </div>
         <div class="col-md-3 text-end">
@@ -84,17 +305,64 @@
                     <h5 class="card-title">
                         <a asp-controller="Home" asp-action="DetailsProduct" asp-route-id="@item.CofId">@item.CofName</a>
                     </h5>
-                    <p class="card-text"><strong>Категорія:</strong> @item.CofCateg</p>
-                    <p class="card-text"><strong>Ціна:</strong> @item.CofPrice грн</p>
-                    <p class="card-text"><strong>Кількість:</strong> @item.CofAmount</p>
-                    <p class="card-text"><strong>Термін зберігання:</strong> @item.CofDuration.ToString("yyyy-MM-dd")</p>
+                    <p class="card-text"><strong>
+                            @if (currentLanguage == "en-US")
+                            {
+                                <text>Category:</text>
+                            }
+                            else if (currentLanguage == "uk-UA")
+                            {
+                                <text>Категорія:</text>
+                            }
+                    </strong> @item.CofCateg</p>
+                    <p class="card-text"><strong>
+                            @if (currentLanguage == "en-US")
+                            {
+                                <text>Price:</text>
+                            }
+                            else if (currentLanguage == "uk-UA")
+                            {
+                                <text>Ціна:</text>
+                            }
+                    </strong> @item.CofPrice грн</p>
+                    <p class="card-text"><strong>
+                            @if (currentLanguage == "en-US")
+                            {
+                                <text>Number:</text>
+                            }
+                            else if (currentLanguage == "uk-UA")
+                            {
+                                <text>Кількість:</text>
+                            }
+                    </strong> @item.CofAmount</p>
+                    <p class="card-text"><strong>
+                            @if (currentLanguage == "en-US")
+                            {
+                                <text>Storage period:</text>
+                            }
+                            else if (currentLanguage == "uk-UA")
+                            {
+                                <text>Термін зберігання:</text>
+                            }
+                    </strong> @item.CofDuration.ToString("yyyy-MM-dd")</p>
                     <form asp-controller="Basket" asp-action="AddToCart" method="post" class="mt-auto">
                         <input type="hidden" name="productId" value="@item.CofId" />
                         <input type="hidden" name="quantity" value="1" />
-                        <button type="submit" class="btn btn-primary w-100">Додати до кошика</button>
+                        <button type="submit" class="btn btn-primary w-100">
+                            @if (currentLanguage == "en-US")
+                            {
+                                <text>Add to cart</text>
+                            }
+                            else if (currentLanguage == "uk-UA")
+                            {
+                                <text>Додати до кошика</text>
+                            }
+                        </button>
                     </form>
                 </div>
             </div>
         </div>
     }
 </div>
+
+

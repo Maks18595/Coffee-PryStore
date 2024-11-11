@@ -1,0 +1,45 @@
+﻿@model Coffee_PryStore.Models.Order
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
+<html lang="@currentLanguage">
+<h2>Order Details - @Model.OrderId</h2>
+
+<p><strong>User ID:</strong> @Model.UserId</p>
+<p><strong>Order Date:</strong> @Model.OrderDate.ToString("yyyy-MM-dd")</p>
+<p><strong>Total Amount:</strong> @Model.TotalAmount</p>
+<p><strong>Status:</strong> @Model.Status</p>
+
+
+<h3>Delivery Information</h3>
+<p><strong>Full Name:</strong> @Model.FullName</p>
+<p><strong>City:</strong> @Model.City</p>
+<p><strong>Address:</strong> @Model.Address</p>
+<p><strong>Phone Number:</strong> @Model.PhoneNumber</p>
+
+<h3>Order Items</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Product ID</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderItems)
+        {
+            <tr>
+                <td>@item.CofId</td>
+                <td>@item.Quantity</td>
+                <td>@item.UnitPrice</td>
+                <td>@(item.Quantity * item.UnitPrice)</td>
+            </tr>
+        }
+    </tbody>
+</table>

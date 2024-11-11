@@ -3,7 +3,10 @@
 @{
     ViewData["Title"] = "Order Details";
 }
-
+@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
+<html lang="@currentLanguage">
 <h2>Order Details - @Model.OrderId</h2>
 
 <p><strong>User ID:</strong> @Model.UserId</p>
@@ -12,7 +15,7 @@
 <p><strong>Status:</strong> @Model.Status</p>
 
     <h3>Admin Actions</h3>
-    <!-- Form to change order status -->
+
     <form asp-action="ChangeStatus" method="post">
         <input type="hidden" name="id" value="@Model.OrderId" />
         <label for="newStatus">Change Status:</label>
@@ -53,7 +56,6 @@
         <button type="submit" class="btn btn-primary">Update Status</button>
     </form>
 
-    <!-- Button to delete order -->
     <form asp-action="DeleteOrder" method="post" style="margin-top: 10px;">
         <input type="hidden" name="id" value="@Model.OrderId" />
         <button type="submit" class="btn btn-danger">Delete Order</button>

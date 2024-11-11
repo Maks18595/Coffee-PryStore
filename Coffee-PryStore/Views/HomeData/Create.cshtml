@@ -3,7 +3,10 @@
 @{
     ViewData["Title"] = "Create User";
 }
-
+@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
+<html lang="@currentLanguage">
 <h1>Create User</h1>
 
 <form asp-action="Create" method="post">

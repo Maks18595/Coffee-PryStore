@@ -1,0 +1,137 @@
+﻿@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
+<!DOCTYPE html>
+<html lang="@currentLanguage">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@(currentLanguage == "en-US" ? "About Us" : "Про нас")</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #2c1d12; /* Rich dark coffee background */
+            color: #fff; /* Light text for contrast */
+        }
+
+        .hero-section {
+            background-color: rgba(0, 0, 0, 0.6); /* Dark, semi-transparent overlay for hero section */
+            background-image: url('https://example.com/coffee-background.jpg'); /* Background image */
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            padding: 100px 0;
+            text-align: center;
+            border-bottom: 5px solid #6f4f28; /* Coffee brown border to separate sections */
+        }
+
+            .hero-section h1 {
+                font-size: 3.5em;
+                font-weight: bold;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Text shadow for better readability */
+            }
+
+            .hero-section p {
+                font-size: 1.5em;
+                margin-top: 20px;
+            }
+
+        .section-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #6f4f28; /* Coffee brown */
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .about-content {
+            background-color: #fff;
+            color: #333;
+            padding: 40px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+            .about-content:hover {
+                transform: scale(1.02); /* Slight zoom effect on hover */
+            }
+
+            .about-content img {
+                max-width: 100%;
+                border-radius: 8px;
+                margin-bottom: 30px;
+            }
+
+            .about-content ul {
+                list-style-type: none;
+                padding-left: 0;
+            }
+
+            .about-content li {
+                font-size: 1.2em;
+                margin-bottom: 15px;
+            }
+
+        .footer {
+            background-color: #6f4f28; /* Coffee brown for footer */
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+            .footer p {
+                margin-bottom: 0;
+                font-size: 1.1em;
+            }
+    </style>
+</head>
+
+<body>
+    <div class="hero-section">
+        <h1>@(currentLanguage == "en-US" ? "About Us" : "Про нас")</h1>
+        <p>@(currentLanguage == "en-US" ? "Learn more about our story and passion for coffee." : "Дізнайтесь більше про нашу історію та пристрасть до кави.")</p>
+    </div>
+
+    <div class="container">
+        <div class="about-content">
+            <h2 class="section-title">@((currentLanguage == "en-US") ? "Our Story" : "Наша історія")</h2>
+            <p>@(currentLanguage == "en-US" ? "We are passionate about coffee. Our journey began with a simple idea to bring the finest coffee from around the world to your cup. Over the years, we have developed a deep connection with coffee farmers, ensuring the highest quality beans for our customers." : "Ми захоплені кавою. Наша подорож розпочалась з простого ідеї — приносити найкращу каву з усього світу до вашої чашки. З роками ми розвинули глибоке зв'язок з кавовими фермерами, забезпечуючи найвищу якість зерен для наших клієнтів.")</p>
+        </div>
+
+        <div class="about-content">
+            <h2 class="section-title">@((currentLanguage == "en-US") ? "Our Mission" : "Наша місія")</h2>
+            <p>@(currentLanguage == "en-US" ? "Our mission is to provide our customers with a rich and authentic coffee experience. We are committed to sustainability and ethical sourcing practices, ensuring that every cup of coffee supports farmers and communities around the world." : "Наша місія — забезпечити наших клієнтів багатим та автентичним кавовим досвідом. Ми прагнемо до сталого розвитку та етичних практик постачання, щоб кожна чашка кави підтримувала фермерів та громади по всьому світу.")</p>
+        </div>
+
+        <div class="about-content">
+            <h2 class="section-title">@((currentLanguage == "en-US") ? "Our Values" : "Наші цінності")</h2>
+            <ul>
+                <li>@(currentLanguage == "en-US" ? "Quality: We focus on providing the best coffee with exceptional quality." : "Якість: Ми орієнтуємося на надання найкращої кави з винятковою якістю.")</li>
+                <li>@(currentLanguage == "en-US" ? "Sustainability: We believe in environmentally friendly practices and sustainability." : "Сталий розвиток: Ми віримо в екологічно чисті практики та сталий розвиток.")</li>
+                <li>@(currentLanguage == "en-US" ? "Community: Supporting the coffee community and creating positive impact." : "Спільнота: Підтримка кавової спільноти та створення позитивного впливу.")</li>
+            </ul>
+        </div>
+
+        <div class="about-content">
+            <h2 class="section-title">@((currentLanguage == "en-US") ? "Our Production Process" : "Наш виробничий процес")</h2>
+            <p>@(currentLanguage == "en-US" ? "At our workshop, we take pride in every step of the coffee-making process. From selecting the best coffee beans to roasting and grinding, we ensure that every cup is made with care and precision. Our process follows sustainable practices, working directly with coffee farmers to ensure that they are paid fairly and that our coffee is of the highest quality." : "У нашій майстерні ми пишаємося кожним етапом процесу приготування кави. Від відбору найкращих кавових зерен до обсмажування та подрібнення — ми гарантуємо, що кожна чашка зроблена з увагою та точністю. Наш процес відповідає сталим практикам, ми працюємо безпосередньо з кавовими фермерами, забезпечуючи їх справедливою оплатою та гарантуємо, що наша кава найвищої якості.")</p>
+        </div>
+
+        <div class="about-content">
+            <h2 class="section-title">@((currentLanguage == "en-US") ? "How We Source Our Coffee" : "Як ми постачаємо каву")</h2>
+            <p>@(currentLanguage == "en-US" ? "We source our coffee from small-scale farmers around the world, focusing on regions known for their exceptional beans. Our partners share our values of sustainability and fair trade, ensuring that the farmers are treated ethically and that their coffee is of the finest quality." : "Ми постачаємо каву від малих фермерів з усього світу, орієнтуючись на регіони, відомі своїми винятковими зернами. Наші партнери поділяють наші цінності сталого розвитку та чесної торгівлі, забезпечуючи етичне ставлення до фермерів та найвищу якість кави.")</p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

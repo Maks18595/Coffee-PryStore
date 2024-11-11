@@ -3,20 +3,90 @@
 @{
     ViewData["Title"] = "Деталі товару";
 }
-
+@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
+<html lang="@currentLanguage">
 <style>
-    .custom-img-size {
-        max-width: 300px; /* Встановіть максимальну ширину зображення */
-        width: 100%;      /* Зображення буде займати всю доступну ширину до максимального розміру */
-        height: auto;     /* Зберігає пропорції зображення */
-        display: block;   /* Встановлює зображення як блочний елемент для кращого контролю */
-        margin: 0 auto;   /* Вирівнює зображення по центру */
+
+    body {
+        background-color: #f5ebe0;
+        font-family: 'Arial', sans-serif;
+        color: #4b2e20;
     }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+
+    h2 {
+        text-align: center;
+        font-size: 36px;
+        color: #4b2e20;
+        margin-bottom: 20px;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+
+    .custom-img-size {
+        max-width: 400px; 
+        width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+
+    p {
+        font-size: 18px;
+        color: #6b4f2b;
+        margin-bottom: 10px;
+    }
+
+    p strong {
+        color: #b85c38; 
+        font-weight: bold;
+    }
+
+
+    button {
+        background-color: #b85c38;
+        border: none;
+        color: #fff;
+        font-size: 18px;
+        padding: 12px 24px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s;
+        margin-top: 20px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    button:hover {
+        background-color: #6b4f2b;
+        transform: translateY(-3px);
+    }
+
+
+    form {
+        text-align: center;
+    }
+
+   
 </style>
 
 <div class="container mt-5">
     <h2>@Model.CofName</h2>
     <img src="@(Model.ImageData != null ? $"data:image/jpeg;base64,{Convert.ToBase64String(Model.ImageData)}" : "/Attributes/Images/placeholder.png")" class="img-thumbnail mb-4 custom-img-size" alt="@Model.CofName" />
+    
     <p><strong>Опис:</strong> @Model.Description</p>
     <p><strong>Категорія:</strong> @Model.CofCateg</p>
     <p><strong>Ціна:</strong> @Model.CofPrice грн</p>
@@ -29,4 +99,4 @@
         <button type="submit" class="btn btn-primary">Додати до кошика</button>
     </form>
 </div>
-
+</html>

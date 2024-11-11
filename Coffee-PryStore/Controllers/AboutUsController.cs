@@ -2,11 +2,11 @@
 
 namespace Coffee_PryStore.Controllers
 {
-    public class HistoryController : Controller
+    public class AboutUsController : Controller
     {
-        public IActionResult History()
+        public IActionResult AboutUs()
         {
-            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US";
             ViewData["CurrentLanguage"] = currentLanguage;
             return View();
         }

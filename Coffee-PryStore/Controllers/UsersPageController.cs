@@ -2,6 +2,7 @@
 using Coffee_PryStore.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Globalization;
 
 
 namespace Coffee_PryStore.Controllers
@@ -9,14 +10,6 @@ namespace Coffee_PryStore.Controllers
     public class UsersPageController(DataBaseHome context) : Controller
     {
         private readonly DataBaseHome _context = context;
-
-        /*
-        [HttpGet]
-        public IActionResult Edit(int id)
-        {
-            return View(new User());
-        }
-        */
 
 
         [HttpPost]
@@ -51,6 +44,8 @@ namespace Coffee_PryStore.Controllers
                     ModelState.AddModelError("", "Error saving changes: " + ex.Message);
                 }
             }
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return View(user);
         }
 
@@ -60,7 +55,21 @@ namespace Coffee_PryStore.Controllers
             var users = _context.Users.ToList(); 
             return View(users); 
         }
+        public IActionResult ChangeLanguage(string culture)
+        {
 
-    
+            CultureInfo.CurrentCulture = new CultureInfo(culture);
+            CultureInfo.CurrentUICulture = new CultureInfo(culture);
+
+       
+            Response.Cookies.Append("lang", culture, new CookieOptions { Expires = DateTimeOffset.Now.AddYears(1) });
+
+         
+            HttpContext.Session.SetString("Culture", culture);
+
+            return RedirectToAction("PersonRegistration");
+        }
+
+
     }
 }

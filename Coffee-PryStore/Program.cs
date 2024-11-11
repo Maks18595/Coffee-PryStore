@@ -1,11 +1,21 @@
 using Coffee_PryStore.Models;
 using Coffee_PryStore.Models.Configurations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System.Globalization;
+using System.Reflection;
 using System.Text;
+using static Coffee_PryStore.Models.Configurations.Startup;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
 
 var jwtKey = builder.Configuration["JwtSettings:Key"]
              ?? throw new InvalidOperationException("JwtSettings:Key не налаштовано.");
@@ -42,7 +52,10 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<LanguageService>();
+
+
 
 var app = builder.Build();
 
@@ -52,10 +65,17 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+var locOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
+app.UseRequestLocalization(locOptions.Value);
+
+
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+
 
 app.UseAuthentication();
 app.UseAuthorization();

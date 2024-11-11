@@ -3,7 +3,10 @@
 @{
     ViewData["Title"] = "Профіль адміністратора";
 }
-
+@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
+<html lang="@currentLanguage">
 <h1>Профіль адміністратора</h1>
 <p>Електронна адреса: @Model.Email</p>
 <p>Роль: @Model.Role</p>
@@ -41,8 +44,5 @@
                 <th>Статус</th>
             </tr>
         </thead>
-        <tbody>
-            @* Логіка для відображення замовлень користувача *@
-        </tbody>
     </table>
 </div>

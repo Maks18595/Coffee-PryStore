@@ -2,9 +2,12 @@
     Layout = "~/Views/Shared/Settings.cshtml";
     ViewData["Title"] = "Registration";
 }
+@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="@currentLanguage">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -120,6 +123,12 @@
         <div class="container-fluid">
             <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Coffee_PryStore</a>
         </div>
+
+        <ul class="navbar-nav">
+            <li><a asp-controller="PersonRegistration" asp-action="ChangeLanguage" asp-route-culture="en-US" class="nav-link"><i class="flag-icon flag-icon-us"></i> English</a></li>
+            <li><a asp-controller="PersonRegistration" asp-action="ChangeLanguage" asp-route-culture="uk-UA" class="nav-link"><i class="flag-icon flag-icon-ua"></i> Українська</a></li>
+        </ul>
+
     </nav>
     <div class="background-image"></div>
     <div class="content">
@@ -128,7 +137,16 @@
                 <img src="@Url.Content("~/Attributes/Images/girlcoffee.png")" class="img-fluid" alt="Coffee Image" />
             </div>
             <div class="col-md-6">
-                <h1 class="custom-title">Приєднатись</h1> 
+                <h1 class="custom-title">
+                    @if (currentLanguage == "en-US")
+                    {
+                        @:Join
+                    }
+                    else if (currentLanguage == "uk-UA")
+                    {
+                        @:Приєднатись
+                    }
+                </h1>
                 @if (!ViewData.ModelState.IsValid)
                 {
                     <div class="alert alert-danger">
@@ -137,15 +155,42 @@
                 }
                 <form method="post">
                     <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Електронна адреса</label>
+                        <label for="exampleInputEmail1" class="form-label">
+                            @if (currentLanguage == "en-US")
+                            {
+                                <text>E-mail address</text>
+                            }
+                            else if (currentLanguage == "uk-UA")
+                            {
+                                <text>Електронна адреса</text>
+                            }
+                        </label>
                         <input type="email" class="form-control" id="exampleInputEmail1" name="email" placeholder="Enter your email" required>
                     </div>
                     <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">Пароль</label>
+                        <label for="exampleInputPassword1" class="form-label">
+                            @if (currentLanguage == "en-US")
+                            {
+                                <text>Password</text>
+                            }
+                            else if (currentLanguage == "uk-UA")
+                            {
+                                <text>Пароль</text>
+                            }
+                        </label>
                         <input type="password" class="form-control" id="exampleInputPassword1" name="password" placeholder="Enter your password" required minlength="8">
                     </div>
                     <div class="mb-3 d-grid">
-                        <button type="submit" class="btn btn-danger btn-block">Зареєструватись / Увійти</button>
+                        <button type="submit" class="btn btn-danger btn-block">
+                            @if (currentLanguage == "en-US")
+                            {
+                                <text>Registration / Login</text>
+                            }
+                            else if (currentLanguage == "uk-UA")
+                            {
+                                <text>Зареєструватись / Увійти</text>
+                            }
+                        </button>
                     </div>
                 </form>
 

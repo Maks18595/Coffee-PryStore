@@ -4,23 +4,101 @@
     ViewData["Title"] = "Результати пошуку";
 }
 
-<h1>Результати пошуку</h1>
+<style>
 
-@if (Model != null && Model.Any())
-{
-    <ul class="list-group">
-        @foreach (var product in Model)
-        {
-            <li class="list-group-item">
-                <h5>@product.CofName</h5>
-                <p>Ціна: @product.CofPrice грн</p>
-                <a asp-controller="Home" asp-action="DetailsProduct" asp-route-id="@product.CofId">Деталі</a>
-            </li>
-        }
-    </ul>
-}
-else
-{
-    <p>На жаль, жодного продукту не знайдено за запитом "@ViewData["searchTerm"]".</p>
-}
+    body {
+        background-color: #f5ebe0;
+        font-family: 'Arial', sans-serif;
+        color: #4b2e20;
+    }
 
+    h1 {
+        text-align: center;
+        font-size: 36px;
+        color: #4b2e20;
+        margin-bottom: 30px;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .list-group-item {
+        background-color: rgba(250, 245, 235, 0.95);
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .list-group-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .list-group-item h5 {
+        font-size: 24px;
+        color: #b85c38;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .list-group-item p {
+        font-size: 18px;
+        color: #6b4f2b;
+    }
+
+    .list-group-item a {
+        display: inline-block;
+        font-size: 16px;
+        font-weight: bold;
+        color: #b85c38;
+        margin-top: 10px;
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        border: 2px solid #b85c38;
+        background-color: #f5ebe0;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .list-group-item a:hover {
+        background-color: #b85c38;
+        color: #fff;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .no-results {
+        text-align: center;
+        font-size: 20px;
+        color: #b85c38;
+        font-weight: bold;
+        margin-top: 30px;
+    }
+</style>
+
+<div class="container">
+    <h1>Результати пошуку</h1>
+
+    @if (Model != null && Model.Any())
+    {
+        <ul class="list-group">
+            @foreach (var product in Model)
+            {
+                <li class="list-group-item">
+                    <h5>@product.CofName</h5>
+                    <p>Ціна: @product.CofPrice грн</p>
+                    <a asp-controller="Home" asp-action="DetailsProduct" asp-route-id="@product.CofId">Деталі</a>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p class="no-results">На жаль, жодного продукту не знайдено за запитом "@ViewData["searchTerm"]".</p>
+    }
+</div>

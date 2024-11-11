@@ -3,33 +3,105 @@
 @{
     ViewData["Title"] = "Orders Management";
 }
+@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
 
-<h2>Orders Management</h2>
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Order ID</th>
-            <th>User ID</th>
-            <th>Order Date</th>
-            <th>Total Amount</th>
-            <th>Status</th>
-            <th>Details</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var order in Model)
-        {
-            <tr>
-                <td>@order.OrderId</td>
-                <td>@order.UserId</td>
-                <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
-                <td>@order.TotalAmount</td>
-                <td>@order.Status</td>
-                <td>
-                    <a asp-action="OrderDetails" asp-route-id="@order.OrderId" class="btn btn-info">View Details</a>
-                </td>
-            </tr>
+<html lang="@currentLanguage">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="~/Attributes/Boost/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Raleway', sans-serif;
+            background-color: #f3ebe0; 
+            color: #4b3b2a; 
         }
-    </tbody>
-</table>
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; 
+            padding-bottom: 50px; 
+        }
+
+        h2 {
+            margin-top: 50px;
+            font-size: 32px;
+            color: #3e2c23;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        main {
+            flex: 1; 
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .table {
+            width: 100%;
+            max-width: 1000px;
+            margin-top: 20px;
+        }
+
+            .table th, .table td {
+                text-align: center;
+            }
+
+        footer {
+            background-color: #5c3d2e;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 14px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Orders Management</h2>
+
+    <main>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>User ID</th>
+                    <th>Order Date</th>
+                    <th>Total Amount</th>
+                    <th>Status</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td>@order.OrderId</td>
+                        <td>@order.UserId</td>
+                        <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
+                        <td>@order.TotalAmount</td>
+                        <td>@order.Status</td>
+                        <td>
+                            <a asp-action="OrderDetails" asp-route-id="@order.OrderId" class="btn btn-info">View Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </main>
+
+    <script src="~/Attributes/Boost/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,4 +1,386 @@
-﻿
-<div class="container mt-5">
-    <h2 class="text-center mb-4">Факти та історія кави</h2>
+﻿@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
+<!DOCTYPE html>
+<html lang="@currentLanguage">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        @if (currentLanguage == "en-US")
+        {
+            <text>Coffee Facts and History</text>
+        }
+        else if (currentLanguage == "uk-UA")
+        {
+            <text>Факти та історія кави</text>
+        }
+    </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #2c1f1b; 
+            color: #f8f9fa;
+        }
+
+        .hero-section {
+            background-image: url('https://example.com/coffee-background.jpg'); 
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+
+            .hero-section h2 {
+                font-size: 3em;
+                font-weight: bold;
+            }
+
+        .section-title {
+            font-size: 2em;
+            font-weight: bold;
+            color: #6f4f28; 
+            margin-bottom: 20px;
+        }
+
+        .fact-list {
+            background-color: #3e2a2a; 
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .fact-item {
+            margin-bottom: 20px;
+        }
+
+            .fact-item h4 {
+                color: #f8f9fa;
+                font-size: 1.5em;
+            }
+
+            .fact-item p {
+                font-size: 1.1em;
+                line-height: 1.6;
+            }
+
+        .image-section img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .coffee-types-section {
+            background-color: #f1f1f1;
+            padding: 50px 0;
+        }
+
+        .footer {
+            background-color: #6f4f28; 
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+            .footer p {
+                margin-bottom: 0;
+            }
+    </style>
+</head>
+
+<body>
+    <div class="hero-section">
+        <h2>
+            @if (currentLanguage == "en-US")
+            {
+                <text>Coffee Facts and History</text>
+            }
+            else if (currentLanguage == "uk-UA")
+            {
+                <text>Факти та історія кави</text>
+            }
+        </h2>
+        <p>
+            @if (currentLanguage == "en-US")
+            {
+                <text>Learn more about this amazing drink that changed the world.</text>
+            }
+            else if (currentLanguage == "uk-UA")
+            {
+                <text>Дізнайтесь більше про цей неймовірний напій, який змінив світ.</text>
+            }
+        </p>
     </div>
+
+    <div class="container mt-5">
+        <div class="fact-list">
+            <div class="section-title">
+                @if (currentLanguage == "en-US")
+                {
+                    <text>History of Coffee</text>
+                }
+                else if (currentLanguage == "uk-UA")
+                {
+                    <text>Історія кави</text>
+                }
+            </div>
+            <div class="fact-item">
+                <h4>
+                    @if (currentLanguage == "en-US")
+                    {
+                        <text>Origin of Coffee</text>
+                    }
+                    else if (currentLanguage == "uk-UA")
+                    {
+                        <text>Походження кави</text>
+                    }
+                </h4>
+                <p>
+                    @if (currentLanguage == "en-US")
+                    {
+                        <text>Coffee was first discovered in Ethiopia in the 9th century, when shepherds noticed their goats became energetic after eating the red berries from a coffee tree.</text>
+                    }
+                    else if (currentLanguage == "uk-UA")
+                    {
+                        <text>Кава була вперше виявлена в Ефіопії в IX столітті, коли пастухи помітили, що їхні кози ставали енергійними після того, як поїдали червоні ягоди з кавового дерева.</text>
+                    }
+                </p>
+            </div>
+            <div class="fact-item">
+                <h4>
+                    @if (currentLanguage == "en-US")
+                    {
+                        <text>A trip to Europe</text>
+                    }
+                    else if (currentLanguage == "uk-UA")
+                    {
+                        <text>Подорож до Європи</text>
+                    }
+                </h4>
+                <p>
+                    @if (currentLanguage == "en-US")
+                    {
+                        <text>In the 15th century, coffee reached Arabia, and later spread throughout the world through trade routes, becoming popular in Europe in the 16th century.</text>
+                    }
+                    else if (currentLanguage == "uk-UA")
+                    {
+                        <text>У XV столітті кава потрапила до Аравії, а згодом поширилася по всьому світу через торгові шляхи, ставши популярною в Європі в XVI столітті.</text>
+                    }
+                </p>
+            </div>
+            <div class="fact-item">
+                <h4>
+                    @if (currentLanguage == "en-US")
+                    {
+                        <text>The first coffee shop</text>
+                    }
+                    else if (currentLanguage == "uk-UA")
+                    {
+                        <text>Перша кав'ярня</text>
+                    }
+                </h4>
+                <p>
+                    @if (currentLanguage == "en-US")
+                    {
+                        <text>The first coffee shop was opened in Istanbul in 1555, and in Europe, the first coffee shops appeared in London and Paris in the 17th century.</text>
+                    }
+                    else if (currentLanguage == "uk-UA")
+                    {
+                        <text>Перша кав'ярня була відкрита в Стамбулі в 1555 році, а в Європі перші кав'ярні з'явилися в Лондоні та Парижі в XVII столітті.</text>
+                    }
+                </p>
+            </div>
+        </div>
+
+        <div class="fact-list">
+            <div class="section-title">
+                @if (currentLanguage == "en-US")
+                {
+                    <text>Coffee Varieties</text>
+                }
+                else if (currentLanguage == "uk-UA")
+                {
+                    <text>Види кави</text>
+                }
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="image-section">
+                        <img src="~/Attributes/Images/capucino.jpeg" alt="Espresso">
+                        <h5>
+                            @if (currentLanguage == "en-US")
+                            {
+                                <text>Espresso</text>
+                            }
+                            else if (currentLanguage == "uk-UA")
+                            {
+                                <text>Еспресо</text>
+                            }
+                        </h5>
+                        <p>
+                            @if (currentLanguage == "en-US")
+                            {
+                                <text>An Italian classic consisting of strong, concentrated coffee, often serving as the base for other coffee drinks.</text>
+                            }
+                            else if (currentLanguage == "uk-UA")
+                            {
+                                <text>Італійський класичний напій, що складається з сильної та концентрованої кави, часто служить основою для інших кавових напоїв.</text>
+                            }
+                        </p>
+                    </div>
+                </div>
+                    <div class="col-md-4">
+                        <div class="image-section">
+                            <img src="~/Attributes/Images/cappuccino.jpeg" alt="Cappuccino">
+                        <h5>
+                            @if (currentLanguage == "en-US")
+                            {
+                                <text>Cappuccino</text>
+                            }
+                            else if (currentLanguage == "uk-UA")
+                            {
+                                <text>Капучино</text>
+                            }
+                        </h5>
+                        <p>
+                            @if (currentLanguage == "en-US")
+                            {
+                                <text>A coffee-based drink made with espresso, steamed milk, and frothed milk, giving it a creamy texture.</text>
+                            }
+                            else if (currentLanguage == "uk-UA")
+                            {
+                                <text>Кавовий напій з еспресо, гарячим молоком та пінкою молока, що має приємну кремову текстуру.</text>
+                            }
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="image-section">
+                        <img src="~/Attributes/Images/capucandlatte.jpeg" alt="Latte">
+                        <h5>
+                            @if (currentLanguage == "en-US")
+                            {
+                                <text>Latte</text>
+                            }
+                            else if (currentLanguage == "uk-UA")
+                            {
+                                <text>Латте</text>
+                            }
+                        </h5>
+                        <p>
+                            @if (currentLanguage == "en-US")
+                            {
+                                <text>Latte is a smooth drink made with espresso and a large amount of steamed milk, making it soft and sweet in taste.</text>
+                            }
+                            else if (currentLanguage == "uk-UA")
+                            {
+                                <text>Латте — це м'який напій, що складається з еспресо та великої кількості теплого молока, що робить його м'яким і солодким на смак.</text>
+                            }
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fact-list">
+        <div class="section-title">
+            @if (currentLanguage == "en-US")
+            {
+                <text>How is coffee grown?</text>
+            }
+            else if (currentLanguage == "uk-UA")
+            {
+                <text>Як вирощується кава?</text>
+            }
+        </div>
+        <div class="fact-item">
+            <h4>
+                @if (currentLanguage == "en-US")
+                {
+                    <text>Growing Process</text>
+                }
+                else if (currentLanguage == "uk-UA")
+                {
+                    <text>Процес вирощування</text>
+                }
+            </h4>
+            <p>
+                @if (currentLanguage == "en-US")
+                {
+                    <text>Coffee trees grow in tropical zones where ideal conditions for development exist — temperatures ranging from 18 to 22°C, high humidity, and rain. Major coffee producers include Brazil, Vietnam, and Colombia.</text>
+                }
+                else if (currentLanguage == "uk-UA")
+                {
+                    <text>Кавові дерева ростуть в тропічних зонах, де ідеальні умови для розвитку — температура від 18 до 22 градусів Цельсія, висока вологість та дощі. Основні виробники кави — Бразилія, В'єтнам та Колумбія.</text>
+                }
+            </p>
+        </div>
+        <div class="fact-item">
+            <h4>
+                @if (currentLanguage == "en-US")
+                {
+                    <text>Harvesting</text>
+                }
+                else if (currentLanguage == "uk-UA")
+                {
+                    <text>Збір урожаю</text>
+                }
+            </h4>
+            <p>
+                @if (currentLanguage == "en-US")
+                {
+                    <text>Coffee cherries are harvested by hand, as only ripe fruit can produce the best coffee. This is a labor-intensive process that takes several months.</text>
+                }
+                else if (currentLanguage == "uk-UA")
+                {
+                    <text>Збір кавових ягід відбувається вручну, оскільки тільки зрілі плоди здатні дати найкращу каву. Це трудомісткий процес, який займає кілька місяців.</text>
+                }
+            </p>
+        </div>
+    </div>
+
+    <div class="fact-list">
+        <div class="section-title">
+            @if (currentLanguage == "en-US")
+            {
+                <text>How to make coffee?</text>
+            }
+            else if (currentLanguage == "uk-UA")
+            {
+                <text>Як готувати каву?</text>
+            }
+        </div>
+        <div class="fact-item">
+            <h4>
+                @if (currentLanguage == "en-US")
+                {
+                    <text>Brewing Methods</text>
+                }
+                else if (currentLanguage == "uk-UA")
+                {
+                    <text>Методи приготування</text>
+                }
+            </h4>
+            <p>
+                @if (currentLanguage == "en-US")
+                {
+                    <text>Coffee can be prepared using various methods: espresso, filter coffee, Turkish coffee, as well as with coffee makers or a press. The choice of method depends on your taste preferences.</text>
+                }
+                else if (currentLanguage == "uk-UA")
+                {
+                    <text>Кава може бути приготована різними методами: еспресо, фільтр-кава, турка, а також за допомогою кавоварок або пресу. Вибір методу залежить від ваших смакових уподобань.</text>
+                }
+            </p>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

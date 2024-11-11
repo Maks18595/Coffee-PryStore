@@ -1,76 +1,137 @@
 ﻿@{
     ViewData["Title"] = "Керування товарами";
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
 }
 
-<h2>Керування товарами</h2>
-<link href="~/Attributes/Boost/css/bootstrap.min.css" rel="stylesheet" />
+<html lang="@currentLanguage">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="~/Attributes/Boost/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%; 
+            margin: 0;
+            font-family: 'Raleway', sans-serif;
+            background-color: #f3ebe0;
+            color: #4b3b2a; 
+        }
 
-<style>
-    body {
-        background-color: #f8f9fa; 
-        font-family: 'Arial', sans-serif;
-    }
+        body {
+            display: flex;
+            flex-direction: column; 
+            min-height: 100vh; 
+        }
 
-    .navbar {
-        background-color: #6f4c3e; 
-    }
+        .navbar {
+            background-color: #5c3d2e; 
+            border-bottom: 3px solid #d9b382; 
+        }
 
-    .navbar-brand, .nav-link {
-        color: #ffffff; 
-    }
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+            font-weight: bold;
+        }
 
-    .navbar-brand:hover, .nav-link:hover {
-        color: #ffe135; 
-    }
+            .navbar-brand:hover, .nav-link:hover {
+                color: #f7c873 !important; 
+            }
 
-    h2 {
-        text-align: center;
-        margin-top: 20px;
-    }
+        h2 {
+            margin-top: 50px;
+            font-size: 32px;
+            color: #3e2c23;
+            text-align: center;
+            margin-bottom: 30px;
+        }
 
-    .nav-item {
-        margin: 0 15px; 
-    }
-</style>
+        main {
+            flex: 1; 
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 20px; 
+        }
 
-<nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Coffee_PryStore</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Admin" asp-action="CreateProduct">Додати новий продукт</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Admin" asp-action="Categories">Категорії</a>
-                </li>
-                <li class="nav-item">
-                    <a asp-action="ProductDetails" asp-controller="Admin" class="btn btn-secondary mt-3">Показати всі товари</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Admin" asp-action="Users">Користувачі</a>
-                </li>
+        .form-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            margin-top: 20px;
+        }
 
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Admin" asp-action="Orders">Замовлення</a>
-                </li>
+        .btn-secondary {
+            background-color: #8b5e3c; 
+            border: none;
+            margin-top: 10px;
+        }
 
-                <!--  
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Admin" asp-action="Table">Таблиця</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Admin" asp-action="Logout">Вихід</a>
-                </li>
-                -->
-            </ul>
+            .btn-secondary:hover {
+                background-color: #6d4a2f; 
+            }
+
+        footer {
+            background-color: #5c3d2e;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 14px;
+            width: 100%;
+            margin-top: auto; 
+        }
+
+   
+        .invisible-form {
+            width: 100%;
+            height: 1px;
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Керування товарами</h2>
+
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Coffee_PryStore</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Admin" asp-action="CreateProduct">Додати новий продукт</a>
+                    </li>
+                   
+                    <li class="nav-item">
+                        <a asp-action="ProductDetails" asp-controller="Admin" class="nav-link">Показати всі товари</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Admin" asp-action="Users">Користувачі</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Admin" asp-action="Orders">Замовлення</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<td>
-    <a href="@Url.Action("AdminDashboard", "Admin")" class="btn btn-secondary mt-3">На сторінку адміністратора</a>
-</td>
+    <main>
+        <div class="form-container">
+            <a href="@Url.Action("AdminDashboard", "Admin")" class="btn btn-secondary">На сторінку адміністратора</a>
+        </div>
+    </main>
+
+    <form class="invisible-form"></form>
+
+    <script src="~/Attributes/Boost/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

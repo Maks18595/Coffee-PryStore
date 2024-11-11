@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace Coffee_PryStore.Controllers
 {
@@ -17,9 +18,27 @@ namespace Coffee_PryStore.Controllers
             _context = context;
         }
 
+        public IActionResult ChangeLanguage(string culture)
+        {
+
+            CultureInfo.CurrentCulture = new CultureInfo(culture);
+            CultureInfo.CurrentUICulture = new CultureInfo(culture);
+
+            Response.Cookies.Append("lang", culture, new CookieOptions { Expires = DateTimeOffset.Now.AddYears(1) });
+
+            HttpContext.Session.SetString("Culture", culture);
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
+            return RedirectToAction("PersonRegistration");
+        }
+
+
         public IActionResult OrderSuccess()
         {
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return View();
+           
         }
 
         public IActionResult Order()
@@ -46,7 +65,8 @@ namespace Coffee_PryStore.Controllers
                                }).ToList();
 
             ViewBag.Products = basketItems;
-
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return View(new OrderViewModel());
         }
 
@@ -75,6 +95,7 @@ namespace Coffee_PryStore.Controllers
                                        }).ToList();
 
                 ViewBag.Products = basketItemsView;
+
                 return View(model);
             }
 
@@ -139,6 +160,8 @@ namespace Coffee_PryStore.Controllers
             await _context.SaveChangesAsync();
 
             TempData["SuccessMessage"] = "Замовлення успішно оформлено.";
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return RedirectToAction("OrderSuccess");
         }
 

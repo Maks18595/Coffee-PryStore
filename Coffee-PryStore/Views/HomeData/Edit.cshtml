@@ -3,7 +3,10 @@
 @{
     ViewData["Title"] = "Edit Profile";
 }
-
+@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
+<html lang="@currentLanguage">
 <h1>Редагування профілю</h1>
 
 <form method="post">

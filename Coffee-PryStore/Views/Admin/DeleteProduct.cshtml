@@ -3,7 +3,10 @@
 @{
     ViewData["Title"] = "Видалити продукт";
 }
-
+@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
+<html lang="@currentLanguage">
 <h2>Видалити продукт</h2>
 
 <div>

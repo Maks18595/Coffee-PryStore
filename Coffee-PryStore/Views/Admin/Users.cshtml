@@ -3,7 +3,10 @@
 @{
     ViewData["Title"] = "Users";
 }
-
+@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
+<html lang="@currentLanguage">
 <h1>Users List</h1>
 
 <div class="mb-3">

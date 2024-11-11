@@ -3,7 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Coffee_PryStore.Models;
-using Coffee_PryStore.Models.Configurations; // Переконайтеся, що це відповідає вашому простору імен
+using Coffee_PryStore.Models.Configurations; 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -29,7 +29,7 @@ namespace Coffee_PryStore.Models.Configurations
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.Name, user.Email) // Додати інші claim за потреби
+                new Claim(ClaimTypes.Name, user.Email) 
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));

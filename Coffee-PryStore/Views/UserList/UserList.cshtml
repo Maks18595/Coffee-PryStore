@@ -1,5 +1,8 @@
 ﻿@model List<User>
-
+@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
+<html lang="@currentLanguage">
 <h1>User List</h1>
 <table>
     <thead>

@@ -25,8 +25,7 @@ namespace Coffee_PryStore.Models
 
         public string? Description { get; set; }
 
-        //  public virtual CategoryTable Category { get; set; } = new CategoryTable();
-
+       
     }
 }
 

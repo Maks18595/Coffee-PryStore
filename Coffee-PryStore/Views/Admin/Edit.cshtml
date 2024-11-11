@@ -1,7 +1,10 @@
 ﻿@model Coffee_PryStore.Models.User
 
 <h1>Edit User</h1>
-
+@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
+<html lang="@currentLanguage">
 <form asp-action="Edit" method="post">
     <input type="hidden" asp-for="Id" /> 
     <div class="form-group">

@@ -3,46 +3,154 @@
 @{
     ViewData["Title"] = "Усі товари";
 }
+@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
 
-<h2>Усі товари</h2>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Назва</th>
-            <th>Категорія</th>
-            <th>Ціна</th>
-            <th>Кількість</th>
-            <th>Термін зберігання</th>
-            <th>Зображення</th>
-            <th>Дії</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.CofName)</td>
-                <td>@Html.DisplayFor(modelItem => item.CofCateg)</td>
-                <td>@Html.DisplayFor(modelItem => item.CofPrice)</td>
-                <td>@Html.DisplayFor(modelItem => item.CofAmount)</td>
-                <td>@Html.DisplayFor(modelItem => item.CofDuration)</td>
-                <td>
-                    <img src="@(item.ImageData != null ? $"data:image/jpeg;base64,{Convert.ToBase64String(item.ImageData)}" : "/Attributes/Images/placeholder.png")" class="img-thumbnail" alt="@item.CofName" />
-                </td>
-                <td>
-                    <a asp-action="EditProduct" asp-route-id="@item.CofId">Редагувати</a>
-                    <a asp-action="DeleteProduct" asp-route-id="@item.CofId">Видалити</a>
-
-                
-                </td>
-            </tr>
+<html lang="@currentLanguage">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="~/Attributes/Boost/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: #f3ebe0; 
+            color: #4b3b2a; 
+            margin: 0; 
+            padding: 0; 
         }
-    </tbody>
-</table>
 
-<td>
-    <a href="@Url.Action("Index", "Home")" class="btn btn-secondary mt-3">На головну сторінку</a>
-    <a asp-action="CreateProduct" asp-controller="Admin" class="btn btn-secondary mt-3">Створити товар</a>
-    <a href="@Url.Action("AdminDashboard", "Admin")" class="btn btn-secondary mt-3">На сторінку адміністратора</a>
-</td>
+       
+
+        h2 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 40px;
+            color: #3e2c23;
+        }
+
+        .product-card {
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            margin-bottom: 30px;
+        }
+
+            .product-card:hover {
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+                transition: all 0.3s ease-in-out;
+            }
+
+        .product-img {
+            max-width: 100%;
+            border-radius: 8px;
+            height: auto;
+        }
+
+        .product-info {
+            text-align: center;
+            padding-top: 15px;
+        }
+
+        .btn-custom {
+            background-color: #5c3d2e;
+            color: #fff;
+            border-radius: 5px;
+            padding: 8px 16px;
+            text-decoration: none;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+            .btn-custom:hover {
+                background-color: #3e2c23;
+            }
+
+        .action-buttons a {
+            text-decoration: none;
+            color: #fff;
+            padding: 8px 16px;
+            margin: 5px;
+            background-color: #5c3d2e;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+            .action-buttons a:hover {
+                background-color: #3e2c23;
+            }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .col-md-4 {
+            width: 30%;
+            padding: 15px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #5c3d2e;
+            color: white;
+            margin-top: 50px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Усі товари</h2>
+
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4">
+                    <div class="product-card">
+                        <img src="@(item.ImageData != null ? $"data:image/jpeg;base64,{Convert.ToBase64String(item.ImageData)}" : "/Attributes/Images/placeholder.png")"
+                             class="product-img" alt="@item.CofName" />
+
+                        <div class="product-info">
+                            <h5>@item.CofName</h5>
+                            <p>Категорія: @item.CofCateg</p>
+                            <p>Ціна: @item.CofPrice ₴</p>
+                            <p>Кількість: @item.CofAmount</p>
+                            <p>Термін зберігання: @item.CofDuration</p>
+
+                            <div class="action-buttons">
+                                <a asp-action="EditProduct" asp-route-id="@item.CofId" class="btn-custom">Редагувати</a>
+                                <a asp-action="DeleteProduct" asp-route-id="@item.CofId" class="btn-custom">Видалити</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="@Url.Action("Index", "Home")" class="btn btn-secondary mt-3">На головну сторінку</a>
+            <a asp-action="CreateProduct" asp-controller="Admin" class="btn btn-secondary mt-3">Створити товар</a>
+            <a href="@Url.Action("AdminDashboard", "Admin")" class="btn btn-secondary mt-3">На сторінку адміністратора</a>
+        </div>
+    </div>
+
+    <script src="~/Attributes/Boost/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

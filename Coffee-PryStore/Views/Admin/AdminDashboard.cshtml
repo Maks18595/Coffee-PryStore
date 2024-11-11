@@ -3,7 +3,10 @@
 @{
     ViewData["Title"] = "Admin Dashboard";
 }
-
+@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
+<html lang="@currentLanguage">
 <div class="container">
 
     <h1 class="mt-4 text-center">Панель адміністратора</h1>
@@ -21,11 +24,6 @@
         <tbody>
 
 
-
-
-
-
-            
             @if (Model != null && Model.Any())
             {
                 foreach (var user in Model)
@@ -69,11 +67,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="@Url.Action("AdminDashboard", "Admin", new { id = Context.Session.GetInt32("UserId") })">Панель адміністратора</a>
                             </li>
-                            <!--  
-                            <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("UserProfile", "Admin", new { id = Context.Session.GetInt32("UserId") })">Профіль</a>
-                            </li>
-                            -->
+                           
                         }
                         else if (userRole == "User")
                         {

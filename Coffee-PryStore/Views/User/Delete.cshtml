@@ -1,5 +1,8 @@
 ﻿@model Coffee_PryStore.Models.User
-
+@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
+<html lang="@currentLanguage">
 <h1>Delete User</h1>
 
 <div>

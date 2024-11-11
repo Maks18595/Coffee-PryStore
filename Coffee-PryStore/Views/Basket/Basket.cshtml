@@ -1,62 +1,179 @@
 ﻿@model Coffee_PryStore.Models.Baskets
+@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
+<html lang="@currentLanguage">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ваш кошик</title>
+    <link href="~/libraries/boost/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #f5ebe0; 
+            font-family: 'Arial', sans-serif;
+            color: #4b2e20; 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-<div class="container mt-5">
-    <h2 class="text-center mb-4">Ваш кошик</h2>
+        h2 {
+            font-size: 2rem;
+            color: #6f4c3e; 
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
 
-    <table class="table table-hover">
-        <thead class="thead-dark">
-            <tr>
-                <th>Назва товару</th>
-                <th>Кількість</th>
-                <th>Ціна за одиницю</th>
-                <th>Загальна ціна</th>
-                <th>Дії</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model?.Items != null && Model.Items.Any())
-            {
-                foreach (var item in Model.Items)
+        .table {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .thead-dark {
+            background-color: #6f4c3e;
+            color: #fff;
+        }
+
+        th, td {
+            text-align: center;
+            padding: 12px;
+        }
+
+        td {
+            color: #4b2e20;
+        }
+
+        .form-control {
+            max-width: 80px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            font-size: 14px;
+            margin: 5px;
+        }
+
+        .btn-primary {
+            background-color: #ffc107; 
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #e0a800;
+        }
+
+        .btn-danger {
+            background-color: #b85c38; 
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background-color: #8c3e22;
+        }
+
+        .alert {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .text-success {
+            color: #28a745;
+        }
+
+        .btn-lg {
+            padding: 12px 24px;
+            font-size: 18px;
+        }
+
+        .d-flex {
+            margin-top: 20px;
+        }
+
+        .d-inline {
+            margin-right: 10px;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f1e1c6; 
+        }
+
+        footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 0.5rem 0;
+            width: 100%;
+            position: relative;
+            margin-top: auto;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Ваш кошик</h2>
+
+        <table class="table table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Назва товару</th>
+                    <th>Кількість</th>
+                    <th>Ціна за одиницю</th>
+                    <th>Загальна ціна</th>
+                    <th>Дії</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model?.Items != null && Model.Items.Any())
+                {
+                    foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td>@item.Cof?.CofName</td>
+                            <td>
+                                <form asp-action="UpdateCartQuantity" method="post" class="d-inline">
+                                    <input type="hidden" name="productId" value="@item.CofId" />
+                                    <input type="number" name="quantity" value="@item.Quantity" min="1" max="@item.Cof?.CofAmount" class="form-control d-inline" />
+                                    <button type="submit" class="btn btn-sm btn-primary">Оновити</button>
+                                </form>
+                            </td>
+                            <td>₴@item.Cof?.CofPrice</td>
+                            <td>₴@(item.Cof?.CofPrice * item.Quantity ?? 0)</td>
+                            <td>
+                                <form asp-action="RemoveFromCart" method="post" style="display:inline;">
+                                    <input type="hidden" name="productId" value="@item.CofId" />
+                                    <button type="submit" class="btn btn-sm btn-danger">Видалити</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
                 {
                     <tr>
-                        <td>@item.Cof?.CofName</td>
-                        <td>
-                            <form asp-action="UpdateCartQuantity" method="post" class="d-inline">
-                                <input type="hidden" name="productId" value="@item.CofId" />
-                                <input type="number" name="quantity" value="@item.Quantity" min="1" max="@item.Cof?.CofAmount" class="form-control d-inline" style="width: 80px;" />
-                                <button type="submit" class="btn btn-sm btn-primary">Оновити</button>
-                            </form>
-                        </td>
-                        <td>₴@item.Cof?.CofPrice</td>
-                        <td>₴@(item.Cof?.CofPrice * item.Quantity ?? 0)</td>
-                        <td>
-                            <form asp-action="RemoveFromCart" method="post" style="display:inline;">
-                                <input type="hidden" name="productId" value="@item.CofId" />
-                                <button type="submit" class="btn btn-sm btn-danger">Видалити</button>
-                            </form>
-                        </td>
+                        <td colspan="5" class="text-center">Ваш кошик порожній</td>
                     </tr>
                 }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="5" class="text-center">Ваш кошик порожній</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
 
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
-    }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
 
-    <div class="d-flex justify-content-between align-items-center mt-4">
-        <h4>Загальна сума: <span class="text-success">₴@(Model?.Items?.Sum(item => item.Cof?.CofPrice * item.Quantity) ?? 0)</span></h4>
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <h4>Загальна сума: <span class="text-success">₴@(Model?.Items?.Sum(item => item.Cof?.CofPrice * item.Quantity) ?? 0)</span></h4>
 
-        <form asp-action="PlaceOrder" method="post">
-            <button type="submit" class="btn btn-primary btn-lg">Зробити замовлення</button>
-        </form>
+            <form asp-action="PlaceOrder" method="post">
+                <button type="submit" class="btn btn-primary btn-lg">Зробити замовлення</button>
+            </form>
+        </div>
     </div>
-</div>
+
+</body>
+</html>

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using System.Globalization;
 
 namespace Coffee_PryStore.Controllers
 {
@@ -34,6 +35,23 @@ namespace Coffee_PryStore.Controllers
         {
             _context = context;
         }
+
+
+        public IActionResult ChangeLanguage(string culture)
+        {
+            CultureInfo.CurrentCulture = new CultureInfo(culture);
+            CultureInfo.CurrentUICulture = new CultureInfo(culture);
+
+
+            Response.Cookies.Append("lang", culture, new CookieOptions { Expires = DateTimeOffset.Now.AddYears(1) });
+
+
+            HttpContext.Session.SetString("Culture", culture);
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
+            return RedirectToAction("PersonRegistration");
+        }
+
 
 
         [HttpPost]
@@ -71,7 +89,8 @@ namespace Coffee_PryStore.Controllers
                     }
                 }
             }
-
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return RedirectToAction("Basket");
         }
 
@@ -126,7 +145,8 @@ namespace Coffee_PryStore.Controllers
           
             HttpContext.Session.SetObjectAsJson("Cart", cart);
             await _context.SaveChangesAsync();
-
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return RedirectToAction("Basket");
         }
 
@@ -155,8 +175,9 @@ namespace Coffee_PryStore.Controllers
 
          
                 HttpContext.Session.SetObjectAsJson("Cart", cart);
-
-                return View(cart); 
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
+            return View(cart); 
             }
 
         
@@ -164,6 +185,8 @@ namespace Coffee_PryStore.Controllers
         private Baskets GetCartFromSession()
         {
             var cart = HttpContext.Session.GetObjectFromJson<Baskets>("Cart");
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return cart ?? new Baskets();
         }
 
@@ -188,16 +211,38 @@ namespace Coffee_PryStore.Controllers
                 cart.Items.RemoveAll(i => i.CofId == productId);
                 HttpContext.Session.SetObjectAsJson("Cart", cart);
             }
-
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return RedirectToAction("Basket");
         }
 
         [HttpPost]
         public async Task<IActionResult> PlaceOrder()
         {
-           
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            if (userId == null)
+            {
+                return RedirectToAction("PersonRegistration", "PersonRegistration");
+            }
+
+
+            var cartItems = await _context.Basket
+                .Where(b => b.Id == userId.Value)
+                .ToListAsync();
+
+            if (cartItems == null || !cartItems.Any())
+            {
+                TempData["ErrorMessage"] = "Ваш кошик порожній. Додайте товари, щоб зробити замовлення.";
+                return RedirectToAction("Basket");
+            }
+
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
+
             return RedirectToAction("Order", "Order");
         }
+
 
 
 

@@ -3,7 +3,10 @@
 @{
     ViewData["Title"] = "Додати новий продукт";
 }
-
+@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
+<html lang="@currentLanguage">
 <h2>Новий продукт</h2>
 
 <form asp-action="CreateProduct" enctype="multipart/form-data">

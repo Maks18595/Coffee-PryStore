@@ -3,7 +3,10 @@
 @{
     ViewData["Title"] = "Редагувати продукт";
 }
-
+@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
+<html lang="@currentLanguage">
 <h2>Редагувати продукт</h2>
 
 <form asp-action="EditProduct" enctype="multipart/form-data">
@@ -66,12 +69,12 @@
     document.querySelectorAll('input[name="ImageChoice"]').forEach((elem) => {
         elem.addEventListener("change", function (event) {
             const fileInput = document.getElementById("fileInput");
-            // Показати або сховати поле для завантаження файлу
+           
             if (event.target.value === "new") {
                 fileInput.style.display = "block";
             } else {
                 fileInput.style.display = "none";
-                fileInput.value = ""; // очищаємо поле вибору файлу, якщо вибрано поточне зображення
+                fileInput.value = ""; 
             }
         });
     });

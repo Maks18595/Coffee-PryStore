@@ -3,7 +3,10 @@
 @{
     ViewData["Title"] = "Delete Profile";
 }
-
+@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
+<html lang="@currentLanguage">
 <h1>Видалення акаунту</h1>
 
 <p>Ви впевнені, що хочете видалити акаунт?</p>

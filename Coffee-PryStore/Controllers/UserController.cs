@@ -6,6 +6,7 @@ using Microsoft.Azure.Documents;
 using System.Text;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Identity;
+using System.Globalization;
 
 namespace Coffee_PryStore.Controllers
 {
@@ -31,11 +32,24 @@ namespace Coffee_PryStore.Controllers
             {
                 return NotFound();
             }
-
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return View(user);
         }
 
+        public IActionResult ChangeLanguage(string culture)
+        {
 
+            CultureInfo.CurrentCulture = new CultureInfo(culture);
+            CultureInfo.CurrentUICulture = new CultureInfo(culture);
+
+            Response.Cookies.Append("lang", culture, new CookieOptions { Expires = DateTimeOffset.Now.AddYears(1) });
+
+            HttpContext.Session.SetString("Culture", culture);
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
+            return RedirectToAction("PersonRegistration");
+        }
 
 
         public IActionResult UserDashboard()
@@ -56,11 +70,29 @@ namespace Coffee_PryStore.Controllers
 
             ViewData["CurrentUserId"] = user.Id;
             ViewData["UserRole"] = user.Role;
+
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return View(user);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> OrderDetails(int id)
+        {
+            var order = await _context.Orders
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Table)
+                .FirstOrDefaultAsync(o => o.OrderId == id);
 
-     
+            if (order == null)
+            {
+                return NotFound();
+            }
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
+            return View(order);
+        }
+
         [HttpGet]
         public IActionResult Delete(int id)
         {
@@ -69,6 +101,8 @@ namespace Coffee_PryStore.Controllers
             {
                 return NotFound();
             }
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return View(user);
         }
 
@@ -81,6 +115,8 @@ namespace Coffee_PryStore.Controllers
                 _context.Users.Remove(user);
                 _context.SaveChanges();
             }
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return RedirectToAction(nameof(UserDashboard));
         }
 
@@ -93,6 +129,8 @@ namespace Coffee_PryStore.Controllers
             {
                 return NotFound();
             }
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return View(user);
         }
 
@@ -126,6 +164,8 @@ namespace Coffee_PryStore.Controllers
                     ModelState.AddModelError("", "Error saving changes: " + ex.Message);
                 }
             }
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return View(user);
         }
 
@@ -143,8 +183,6 @@ namespace Coffee_PryStore.Controllers
         }
 
 
-
-
         [HttpGet]
         public IActionResult Details(int id)
         {
@@ -153,6 +191,8 @@ namespace Coffee_PryStore.Controllers
             {
                 return NotFound();
             }
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return View(user);
         }
     }

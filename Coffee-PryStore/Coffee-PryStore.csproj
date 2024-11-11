@@ -36,7 +36,6 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="Resources\" />
     <Folder Include="Views\EmptyFolderTest\" />
     <Folder Include="Views\UserProfile\" />
     <Folder Include="wwwroot\NewFold\" />

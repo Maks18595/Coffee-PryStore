@@ -1,7 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Products";
 }
-
+@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
+<html lang="@currentLanguage">
 <div class="container-fluid">
     <h2>Products Page</h2>
 

@@ -4,9 +4,7 @@ namespace Coffee_PryStore.Models
 {
     public class DataBaseHome(DbContextOptions<DataBaseHome> options) : DbContext(options)
     {
-        //public DbSet<HomeDataModel> HomeDataModels { get; set; }
-
-
+       
         public DbSet<User> Users { get; set; }
 
         public DbSet<Table> Table { get; set; }

@@ -8,31 +8,51 @@ using Newtonsoft.Json;
 using System.Security.Claims;
 using Microsoft.Extensions.Localization;
 using static Coffee_PryStore.Models.Configurations.Startup;
+using Microsoft.AspNetCore.Localization;
+using System.Diagnostics;
+using System.Globalization;
 
 namespace Coffee_PryStore.Controllers
 {
 
-    /*
-     public class HomeController : Controller
+    public class HomeController : Controller
     {
+        private readonly ILogger<HomeController> _logger;
         private readonly DataBaseHome _context;
-        private readonly IStringLocalizer<SharedResource> _localizer;
 
-        // Конструктор, який приймає контекст бази даних і локалізатор
-        public HomeController(DataBaseHome context, IStringLocalizer<SharedResource> localizer)
+        public HomeController(DataBaseHome context, ILogger<HomeController> logger)
         {
             _context = context;
-            _localizer = localizer;
+            _logger = logger;
         }
-    */
 
-
-    public class HomeController(DataBaseHome context) : Controller
-    {
-        private readonly DataBaseHome _context = context;
-
-        public IActionResult Search()
+        public IActionResult ChangeLanguage(string culture, string returnUrl)
         {
+            
+            CultureInfo.CurrentCulture = new CultureInfo(culture);
+            CultureInfo.CurrentUICulture = new CultureInfo(culture);
+
+           
+            Response.Cookies.Append("lang", culture, new CookieOptions { Expires = DateTimeOffset.Now.AddYears(1) });
+
+           
+            return Redirect(returnUrl ?? "/");
+        }
+
+
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+    
+
+
+    public IActionResult Search()
+        {
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return View();
         }
 
@@ -45,6 +65,8 @@ namespace Coffee_PryStore.Controllers
             {
                 return NotFound();
             }
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return View(product);
         }
 
@@ -64,7 +86,8 @@ namespace Coffee_PryStore.Controllers
             {
                 return NotFound();
             }
-
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return View(user);
         }
         
@@ -91,7 +114,8 @@ namespace Coffee_PryStore.Controllers
                 await _context.SaveChangesAsync(); 
                 return RedirectToAction("Index", "Home");
             }
-
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return View(product);
         }
 
@@ -105,6 +129,8 @@ namespace Coffee_PryStore.Controllers
             {
                 return NotFound();
             }
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return View(product);
         }
 
@@ -136,6 +162,8 @@ namespace Coffee_PryStore.Controllers
                 await _context.SaveChangesAsync(); 
                 return RedirectToAction(nameof(Table));
             }
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US";
+            ViewData["CurrentLanguage"] = currentLanguage;
             return View(product);
         }
 
@@ -177,10 +205,26 @@ namespace Coffee_PryStore.Controllers
                     ViewBag.UserRole = user.Role;
                 }
             }
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+
+          
+            ViewData["CurrentLanguage"] = currentLanguage;
 
             return View(productList);
         }
-        
+
+        [HttpPost]
+        public IActionResult SetLanguage(string language)
+        {
+    
+            HttpContext.Session.SetString("CurrentLanguage", language);
+
+    
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+
+
+
 
         [HttpPost]
         public async Task<IActionResult> AddToCart(int productId, int quantity)
@@ -229,7 +273,8 @@ namespace Coffee_PryStore.Controllers
          
             HttpContext.Session.SetObjectAsJson("Cart", cart);
             await _context.SaveChangesAsync();
-
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return RedirectToAction("Basket");
         }
 
@@ -257,7 +302,8 @@ namespace Coffee_PryStore.Controllers
 
          
             HttpContext.Session.SetObjectAsJson("Cart", cart);
-
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return View(cart); 
         }
 
@@ -286,7 +332,8 @@ namespace Coffee_PryStore.Controllers
                 cart.Items.RemoveAll(i => i.CofId == productId);
                 HttpContext.Session.SetObjectAsJson("Cart", cart);
             }
-
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return RedirectToAction("Basket");
         }
 
@@ -323,7 +370,8 @@ namespace Coffee_PryStore.Controllers
                 HttpContext.Session.Remove("Cart"); 
                 await _context.SaveChangesAsync();
             }
-
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US";
+            ViewData["CurrentLanguage"] = currentLanguage;
             return RedirectToAction("OrderConfirmation");
         }
 
@@ -334,111 +382,6 @@ namespace Coffee_PryStore.Controllers
         }
 
 
-
-
     }
 
-
-    /*
-    public class HomeDataController : Controller
-    {
-        private readonly DataBaseHome _context;
-
-        public HomeDataController(DataBaseHome context)
-        {
-            _context = context;
-        }
-
-     
-        public IActionResult HomeTestIndex()
-        {
-            var data = _context.HomeDataModels.ToList();
-            return View(data);
-        }
-
-       
-        public IActionResult Details(int id)
-        {
-            var item = _context.HomeDataModels.Find(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-            return View(item);
-        }
-
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-      
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(HomeDataModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.HomeDataModels.Add(model);
-                _context.SaveChanges();
-                return RedirectToAction(nameof(HomeTestIndex));
-            }
-            return View(model);
-        }
-
-  
-        public IActionResult Edit(int id)
-        {
-            var item = _context.HomeDataModels.Find(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-            return View(item);
-        }
-
-   
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, HomeDataModel model)
-        {
-            if (id != model.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                _context.Update(model);
-                _context.SaveChanges();
-                return RedirectToAction(nameof(HomeTestIndex));
-            }
-            return View(model);
-        }
-
-    
-        public IActionResult Delete(int id)
-        {
-            var item = _context.HomeDataModels.Find(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-            return View(item);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
-        {
-            var item = _context.HomeDataModels.Find(id);
-            if (item != null)
-            {
-                _context.HomeDataModels.Remove(item);
-                _context.SaveChanges();
-            }
-            return RedirectToAction(nameof(HomeTestIndex));
-        }
-    }
-    */
 }

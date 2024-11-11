@@ -1,5 +1,9 @@
-﻿<!DOCTYPE html>
-<html lang="uk">
+﻿@inject LanguageService language
+@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
+<!DOCTYPE html>
+<html lang="@currentLanguage">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,7 +14,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Coffee_PryStore.styles.css" asp-append-version="true" />
-
+    <link rel="stylesheet" href="~/LanguageLearn.styles.css" asp-append-version="true" />
     <style>
         html, body {
             height: 100%;
@@ -31,9 +35,10 @@
             background-color: #343a40;
             color: white;
             text-align: center;
-            padding: 1rem 0;
+            padding: 0.5rem 0; 
             width: 100%;
         }
+
     </style>
 </head>
 <body>
@@ -47,20 +52,43 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Basket" asp-action="Basket">Кошик</a>
+                            <a class="nav-link" asp-controller="AboutUs" asp-action="AboutUs">
+                                @if (currentLanguage == "en-US")
+                                {
+                                    <text>About us</text>
+                                }
+                                else if (currentLanguage == "uk-UA")
+                                {
+                                    <text>Про нас</text>
+                                }
+                            </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="History" asp-action="History">Інформація про каву</a>
+                            <a class="nav-link" asp-controller="Basket" asp-action="Basket">
+                                @if (currentLanguage == "en-US")
+                                {
+                                    <text>Cart</text>
+                                }
+                                else if (currentLanguage == "uk-UA")
+                                {
+                                    <text>Кошик</text>
+                                }
+                            </a>
                         </li>
 
-
-
-                        <!--  
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Products" asp-action="Index">Товари</a>
+                            <a class="nav-link" asp-controller="History" asp-action="History">
+                                @if (currentLanguage == "en-US")
+                                {
+                                    <text>Information about coffee</text>
+                                }
+                                else if (currentLanguage == "uk-UA")
+                                {
+                                    <text>Інформація про каву</text>
+                                }
+                            </a>
                         </li>
-                        -->
 
                         @if (Context.Session.GetInt32("UserId") != null)
                         {
@@ -71,54 +99,106 @@
                             if (userRole == "Admin" || userEmail == "pryimak@gmail.com")
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Admin" asp-action="AdminDashboard">Панель адміністратора</a>
+                                    <a class="nav-link" asp-controller="Admin" asp-action="AdminDashboard">
+                                        @if (currentLanguage == "en-US")
+                                        {
+                                            <text>Administrator panel</text>
+                                        }
+                                        else if (currentLanguage == "uk-UA")
+                                        {
+                                            <text>Панель адміністратора</text>
+                                        }
+                                    </a>
                                 </li>
                             }
                            
                             else if (userRole == "User")
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link" asp-controller="User" asp-action="UserDashboard">Панель</a>
+                                    <a class="nav-link" asp-controller="User" asp-action="UserDashboard">
+                                        @if (currentLanguage == "en-US")
+                                        {
+                                            <text>Panel</text>
+                                        }
+                                        else if (currentLanguage == "uk-UA")
+                                        {
+                                            <text>Панель</text>
+                                        }
+                                    </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" asp-controller="User" asp-action="UserProfile" asp-route-id="@Context.Session.GetInt32("UserId")">Профіль</a>
+                                    <a class="nav-link" asp-controller="User" asp-action="UserProfile" asp-route-id="@Context.Session.GetInt32("UserId")">
+                                        @if (currentLanguage == "en-US")
+                                        {
+                                            <text>Profile</text>
+                                        }
+                                        else if (currentLanguage == "uk-UA")
+                                        {
+                                            <text>Профіль</text>
+                                        }
+                                    </a>
                                 </li>
                             }
 
                    
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="PersonRegistration" asp-action="Logout">Вихід</a>
+                                <a class="nav-link" asp-controller="PersonRegistration" asp-action="Logout">
+                                    @if (currentLanguage == "en-US")
+                                    {
+                                        <text>Exit</text>
+                                    }
+                                    else if (currentLanguage == "uk-UA")
+                                    {
+                                        <text>Вихід</text>
+                                    }
+                                </a>
                             </li>
                         }
                         else
                         {
 
                             <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("PersonRegistration", "PersonRegistration")">Вхід/Реєстрація</a>
+                                <a class="nav-link" href="@Url.Action("PersonRegistration", "PersonRegistration")">
+                                    @if (currentLanguage == "en-US")
+                                    {
+                                        <text>Login/Registration</text>
+                                    }
+                                    else if (currentLanguage == "uk-UA")
+                                    {
+                                        <text>Вхід/Реєстрація</text>
+                                    }
+                                </a>
                             </li>
                         }
                     </ul>
 
-                    <form class="d-flex">
-
-                        <li class="nav-item">
-                            <a href="@Url.Action("ChangeLanguage", "Home", new { culture = "uk" })"> Українська </a>
+                    <ul class="navbar-nav">
+                        <li>
+                            <a asp-controller="Home" asp-action="ChangeLanguage" asp-route-culture="en-US" asp-route-returnUrl="@Context.Request.Path" class="nav-link">
+                                <i class="flag-icon flag-icon-us"></i> English
+                            </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("ChangeLanguage", "Home", new { culture = "en" })"> English </a>
+                        <li>
+                            <a asp-controller="Home" asp-action="ChangeLanguage" asp-route-culture="uk-UA" asp-route-returnUrl="@Context.Request.Path" class="nav-link">
+                                <i class="flag-icon flag-icon-ua"></i> Українська
+                            </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("", "", new { culture = "" })"></a>
-                        </li>
-                    </form>
+                    </ul>
 
 
                     <form class="d-flex" asp-controller="Search" asp-action="Index" method="get">
-                        <input class="form-control me-2" type="search" name="searchTerm" placeholder="Пошук товарів" aria-label="Пошук" />
-                        <button class="btn btn-outline-light" type="submit">Пошук</button>
+                        <input class="form-control me-2" type="search" name="searchTerm" placeholder="@((currentLanguage == "en-US") ? "Search products" : "Пошук товарів")" aria-label="Пошук" />
+                        <button class="btn btn-outline-light" type="submit">
+                            @if (currentLanguage == "en-US")
+                            {
+                                <text>Search</text>
+                            }
+                            else if (currentLanguage == "uk-UA")
+                            {
+                                <text>Пошук</text>
+                            }
+                        </button>
                     </form>
-
-               
 
                 </div>
             </div>
@@ -132,10 +212,37 @@
     </div>
 
     <footer>
-        <div class="container">
-            &copy; 2024 - Coffee PryStore
+        <div class="container text-center py-4">
+            <p>
+                &copy; 2024 - Coffee PryStore
+            </p>
+            <p>
+                <strong>
+                    @if (currentLanguage == "en-US")
+                    {
+                        <text>Contact Us:</text>
+                    }
+                    else if (currentLanguage == "uk-UA")
+                    {
+                        <text>Зв'яжіться з нами:</text>
+                    }
+                </strong><br>
+                <a href="mailto:info@coffeepystore.com">info@coffeepystore.com</a><br>
+                <small>
+                    @if (currentLanguage == "en-US")
+                    {
+                        <text>We are happy to answer your questions and provide more information.</text>
+                    }
+                    else if (currentLanguage == "uk-UA")
+                    {
+                        <text>Ми раді відповісти на ваші запитання та надати більше інформації.</text>
+                    }
+                </small>
+            </p>
         </div>
     </footer>
+
+
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

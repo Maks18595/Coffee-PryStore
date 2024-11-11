@@ -1,4 +1,8 @@
-﻿<form method="post" asp-action="RegisterOrLogin">
+﻿@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
+<html lang="@currentLanguage">
+<form method="post" asp-action="RegisterOrLogin">
     <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Email address</label>
         <input type="email" class="form-control" id="exampleInputEmail1" name="email" aria-describedby="emailHelp" placeholder="Enter your email" required>

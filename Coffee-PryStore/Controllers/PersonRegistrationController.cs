@@ -7,6 +7,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Coffee_PryStore.Models.Configurations;
+using System.Globalization;
 
 namespace Coffee_PryStore.Controllers
 {
@@ -21,9 +22,27 @@ namespace Coffee_PryStore.Controllers
             _tokenService = tokenService;
         }
 
+        public IActionResult ChangeLanguage(string culture)
+        {
+
+            CultureInfo.CurrentCulture = new CultureInfo(culture);
+            CultureInfo.CurrentUICulture = new CultureInfo(culture);
+
+            Response.Cookies.Append("lang", culture, new CookieOptions { Expires = DateTimeOffset.Now.AddYears(1) });
+
+            HttpContext.Session.SetString("Culture", culture);
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
+            return RedirectToAction("PersonRegistration");
+        }
+
+
+
         [HttpGet]
         public IActionResult PersonRegistration()
         {
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return View();
         }
 
@@ -42,7 +61,8 @@ namespace Coffee_PryStore.Controllers
             {
                 return NotFound();
             }
-
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return View(user);
         }
 
@@ -109,7 +129,8 @@ namespace Coffee_PryStore.Controllers
 
             HttpContext.Session.SetInt32("UserId", newUser.Id);
             HttpContext.Session.SetString("UserRole", newUser.Role);
-
+            var currentLanguage = Request.Cookies["lang"] ?? "en-US"; 
+            ViewData["CurrentLanguage"] = currentLanguage;
             return RedirectToAction("UserDashboard", "User", new { id = newUser.Id });
         }
         
