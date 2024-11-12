@@ -32,12 +32,17 @@
         }
 
         footer {
+            flex-shrink: 0;
             background-color: #343a40;
             color: white;
             text-align: center;
-            padding: 0.5rem 0; 
+            padding: 0.2rem 3rem; 
+            font-size: 18px;
             width: 100%;
+            position: relative;
+            bottom: 0;
         }
+
 
     </style>
 </head>
@@ -213,9 +218,7 @@
 
     <footer>
         <div class="container text-center py-4">
-            <p>
-                &copy; 2024 - Coffee PryStore
-            </p>
+           
             <p>
                 <strong>
                     @if (currentLanguage == "en-US")
@@ -231,11 +234,16 @@
                 <small>
                     @if (currentLanguage == "en-US")
                     {
-                        <text>We are happy to answer your questions and provide more information.</text>
+                        <text>
+                            We are happy to answer your questions and provide more information.            &copy; 2024 - Coffee PryStore
+                         </text>
                     }
                     else if (currentLanguage == "uk-UA")
                     {
-                        <text>Ми раді відповісти на ваші запитання та надати більше інформації.</text>
+                        <text>
+                            Ми раді відповісти на ваші запитання та надати більше інформації.              &copy; 2024 - Coffee PryStore
+
+                        </text>
                     }
                 </small>
             </p>
