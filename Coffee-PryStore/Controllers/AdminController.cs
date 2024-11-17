@@ -178,6 +178,9 @@ namespace Coffee_PryStore.Controllers
         public IActionResult Details(int id)
         {
             var user = _context.Users.Find(id);
+            user = _context.Users
+      .Include(u => u.Orders)
+      .FirstOrDefault(u => u.Id == id);
             if (user == null)
             {
                 return NotFound();

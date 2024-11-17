@@ -7,39 +7,79 @@
     var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
 }
 <html lang="@currentLanguage">
-<h2>Order Details - @Model.OrderId</h2>
-
-<p><strong>User ID:</strong> @Model.UserId</p>
-<p><strong>Order Date:</strong> @Model.OrderDate.ToString("yyyy-MM-dd")</p>
-<p><strong>Total Amount:</strong> @Model.TotalAmount</p>
-<p><strong>Status:</strong> @Model.Status</p>
 
 
-<h3>Delivery Information</h3>
-<p><strong>Full Name:</strong> @Model.FullName</p>
-<p><strong>City:</strong> @Model.City</p>
-<p><strong>Address:</strong> @Model.Address</p>
-<p><strong>Phone Number:</strong> @Model.PhoneNumber</p>
+    <div class="card shadow-sm mt-4">
+        <div class="card-body">
+            <h3 class="mb-3">
+                @if (currentLanguage == "en-US")
+                {
+                    <text>Order Information</text>
+                }
+                else
+                {
+                    <text>Інформація про замовлення</text>
+                }
+            </h3>
 
-<h3>Order Items</h3>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Product ID</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Subtotal</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.OrderItems)
-        {
-            <tr>
-                <td>@item.CofId</td>
-                <td>@item.Quantity</td>
-                <td>@item.UnitPrice</td>
-                <td>@(item.Quantity * item.UnitPrice)</td>
-            </tr>
-        }
-    </tbody>
-</table>
+            <p><strong>@(currentLanguage == "en-US" ? "User ID:" : "ID користувача:")</strong> @Model.UserId</p>
+            <p><strong>@(currentLanguage == "en-US" ? "Order Date:" : "Дата замовлення:")</strong> @Model.OrderDate.ToString("yyyy-MM-dd")</p>
+            <p><strong>@(currentLanguage == "en-US" ? "Total Amount:" : "Загальна сума:")</strong> @Model.TotalAmount</p>
+            <p><strong>@(currentLanguage == "en-US" ? "Status:" : "Статус:")</strong> @Model.Status</p>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mt-4">
+        <div class="card-body">
+            <h3 class="mb-3">
+                @if (currentLanguage == "en-US")
+                {
+                    <text>Delivery Information</text>
+                }
+                else
+                {
+                    <text>Інформація про доставку</text>
+                }
+            </h3>
+            <p><strong>@(currentLanguage == "en-US" ? "Full Name:" : "Повне ім'я:")</strong> @Model.FullName</p>
+            <p><strong>@(currentLanguage == "en-US" ? "City:" : "Місто:")</strong> @Model.City</p>
+            <p><strong>@(currentLanguage == "en-US" ? "Address:" : "Адреса:")</strong> @Model.Address</p>
+            <p><strong>@(currentLanguage == "en-US" ? "Phone Number:" : "Телефон:")</strong> @Model.PhoneNumber</p>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <h3>@(currentLanguage == "en-US" ? "Order Items" : "Товари у замовленні")</h3>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>@(currentLanguage == "en-US" ? "Product Name" : "Назва товару")</th>
+                        <th>@(currentLanguage == "en-US" ? "Product ID" : "ID Товару")</th>
+                        <th>@(currentLanguage == "en-US" ? "Quantity" : "Кількість")</th>
+                        <th>@(currentLanguage == "en-US" ? "Price" : "Ціна")</th>
+                        <th>@(currentLanguage == "en-US" ? "Subtotal" : "Сума")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.OrderItems)
+                    {
+                        <tr>
+                            <td>@item.Table.CofName</td>
+                            <td>@item.CofId</td>
+                            <td>@item.Quantity</td>
+                            <td>@item.UnitPrice</td>
+                            <td>@(item.Quantity * item.UnitPrice)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="@Url.Action("UserDashboard", "User")" class="btn btn-secondary">
+            @(currentLanguage == "en-US" ? "Back to Dashboard" : "Повернутись до панелі")
+        </a>
+    </div>
+</div>

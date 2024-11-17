@@ -57,39 +57,8 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    @if (Context.Session.GetInt32("UserId") != null)
-                    {
-                        var userRole = Context.Session.GetString("UserRole");
-
-                        if (userRole == "Admin")
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("AdminDashboard", "Admin", new { id = Context.Session.GetInt32("UserId") })">Панель адміністратора</a>
-                            </li>
-                           
-                        }
-                        else if (userRole == "User")
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("UserProfile", "User", new { id = Context.Session.GetInt32("UserId") })">Профіль</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("AdminDashboard", "Admin", new { id = Context.Session.GetInt32("UserId") })">Панель адміністратора</a>
-                            </li>
-                        }
-                    }
-                    else
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("PersonRegistration", "PersonRegistration")">Вхід/Реєстрація</a>
-                        </li>
-                    }
-                </ul>
-                <form class="d-flex" method="get" asp-action="Search" asp-controller="Admin">
-                    <input class="form-control me-2" type="search" placeholder="Пошук" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Пошук</button>
-                </form>
+               
+               
                 <form asp-action="EmptyPage" asp-controller="Admin" method="get" class="ms-3">
                     <button type="submit" class="btn btn-primary">Керування товарами</button>
                 </form>

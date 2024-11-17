@@ -36,17 +36,19 @@
         }
 
         .content {
-            position: relative;
+            position: absolute;
             z-index: 1;
             padding: 40px;
-            background-color: rgba(250, 245, 235, 0.95); 
+            background-color: rgba(250, 245, 235, 0.95);
             border-radius: 15px;
             max-width: 800px;
-            margin: 100px auto;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-            max-height: calc(100vh - 100px);
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -60%); 
         }
+
+
 
         .navbar {
             position: fixed;

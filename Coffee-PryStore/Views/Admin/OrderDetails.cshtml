@@ -9,90 +9,237 @@
 <html lang="@currentLanguage">
 <h2>Order Details - @Model.OrderId</h2>
 
-<p><strong>User ID:</strong> @Model.UserId</p>
-<p><strong>Order Date:</strong> @Model.OrderDate.ToString("yyyy-MM-dd")</p>
-<p><strong>Total Amount:</strong> @Model.TotalAmount</p>
-<p><strong>Status:</strong> @Model.Status</p>
+<h2 class="text-center mt-4">
+    @if (currentLanguage == "en-US") 
+    { 
+        <text>Order Details</text> 
+    } 
+    else if (currentLanguage == "uk-UA") 
+    { 
+        <text>Деталі замовлення</text> 
+    } 
+</h2>
 
-    <h3>Admin Actions</h3>
+<div class="card shadow-sm mt-4 mx-auto" style="max-width: 800px;">
+    <div class="card-body">
+        <h4>
+            @if (currentLanguage == "en-US") 
+            { 
+                <text>Order Information</text> 
+            } 
+            else if (currentLanguage == "uk-UA") 
+            { 
+                <text>Інформація про замовлення</text> 
+            }
+        </h4>
+        <p><strong>
+            @if (currentLanguage == "en-US") 
+            { 
+                <text>User ID:</text> 
+            } 
+            else if (currentLanguage == "uk-UA") 
+            { 
+                <text>ID користувача:</text> 
+            } 
+        </strong> @Model.UserId</p>
 
-    <form asp-action="ChangeStatus" method="post">
-        <input type="hidden" name="id" value="@Model.OrderId" />
-        <label for="newStatus">Change Status:</label>
-        <select id="newStatus" name="newStatus">
-            @if (Model.Status == "New")
-            {
-                <option value="New" selected>New</option>
-            }
-            else
-            {
-                <option value="New">New</option>
-            }
-            @if (Model.Status == "Accepted")
-            {
-                <option value="Accepted" selected>Accepted</option>
-            }
-            else
-            {
-                <option value="Accepted">Accepted</option>
-            }
-            @if (Model.Status == "Shipped")
-            {
-                <option value="Shipped" selected>Shipped</option>
-            }
-            else
-            {
-                <option value="Shipped">Shipped</option>
-            }
-            @if (Model.Status == "Completed")
-            {
-                <option value="Completed" selected>Completed</option>
-            }
-            else
-            {
-                <option value="Completed">Completed</option>
-            }
-        </select>
-        <button type="submit" class="btn btn-primary">Update Status</button>
-    </form>
+        <p><strong>
+            @if (currentLanguage == "en-US") 
+            { 
+                <text>Order Date:</text> 
+            } 
+            else if (currentLanguage == "uk-UA") 
+            { 
+                <text>Дата замовлення:</text> 
+            } 
+        </strong> @Model.OrderDate.ToString("yyyy-MM-dd")</p>
 
-    <form asp-action="DeleteOrder" method="post" style="margin-top: 10px;">
-        <input type="hidden" name="id" value="@Model.OrderId" />
-        <button type="submit" class="btn btn-danger">Delete Order</button>
-    </form>
+        <p><strong>
+            @if (currentLanguage == "en-US") 
+            { 
+                <text>Total Amount:</text> 
+            } 
+            else if (currentLanguage == "uk-UA") 
+            { 
+                <text>Загальна сума:</text> 
+            } 
+        </strong> @Model.TotalAmount</p>
 
+        <p><strong>
+            @if (currentLanguage == "en-US") 
+            { 
+                <text>Status:</text> 
+            } 
+            else if (currentLanguage == "uk-UA") 
+            { 
+                <text>Статус:</text> 
+            } 
+        </strong> @Model.Status</p>
 
+        <h4 class="mt-4">
+            @if (currentLanguage == "en-US") 
+            { 
+                <text>Admin Actions</text> 
+            } 
+            else if (currentLanguage == "uk-UA") 
+            { 
+                <text>Дії адміністратора</text> 
+            } 
+        </h4>
+        
+        <form asp-action="ChangeStatus" method="post" class="mb-3">
+            <input type="hidden" name="id" value="@Model.OrderId" />
+            <label for="newStatus">
+                @if (currentLanguage == "en-US") 
+                { 
+                    <text>Change Status:</text> 
+                } 
+                else if (currentLanguage == "uk-UA") 
+                { 
+                    <text>Змінити статус:</text> 
+                } 
+            </label>
+            <select id="newStatus" name="newStatus">
+                @if (Model.Status == "New")
+                {
+                    <option value="New" selected>New</option>
+                }
+                else
+                {
+                    <option value="New">New</option>
+                }
+                @if (Model.Status == "Accepted")
+                {
+                    <option value="Accepted" selected>Accepted</option>
+                }
+                else
+                {
+                    <option value="Accepted">Accepted</option>
+                }
+                @if (Model.Status == "Shipped")
+                {
+                    <option value="Shipped" selected>Shipped</option>
+                }
+                else
+                {
+                    <option value="Shipped">Shipped</option>
+                }
+                @if (Model.Status == "Completed")
+                {
+                    <option value="Completed" selected>Completed</option>
+                }
+                else
+                {
+                    <option value="Completed">Completed</option>
+                }
+            </select>
+            <button type="submit" class="btn btn-primary mt-2 w-100">
+                @if (currentLanguage == "en-US") 
+                { 
+                    <text>Update Status</text> 
+                } 
+                else if (currentLanguage == "uk-UA") 
+                { 
+                    <text>Оновити статус</text> 
+                } 
+            </button>
+        </form>
 
-<h3>Delivery Information</h3>
-<p><strong>Full Name:</strong> @Model.FullName</p>
-<p><strong>City:</strong> @Model.City</p>
-<p><strong>Address:</strong> @Model.Address</p>
-<p><strong>Phone Number:</strong> @Model.PhoneNumber</p>
-
-<h3>Order Items</h3>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Product ID</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Subtotal</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.OrderItems)
-        {
-            <tr>
-                <td>@item.CofId</td>
-                <td>@item.Quantity</td>
-                <td>@item.UnitPrice</td>
-                <td>@(item.Quantity * item.UnitPrice)</td>
-            </tr>
-        }
-    </tbody>
-</table>
-<main>
-    <div class="form-container">
-        <a href="@Url.Action("AdminDashboard", "Admin")" class="btn btn-secondary">На сторінку адміністратора</a>
+        <form asp-action="DeleteOrder" method="post">
+            <input type="hidden" name="id" value="@Model.OrderId" />
+            <button type="submit" class="btn btn-danger w-100">
+                @if (currentLanguage == "en-US") 
+                { 
+                    <text>Delete Order</text> 
+                } 
+                else if (currentLanguage == "uk-UA") 
+                { 
+                    <text>Видалити замовлення</text> 
+                } 
+            </button>
+        </form>
     </div>
-</main>
+</div>
+
+<div class="mt-4">
+    <h3>
+        @if (currentLanguage == "en-US") 
+        { 
+            <text>Delivery Information</text> 
+        } 
+        else if (currentLanguage == "uk-UA") 
+        { 
+            <text>Інформація про доставку</text> 
+        } 
+    </h3>
+    <p><strong>
+        @if (currentLanguage == "en-US") { <text>Full Name:</text> } else { <text>Повне ім'я:</text> }
+    </strong> @Model.FullName</p>
+    <p><strong>
+        @if (currentLanguage == "en-US") { <text>City:</text> } else { <text>Місто:</text> }
+    </strong> @Model.City</p>
+    <p><strong>
+        @if (currentLanguage == "en-US") { <text>Address:</text> } else { <text>Адреса:</text> }
+    </strong> @Model.Address</p>
+    <p><strong>
+        @if (currentLanguage == "en-US") { <text>Phone Number:</text> } else { <text>Телефон:</text> }
+    </strong> @Model.PhoneNumber</p>
+</div>
+
+<div class="mt-4">
+    <h3>
+        @if (currentLanguage == "en-US") 
+        { 
+            <text>Order Items</text> 
+        } 
+        else if (currentLanguage == "uk-UA") 
+        { 
+            <text>Товари у замовленні</text> 
+        }
+    </h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>@if (currentLanguage == "en-US")
+                    {
+                        <text>Product Name</text>
+                    }
+                    else
+                    {
+                        <text>Назва товару</text>
+                    }</th>
+                <th>@if (currentLanguage == "en-US") { <text>Product ID</text> } else { <text>ID Товару</text> }</th>
+                <th>@if (currentLanguage == "en-US") { <text>Quantity</text> } else { <text>Кількість</text> }</th>
+                <th>@if (currentLanguage == "en-US") { <text>Price</text> } else { <text>Ціна</text> }</th>
+                <th>@if (currentLanguage == "en-US") { <text>Subtotal</text> } else { <text>Сума</text> }</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderItems)
+            {
+                <tr>
+                    <td>@item.Table.CofName</td>
+                    <td>@item.CofId</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.UnitPrice</td>
+                    <td>@(item.Quantity * item.UnitPrice)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="text-center mt-4">
+    <a href="@Url.Action("AdminDashboard", "Admin")" class="btn btn-secondary">
+        @if (currentLanguage == "en-US") 
+        { 
+            <text>Back to Dashboard</text> 
+        } 
+        else if (currentLanguage == "uk-UA") 
+        { 
+            <text>Повернутись до панелі</text> 
+        }
+    </a>
+</div>
+</html>
+

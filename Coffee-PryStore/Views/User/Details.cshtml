@@ -1,16 +1,59 @@
 ﻿@model Coffee_PryStore.Models.User
 
-<h1>User Details</h1>
 @{
     var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
 }
-<html lang="@currentLanguage">
-<dl class="row">
-    <dt class="col-sm-2">Email</dt>
-    <dd class="col-sm-10">@Model.Email</dd>
 
-    <dt class="col-sm-2">Role</dt>
-    <dd class="col-sm-10">@Model.Role</dd>
-</dl>
+<h1 class="text-center mt-4" style="color: #4b2e20; font-family: 'Georgia', serif;">
+    @if (currentLanguage == "en-US")
+    {
+        <text>User Details</text>
+    }
+    else if (currentLanguage == "uk-UA")
+    {
+        <text>Деталі користувача</text>
+    }
+</h1>
 
-<a asp-action="UserDashboard" class="btn btn-secondary">Back</a>
+<div class="card shadow-lg mt-4 mx-auto" style="max-width: 600px; border: 2px solid #b85c38; background-color: #f5ebe0;">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-4 fw-bold" style="color: #4b2e20;">
+                @if (currentLanguage == "en-US")
+                {
+                    <text>Email:</text>
+                }
+                else if (currentLanguage == "uk-UA")
+                {
+                    <text>Електронна пошта:</text>
+                }
+            </dt>
+            <dd class="col-sm-8" style="color: #4b2e20;">@Model.Email</dd>
+
+            <dt class="col-sm-4 fw-bold" style="color: #4b2e20;">
+                @if (currentLanguage == "en-US")
+                {
+                    <text>Role:</text>
+                }
+                else if (currentLanguage == "uk-UA")
+                {
+                    <text>Роль:</text>
+                }
+            </dt>
+            <dd class="col-sm-8" style="color: #4b2e20;">@Model.Role</dd>
+        </dl>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a href="@Url.Action("UserDashboard", "User")" class="btn" style="background-color: #b85c38; color: white; border-radius: 8px; font-size: 18px; padding: 10px 20px; text-decoration: none;">
+        @if (currentLanguage == "en-US")
+        {
+            <text>Back to Dashboard</text>
+        }
+        else if (currentLanguage == "uk-UA")
+        {
+            <text>Повернутись до панелі</text>
+        }
+    </a>
+</div>

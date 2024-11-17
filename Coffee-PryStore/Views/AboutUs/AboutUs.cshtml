@@ -9,75 +9,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@(currentLanguage == "en-US" ? "About Us" : "Про нас")</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #2c1d12; /* Rich dark coffee background */
-            color: #fff; /* Light text for contrast */
+            font-family: 'Roboto', sans-serif;
+            background-color: #1e1e1e;
+            color: #f5f5f5;
         }
 
         .hero-section {
-            background-color: rgba(0, 0, 0, 0.6); /* Dark, semi-transparent overlay for hero section */
-            background-image: url('https://example.com/coffee-background.jpg'); /* Background image */
+            background-image: url('https://example.com/coffee-background.jpg');
             background-size: cover;
             background-position: center;
             color: #fff;
-            padding: 100px 0;
+            padding: 120px 20px;
             text-align: center;
-            border-bottom: 5px solid #6f4f28; /* Coffee brown border to separate sections */
+            position: relative;
+            overflow: hidden;
         }
 
-            .hero-section h1 {
-                font-size: 3.5em;
-                font-weight: bold;
-                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Text shadow for better readability */
-            }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
 
-            .hero-section p {
-                font-size: 1.5em;
-                margin-top: 20px;
-            }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-section h1 {
+            font-size: 4em;
+            font-weight: bold;
+            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.8);
+            margin-bottom: 20px;
+        }
+
+        .hero-section p {
+            font-size: 1.5em;
+            margin-top: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .container {
+            margin-top: 60px;
+            padding: 20px;
+        }
 
         .section-title {
             font-size: 2.5em;
             font-weight: bold;
-            color: #6f4f28; /* Coffee brown */
+            color: #d4a373;
             margin-bottom: 30px;
             text-align: center;
         }
 
-        .about-content {
-            background-color: #fff;
-            color: #333;
+        .about-content, .production-step {
+            background-color: #2d2d2d;
+            color: #f5f5f5;
             padding: 40px 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
             margin-bottom: 40px;
-            transition: transform 0.3s ease-in-out;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
         }
 
-            .about-content:hover {
-                transform: scale(1.02); /* Slight zoom effect on hover */
+            .about-content:hover, .production-step:hover {
+                transform: scale(1.05);
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
             }
 
-            .about-content img {
+            .about-content img, .production-step img {
                 max-width: 100%;
                 border-radius: 8px;
                 margin-bottom: 30px;
             }
 
-            .about-content ul {
-                list-style-type: none;
-                padding-left: 0;
-            }
-
-            .about-content li {
-                font-size: 1.2em;
-                margin-bottom: 15px;
-            }
+        .icon {
+            font-size: 3em;
+            color: #d4a373;
+            margin-bottom: 15px;
+        }
 
         .footer {
-            background-color: #6f4f28; /* Coffee brown for footer */
+            background-color: #6f4f28;
             color: white;
             padding: 20px 0;
             text-align: center;
@@ -95,22 +116,29 @@
 
 <body>
     <div class="hero-section">
-        <h1>@(currentLanguage == "en-US" ? "About Us" : "Про нас")</h1>
-        <p>@(currentLanguage == "en-US" ? "Learn more about our story and passion for coffee." : "Дізнайтесь більше про нашу історію та пристрасть до кави.")</p>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>@(currentLanguage == "en-US" ? "About Us" : "Про нас")</h1>
+            <p>@(currentLanguage == "en-US" ? "Learn more about our story and passion for coffee." : "Дізнайтесь більше про нашу історію та пристрасть до кави.")</p>
+        </div>
     </div>
 
     <div class="container">
+
         <div class="about-content">
+            <div class="icon">☕</div>
             <h2 class="section-title">@((currentLanguage == "en-US") ? "Our Story" : "Наша історія")</h2>
-            <p>@(currentLanguage == "en-US" ? "We are passionate about coffee. Our journey began with a simple idea to bring the finest coffee from around the world to your cup. Over the years, we have developed a deep connection with coffee farmers, ensuring the highest quality beans for our customers." : "Ми захоплені кавою. Наша подорож розпочалась з простого ідеї — приносити найкращу каву з усього світу до вашої чашки. З роками ми розвинули глибоке зв'язок з кавовими фермерами, забезпечуючи найвищу якість зерен для наших клієнтів.")</p>
+            <p>@(currentLanguage == "en-US" ? "We are passionate about coffee. Our journey began with a simple idea to bring the finest coffee from around the world to your cup." : "Ми захоплені кавою. Наша подорож розпочалась з простого ідеї — приносити найкращу каву з усього світу до вашої чашки.")</p>
         </div>
 
         <div class="about-content">
+            <div class="icon">🌍</div>
             <h2 class="section-title">@((currentLanguage == "en-US") ? "Our Mission" : "Наша місія")</h2>
-            <p>@(currentLanguage == "en-US" ? "Our mission is to provide our customers with a rich and authentic coffee experience. We are committed to sustainability and ethical sourcing practices, ensuring that every cup of coffee supports farmers and communities around the world." : "Наша місія — забезпечити наших клієнтів багатим та автентичним кавовим досвідом. Ми прагнемо до сталого розвитку та етичних практик постачання, щоб кожна чашка кави підтримувала фермерів та громади по всьому світу.")</p>
+            <p>@(currentLanguage == "en-US" ? "Our mission is to provide our customers with a rich and authentic coffee experience." : "Наша місія — забезпечити наших клієнтів багатим та автентичним кавовим досвідом.")</p>
         </div>
 
         <div class="about-content">
+            <div class="icon">💡</div>
             <h2 class="section-title">@((currentLanguage == "en-US") ? "Our Values" : "Наші цінності")</h2>
             <ul>
                 <li>@(currentLanguage == "en-US" ? "Quality: We focus on providing the best coffee with exceptional quality." : "Якість: Ми орієнтуємося на надання найкращої кави з винятковою якістю.")</li>
@@ -119,14 +147,29 @@
             </ul>
         </div>
 
-        <div class="about-content">
+     
+        <div class="production-step">
             <h2 class="section-title">@((currentLanguage == "en-US") ? "Our Production Process" : "Наш виробничий процес")</h2>
-            <p>@(currentLanguage == "en-US" ? "At our workshop, we take pride in every step of the coffee-making process. From selecting the best coffee beans to roasting and grinding, we ensure that every cup is made with care and precision. Our process follows sustainable practices, working directly with coffee farmers to ensure that they are paid fairly and that our coffee is of the highest quality." : "У нашій майстерні ми пишаємося кожним етапом процесу приготування кави. Від відбору найкращих кавових зерен до обсмажування та подрібнення — ми гарантуємо, що кожна чашка зроблена з увагою та точністю. Наш процес відповідає сталим практикам, ми працюємо безпосередньо з кавовими фермерами, забезпечуючи їх справедливою оплатою та гарантуємо, що наша кава найвищої якості.")</p>
-        </div>
 
-        <div class="about-content">
-            <h2 class="section-title">@((currentLanguage == "en-US") ? "How We Source Our Coffee" : "Як ми постачаємо каву")</h2>
-            <p>@(currentLanguage == "en-US" ? "We source our coffee from small-scale farmers around the world, focusing on regions known for their exceptional beans. Our partners share our values of sustainability and fair trade, ensuring that the farmers are treated ethically and that their coffee is of the finest quality." : "Ми постачаємо каву від малих фермерів з усього світу, орієнтуючись на регіони, відомі своїми винятковими зернами. Наші партнери поділяють наші цінності сталого розвитку та чесної торгівлі, забезпечуючи етичне ставлення до фермерів та найвищу якість кави.")</p>
+        
+            <h3>@((currentLanguage == "en-US") ? "1. Selecting the Beans" : "1. Вибір зерен")</h3>
+            <p>@(currentLanguage == "en-US" ? "We carefully select the highest quality coffee beans from trusted farms." : "Ми ретельно обираємо найякісніші кавові зерна з перевірених ферм.")</p>
+       
+
+       
+            <h3>@((currentLanguage == "en-US") ? "2. Roasting" : "2. Обсмажування")</h3>
+            <p>@(currentLanguage == "en-US" ? "Our roasting process brings out unique flavors in each bean." : "Наш процес обсмажування розкриває унікальні смаки кожного зерна.")</p>
+       
+
+     
+            <h3>@((currentLanguage == "en-US") ? "3. Grinding" : "3. Подрібнення")</h3>
+            <p>@(currentLanguage == "en-US" ? "We grind coffee to the perfect consistency, ensuring optimal flavor." : "Ми подрібнюємо каву до ідеальної консистенції для заварювання.")</p>
+         
+
+   
+            <h3>@((currentLanguage == "en-US") ? "4. Packaging" : "4. Пакування")</h3>
+            <p>@(currentLanguage == "en-US" ? "Packed in eco-friendly bags to preserve freshness." : "Пакуємо в екологічні упаковки для збереження свіжості.")</p>
+        
         </div>
     </div>
 
@@ -135,3 +178,172 @@
 </body>
 
 </html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@(currentLanguage == "en-US" ? "Delivery & Payment" : "Доставка та оплата")</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f5f0;
+            color: #333;
+        }
+
+        .hero-section {
+            position: relative;
+            background-image: url('https://example.com/delivery-background.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            padding: 100px 0;
+            text-align: center;
+            border-bottom: 5px solid #6f4f28;
+        }
+
+            .hero-section::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 1;
+            }
+
+            .hero-section h1,
+            .hero-section p {
+                position: relative;
+                z-index: 2;
+            }
+
+            .hero-section h1 {
+                font-size: 3.5em;
+                font-weight: bold;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            }
+
+        .content-section {
+            background-color: #fff;
+            color: #333;
+            padding: 40px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 2em;
+            color: #6f4f28;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+            ul li {
+                margin: 10px 0;
+                padding-left: 20px;
+                position: relative;
+            }
+
+                ul li::before {
+                    content: '✔';
+                    color: #6f4f28;
+                    position: absolute;
+                    left: 0;
+                }
+
+        .footer {
+            background-color: #6f4f28;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+            .footer p {
+                margin: 0;
+            }
+    </style>
+</head>
+
+<body>
+    <div class="hero-section">
+        <h1>@(currentLanguage == "en-US" ? "Delivery & Payment" : "Доставка та оплата")</h1>
+        <p>@(currentLanguage == "en-US" ? "Reliable delivery and convenient payment options." : "Надійна доставка та зручна оплата.")</p>
+    </div>
+
+    <div class="container">
+        <div class="content-section">
+            <h2 class="section-title">@((currentLanguage == "en-US") ? "Our Delivery Service" : "Наша служба доставки")</h2>
+            <p>
+                @(currentLanguage == "en-US"
+                    ? "We ensure timely delivery of your coffee, straight to your door."
+                    : "Ми гарантуємо своєчасну доставку кави прямо до ваших дверей.")
+            </p>
+            <p>
+                @(currentLanguage == "en-US"
+                    ? "Our service is designed to meet the needs of every coffee lover."
+                    : "Наша служба орієнтована на потреби кожного поціновувача кави.")
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">@((currentLanguage == "en-US") ? "Delivery Terms" : "Умови доставки")</h2>
+            <ul>
+                <li>
+                    @(currentLanguage == "en-US"
+                        ? "Delivery within 2-3 business days."
+                        : "Доставка протягом 2-3 робочих днів.")
+                </li>
+                <li>
+                    @(currentLanguage == "en-US"
+                        ? "Free delivery on orders over 2000 grn."
+                        : "Безкоштовна доставка для замовлень понад 2000 грн.")
+                </li>
+                <li>
+                    @(currentLanguage == "en-US"
+                        ? "We will confirm your delivery details."
+                        : "Ми підтвердимо ваші деталі доставки.")
+                </li>
+                <li>
+                    @(currentLanguage == "en-US"
+                        ? "Delivery tracking is available."
+                        : "Доступне відстеження доставки.")
+                </li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">@((currentLanguage == "en-US") ? "Payment Options" : "Способи оплати")</h2>
+            <p>
+                @(currentLanguage == "en-US"
+                    ? "Pay cash on delivery for convenience."
+                    : "Оплачуйте готівкою при доставці для зручності.")
+            </p>
+            <p>
+                @(currentLanguage == "en-US"
+                    ? "We are working to add more payment methods."
+                    : "Ми працюємо над додаванням інших способів оплати.")
+            </p>
+            <p>
+                @(currentLanguage == "en-US"
+                    ? "Soon, you will be able to pay using your favorite credit or debit card."
+                    : "Незабаром ви зможете оплачувати улюбленою кредитною чи дебетовою карткою.")
+            </p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>@(currentLanguage == "en-US" ? "Thank you for choosing us!" : "Дякуємо, що обираєте нас!")</p>
+        <p>@(currentLanguage == "en-US" ? "Your satisfaction is our priority." : "Ваше задоволення - наш пріоритет.")</p>
+    </footer>
+</body>
+
+</html>
+

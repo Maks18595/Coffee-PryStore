@@ -22,7 +22,7 @@
     }
     else if (currentLanguage == "uk-UA")
     {
-        <text>Ласкаво просимо до нашої кав'ярні!</text>
+        <text>Ласкаво просимо до нашої інтернет-майстерні!</text>
     }
 </h1>
 
@@ -136,36 +136,7 @@
                             <text>Мелена кава</text>
                         }
                     </option>
-                    <option value="Еспресо">
-                        @if (currentLanguage == "en-US")
-                        {
-                            <text>Espresso</text>
-                        }
-                        else if (currentLanguage == "uk-UA")
-                        {
-                            <text>Еспресо</text>
-                        }
-                    </option>
-                    <option value="Капучіно">
-                        @if (currentLanguage == "en-US")
-                        {
-                            <text>Cappuccino</text>
-                        }
-                        else if (currentLanguage == "uk-UA")
-                        {
-                            <text>Капучіно</text>
-                        }
-                    </option>
-                    <option value="Латте">
-                        @if (currentLanguage == "en-US")
-                        {
-                            <text>Latte</text>
-                        }
-                        else if (currentLanguage == "uk-UA")
-                        {
-                            <text>Латте</text>
-                        }
-                    </option>
+                   
                     <option value="Кава по-турецьки">
                         @if (currentLanguage == "en-US")
                         {
@@ -216,14 +187,24 @@
                         <text>Міцна кава</text>
                     }
                 </option>
-                <option value="Шоколад">
+                <option value="Розчинна">
                     @if (currentLanguage == "en-US")
                     {
-                        <text>Chocolate</text>
+                        <text>Instant</text>
                     }
                     else if (currentLanguage == "uk-UA")
                     {
-                        <text>Шоколад</text>
+                        <text>Розчинна</text>
+                    }
+                </option>
+                <option value="Дріп-кава">
+                    @if (currentLanguage == "en-US")
+                    {
+                        <text>Drip coffee</text>
+                    }
+                    else if (currentLanguage == "uk-UA")
+                    {
+                        <text>Дріп-кава</text>
                     }
                 </option>
                 </select>
@@ -296,16 +277,17 @@
     @foreach (var item in Model)
     {
         <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
+            <div class="card h-100 shadow-sm d-flex flex-column">
                 <a asp-controller="Home" asp-action="DetailsProduct" asp-route-id="@item.CofId">
                     <img src="@(item.ImageData != null ? $"data:image/jpeg;base64,{Convert.ToBase64String(item.ImageData)}" : "/Attributes/Images/placeholder.png")" class="card-img-top" alt="@item.CofName" />
                 </a>
 
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
                     <h5 class="card-title">
                         <a asp-controller="Home" asp-action="DetailsProduct" asp-route-id="@item.CofId">@item.CofName</a>
                     </h5>
-                    <p class="card-text"><strong>
+                    <p class="card-text">
+                        <strong>
                             @if (currentLanguage == "en-US")
                             {
                                 <text>Category:</text>
@@ -314,8 +296,10 @@
                             {
                                 <text>Категорія:</text>
                             }
-                    </strong> @item.CofCateg</p>
-                    <p class="card-text"><strong>
+                        </strong> @item.CofCateg
+                    </p>
+                    <p class="card-text">
+                        <strong>
                             @if (currentLanguage == "en-US")
                             {
                                 <text>Price:</text>
@@ -324,8 +308,10 @@
                             {
                                 <text>Ціна:</text>
                             }
-                    </strong> @item.CofPrice грн</p>
-                    <p class="card-text"><strong>
+                        </strong> @item.CofPrice грн
+                    </p>
+                    <p class="card-text">
+                        <strong>
                             @if (currentLanguage == "en-US")
                             {
                                 <text>Number:</text>
@@ -334,8 +320,10 @@
                             {
                                 <text>Кількість:</text>
                             }
-                    </strong> @item.CofAmount</p>
-                    <p class="card-text"><strong>
+                        </strong> @item.CofAmount
+                    </p>
+                    <p class="card-text">
+                        <strong>
                             @if (currentLanguage == "en-US")
                             {
                                 <text>Storage period:</text>
@@ -344,7 +332,8 @@
                             {
                                 <text>Термін зберігання:</text>
                             }
-                    </strong> @item.CofDuration.ToString("yyyy-MM-dd")</p>
+                        </strong> @item.CofDuration.ToString("yyyy-MM-dd")
+                    </p>
                     <form asp-controller="Basket" asp-action="AddToCart" method="post" class="mt-auto">
                         <input type="hidden" name="productId" value="@item.CofId" />
                         <input type="hidden" name="quantity" value="1" />
@@ -361,6 +350,7 @@
                     </form>
                 </div>
             </div>
+
         </div>
     }
 </div>

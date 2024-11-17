@@ -1,0 +1,173 @@
+﻿@{
+    var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
+}
+<!DOCTYPE html>
+<html lang="@currentLanguage">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@(currentLanguage == "en-US" ? "Delivery & Payment" : "Доставка та оплата")</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f5f0;
+            color: #333;
+        }
+
+        .hero-section {
+            position: relative;
+            background-image: url('https://example.com/delivery-background.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            padding: 100px 0;
+            text-align: center;
+            border-bottom: 5px solid #6f4f28;
+        }
+
+            .hero-section::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 1;
+            }
+
+            .hero-section h1,
+            .hero-section p {
+                position: relative;
+                z-index: 2;
+            }
+
+            .hero-section h1 {
+                font-size: 3.5em;
+                font-weight: bold;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            }
+
+        .content-section {
+            background-color: #fff;
+            color: #333;
+            padding: 40px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 2em;
+            color: #6f4f28;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+            ul li {
+                margin: 10px 0;
+                padding-left: 20px;
+                position: relative;
+            }
+
+                ul li::before {
+                    content: '✔';
+                    color: #6f4f28;
+                    position: absolute;
+                    left: 0;
+                }
+
+        .footer {
+            background-color: #6f4f28;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+            .footer p {
+                margin: 0;
+            }
+    </style>
+</head>
+
+<body>
+    <div class="hero-section">
+        <h1>@(currentLanguage == "en-US" ? "Delivery & Payment" : "Доставка та оплата")</h1>
+        <p>@(currentLanguage == "en-US" ? "Reliable delivery and convenient payment options." : "Надійна доставка та зручна оплата.")</p>
+    </div>
+
+    <div class="container">
+        <div class="content-section">
+            <h2 class="section-title">@((currentLanguage == "en-US") ? "Our Delivery Service" : "Наша служба доставки")</h2>
+            <p>
+                @(currentLanguage == "en-US"
+                    ? "We ensure timely delivery of your coffee, straight to your door."
+                    : "Ми гарантуємо своєчасну доставку кави прямо до ваших дверей.")
+            </p>
+            <p>
+                @(currentLanguage == "en-US"
+                    ? "Our service is designed to meet the needs of every coffee lover."
+                    : "Наша служба орієнтована на потреби кожного поціновувача кави.")
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">@((currentLanguage == "en-US") ? "Delivery Terms" : "Умови доставки")</h2>
+            <ul>
+                <li>
+                    @(currentLanguage == "en-US"
+                        ? "Delivery within 2-3 business days."
+                        : "Доставка протягом 2-3 робочих днів.")
+                </li>
+                <li>
+                    @(currentLanguage == "en-US"
+                        ? "Free delivery on orders over 2000 grn."
+                        : "Безкоштовна доставка для замовлень понад 2000 грн.")
+                </li>
+                <li>
+                    @(currentLanguage == "en-US"
+                        ? "We will confirm your delivery details."
+                        : "Ми підтвердимо ваші деталі доставки.")
+                </li>
+                <li>
+                    @(currentLanguage == "en-US"
+                        ? "Delivery tracking is available."
+                        : "Доступне відстеження доставки.")
+                </li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">@((currentLanguage == "en-US") ? "Payment Options" : "Способи оплати")</h2>
+            <p>
+                @(currentLanguage == "en-US"
+                    ? "Pay cash on delivery for convenience."
+                    : "Оплачуйте готівкою при доставці для зручності.")
+            </p>
+            <p>
+                @(currentLanguage == "en-US"
+                    ? "We are working to add more payment methods."
+                    : "Ми працюємо над додаванням інших способів оплати.")
+            </p>
+            <p>
+                @(currentLanguage == "en-US"
+                    ? "Soon, you will be able to pay using your favorite credit or debit card."
+                    : "Незабаром ви зможете оплачувати улюбленою кредитною чи дебетовою карткою.")
+            </p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>@(currentLanguage == "en-US" ? "Thank you for choosing us!" : "Дякуємо, що обираєте нас!")</p>
+        <p>@(currentLanguage == "en-US" ? "Your satisfaction is our priority." : "Ваше задоволення - наш пріоритет.")</p>
+    </footer>
+</body>
+
+</html>

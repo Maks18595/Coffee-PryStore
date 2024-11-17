@@ -39,7 +39,7 @@ namespace Coffee_PryStore.Controllers
             return Redirect(returnUrl ?? "/");
         }
 
-
+        
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

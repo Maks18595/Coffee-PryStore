@@ -75,7 +75,7 @@ namespace Coffee_PryStore.Controllers
             return RedirectToAction("PersonRegistration", "PersonRegistration");
         }
 
-        
+       
         [HttpPost]
         public IActionResult PersonRegistration(string email, string password)
         {

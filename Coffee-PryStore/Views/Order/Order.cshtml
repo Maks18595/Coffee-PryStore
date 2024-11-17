@@ -56,7 +56,7 @@
                             <td>
                                 <form asp-action="RemoveFromCart" method="post" class="d-inline">
                                     <input type="hidden" name="productId" value="@product.CofId" />
-                                    <button type="submit" class="btn btn-sm btn-outline-danger">Видалити</button>
+                                    <a href="@Url.Action("Basket", "Basket")" class="btn btn-secondary">Видалити</a>
                                 </form>
                             </td>
                         </tr>

@@ -1,32 +1,79 @@
 ﻿@model Coffee_PryStore.Models.User
 
-<h1>Edit User</h1>
 @{
     var currentLanguage = ViewData["CurrentLanguage"]?.ToString();
 }
-<html lang="@currentLanguage">
-<form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="Id" />  
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Password"></label>
-        <input asp-for="Password" type="password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Role"></label>
-        <select asp-for="Role" class="form-control">
-            <option value="">Select Role</option>
-            <option value="User">User</option>
-            <option value="Admin">Admin</option>
-        </select>
-        <span asp-validation-for="Role" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Edit User</button>
-</form>
 
-<a class="btn btn-secondary mt-3" asp-action="UserDashboard">Back to Dashboard</a>
+<h1 class="text-center mt-4" style="color: #4b2e20; font-family: 'Georgia', serif;">
+    @if (currentLanguage == "en-US")
+    {
+        <text>Edit User</text>
+    }
+    else if (currentLanguage == "uk-UA")
+    {
+        <text>Редагування користувача</text>
+    }
+</h1>
+
+<div class="card shadow-lg mt-4 mx-auto" style="max-width: 600px; border: 2px solid #b85c38; background-color: #f5ebe0;">
+    <div class="card-body">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-group mb-3">
+                <label asp-for="Email" class="form-label" style="color: #4b2e20; font-weight: bold;">
+                    @if (currentLanguage == "en-US")
+                    {
+                        <text>Email</text>
+                    }
+                    else if (currentLanguage == "uk-UA")
+                    {
+                        <text>Електронна пошта</text>
+                    }
+                </label>
+                <input asp-for="Email" class="form-control" style="border: 1px solid #b85c38;" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Password" class="form-label" style="color: #4b2e20; font-weight: bold;">
+                    @if (currentLanguage == "en-US")
+                    {
+                        <text>Password</text>
+                    }
+                    else if (currentLanguage == "uk-UA")
+                    {
+                        <text>Пароль</text>
+                    }
+                </label>
+                <input asp-for="Password" type="password" class="form-control" style="border: 1px solid #b85c38;" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+           
+            <button type="submit" class="btn" style="background-color: #b85c38; color: white; border-radius: 8px; font-size: 18px; padding: 10px 20px;">
+                @if (currentLanguage == "en-US")
+                {
+                    <text>Save Changes</text>
+                }
+                else if (currentLanguage == "uk-UA")
+                {
+                    <text>Зберегти зміни</text>
+                }
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a href="@Url.Action("UserDashboard", "User")" class="btn" style="background-color: #6c757d; color: white; border-radius: 8px; padding: 10px 20px;">
+        @if (currentLanguage == "en-US")
+        {
+            <text>Back to Dashboard</text>
+        }
+        else if (currentLanguage == "uk-UA")
+        {
+            <text>Повернутись до панелі</text>
+        }
+    </a>
+</div>
